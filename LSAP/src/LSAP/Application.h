@@ -1,7 +1,7 @@
 #pragma once
 #include "Core.h"
+#include "Header.h"
 #include "Synth/SoundGenerator.h"
-#include <GLFW/glfw3.h>
 
 namespace LSAP {
 	class LSAP_API Application

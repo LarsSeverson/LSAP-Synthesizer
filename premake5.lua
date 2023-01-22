@@ -39,7 +39,7 @@ workspace "LSAP"
         links
         {
             "GLFW",
-            "glfw3.lib"
+            "opengl32.lib"
         }
 
         filter "system:windows"
@@ -50,7 +50,8 @@ workspace "LSAP"
         defines
         {
             "LS_PLATFORM_WINDOWS",
-            "LS_BUILD_DLL"
+            "LS_BUILD_DLL",
+            "GLFW_INCLUDE_NONE"
         }
 
         postbuildcommands

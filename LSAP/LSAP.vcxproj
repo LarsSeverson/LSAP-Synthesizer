@@ -79,7 +79,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>lspch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>LS_PLATFORM_WINDOWS;LS_BUILD_DLL;LS_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LS_PLATFORM_WINDOWS;LS_BUILD_DLL;GLFW_INCLUDE_NONE;LS_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\GLFW3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -91,7 +91,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>..\bin\Debug-windows-x86_64\LSAP\LSAP.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
@@ -103,7 +103,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>lspch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>LS_PLATFORM_WINDOWS;LS_BUILD_DLL;LS_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LS_PLATFORM_WINDOWS;LS_BUILD_DLL;GLFW_INCLUDE_NONE;LS_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\GLFW3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -119,7 +119,7 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>..\bin\Release-windows-x86_64\LSAP\LSAP.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
@@ -131,7 +131,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>lspch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>LS_PLATFORM_WINDOWS;LS_BUILD_DLL;LS_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LS_PLATFORM_WINDOWS;LS_BUILD_DLL;GLFW_INCLUDE_NONE;LS_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\GLFW3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -147,7 +147,7 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>..\bin\Dist-windows-x86_64\LSAP\LSAP.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
@@ -159,7 +159,9 @@
     <ClInclude Include="src\LSAP\Application.h" />
     <ClInclude Include="src\LSAP\Core.h" />
     <ClInclude Include="src\LSAP\EntryPoint.h" />
+    <ClInclude Include="src\LSAP\Header.h" />
     <ClInclude Include="src\LSAP\Synth\SoundGenerator.h" />
+    <ClInclude Include="src\LSAP\poop.h" />
     <ClInclude Include="src\lspch.h" />
   </ItemGroup>
   <ItemGroup>

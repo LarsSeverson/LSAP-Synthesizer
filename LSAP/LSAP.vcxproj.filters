@@ -19,8 +19,14 @@
     <ClInclude Include="src\LSAP\EntryPoint.h">
       <Filter>LSAP</Filter>
     </ClInclude>
+    <ClInclude Include="src\LSAP\Header.h">
+      <Filter>LSAP</Filter>
+    </ClInclude>
     <ClInclude Include="src\LSAP\Synth\SoundGenerator.h">
       <Filter>LSAP\Synth</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LSAP\poop.h">
+      <Filter>LSAP</Filter>
     </ClInclude>
     <ClInclude Include="src\lspch.h" />
   </ItemGroup>
