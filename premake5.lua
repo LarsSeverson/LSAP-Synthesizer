@@ -50,8 +50,7 @@ workspace "LSAP"
         defines
         {
             "LS_PLATFORM_WINDOWS",
-            "LS_BUILD_DLL",
-            "GLFW_INCLUDE_NONE"
+            "LS_BUILD_DLL"
         }
 
         postbuildcommands

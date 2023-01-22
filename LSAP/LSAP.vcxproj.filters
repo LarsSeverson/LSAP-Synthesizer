@@ -19,13 +19,13 @@
     <ClInclude Include="src\LSAP\EntryPoint.h">
       <Filter>LSAP</Filter>
     </ClInclude>
-    <ClInclude Include="src\LSAP\Header.h">
-      <Filter>LSAP</Filter>
-    </ClInclude>
     <ClInclude Include="src\LSAP\Synth\SoundGenerator.h">
       <Filter>LSAP\Synth</Filter>
     </ClInclude>
-    <ClInclude Include="src\LSAP\poop.h">
+    <ClInclude Include="src\LSAP\Window.h">
+      <Filter>LSAP</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LSAP\WindowGL.h">
       <Filter>LSAP</Filter>
     </ClInclude>
     <ClInclude Include="src\lspch.h" />
@@ -36,6 +36,9 @@
     </ClCompile>
     <ClCompile Include="src\LSAP\Synth\SoundGenerator.cpp">
       <Filter>LSAP\Synth</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LSAP\WindowGL.cpp">
+      <Filter>LSAP</Filter>
     </ClCompile>
     <ClCompile Include="src\lspch.cpp" />
   </ItemGroup>
