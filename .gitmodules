@@ -1,0 +1,3 @@
+[submodule "LSAP/vendor/GLFW3"]
+	path = LSAP/vendor/GLFW3
+	url = https://github.com/glfw/glfw

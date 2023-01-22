@@ -4,6 +4,9 @@
     <Filter Include="LSAP">
       <UniqueIdentifier>{1526887C-015D-890D-AA49-6F10965F050F}</UniqueIdentifier>
     </Filter>
+    <Filter Include="LSAP\Synth">
+      <UniqueIdentifier>{5A46D8AB-46FE-19F9-AF05-F3549BDCB4E9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\LSAP.h" />
@@ -16,16 +19,18 @@
     <ClInclude Include="src\LSAP\EntryPoint.h">
       <Filter>LSAP</Filter>
     </ClInclude>
+    <ClInclude Include="src\LSAP\Synth\SoundGenerator.h">
+      <Filter>LSAP\Synth</Filter>
+    </ClInclude>
     <ClInclude Include="src\lspch.h" />
-    <ClInclude Include="src\LSAP\Synth\Class.h" />
-    <ClInclude Include="src\LSAP\Synth\SoundGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\LSAP\Application.cpp">
       <Filter>LSAP</Filter>
     </ClCompile>
+    <ClCompile Include="src\LSAP\Synth\SoundGenerator.cpp">
+      <Filter>LSAP\Synth</Filter>
+    </ClCompile>
     <ClCompile Include="src\lspch.cpp" />
-    <ClCompile Include="src\LSAP\Synth\Class.cpp" />
-    <ClCompile Include="src\LSAP\Synth\SoundGenerator.cpp" />
   </ItemGroup>
 </Project>

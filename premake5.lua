@@ -10,6 +10,11 @@ workspace "LSAP"
     }
     outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+    IncludeDir = {}
+    IncludeDir["GLFW3"] = "LSAP/vendor/GLFW3/include"
+
+    include "LSAP/vendor/GLFW3"
+
     project "LSAP"
         location "LSAP"
         kind "SharedLib"
@@ -28,9 +33,14 @@ workspace "LSAP"
         }
         includedirs
         {
-            "%{prj.name}/src"
+            "%{prj.name}/src",
+            "%{IncludeDir.GLFW3}"
         }
-
+        links
+        {
+            "GLFW",
+            "glfw3.lib"
+        }
 
         filter "system:windows"
         cppdialect "C++20"

@@ -6,7 +6,7 @@ namespace LSAP {
 
 	}
 	void Application::run() {
-		while (true) {}
+
 	}
 	void Application::setSound(SoundGenerator* sound) {
 		sound->openAudioDevice();
