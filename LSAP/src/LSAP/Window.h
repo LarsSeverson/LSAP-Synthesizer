@@ -25,6 +25,10 @@ namespace LSAP {
 		using EventCallbackW = std::function<void(Event&)>;
 
 		virtual ~Window() {}
+
+		virtual unsigned int getWidth() const = 0;
+		virtual unsigned int getHeight() const = 0;
+
 		virtual void onUpdate() = 0;
 		virtual void setEventCallback(const EventCallbackW& event) = 0;
 		static Window* createWindow(const WindowProperties& props = WindowProperties());

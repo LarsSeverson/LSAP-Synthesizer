@@ -4,8 +4,9 @@
 #include "LSAP/Events/ApplicationEvent.h"
 #include "LSAP/Events/KeyEvent.h"
 #include "LSAP/Events/MouseEvent.h"
-
 #include "Log.h"
+
+#include <glad/glad.h>
 
 namespace LSAP
 {
@@ -13,7 +14,9 @@ namespace LSAP
 		return new WindowGL(props);
 	}
 
-	WindowGL::WindowGL(const WindowProperties& props) {
+	WindowGL::WindowGL(const WindowProperties& props) 
+		: wWidth(props.wWidth), wHeight(props.wHeight)
+	{
 		WindowGL::initWindow(props);
 	}
 
@@ -24,13 +27,15 @@ namespace LSAP
 	void WindowGL::initWindow(const WindowProperties& props) {
 
 		LS_CORE_INFO("Creating window {0} ({1}, {2})", props.wTitle, props.wWidth, props.wHeight);
-		LS_ASSERT(glfwInit(), "Could not initialize GLFW");
 		
+		// GLFW and glad initializations
+		LS_ASSERT(glfwInit(), "Could not initialize GLFW");
 		glfwWindow = glfwCreateWindow((int)props.wWidth, (int)props.wHeight, props.wTitle.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(glfwWindow);
+		LS_ASSERT(gladLoadGLLoader((GLADloadproc)glfwGetProcAddress), "Could not initialize glad");
 		glfwSetWindowUserPointer(glfwWindow, &mWindowContext);
 
-		// -------------Callbacks-------------
+		// Callbacks
 		glfwSetWindowSizeCallback(glfwWindow, [](GLFWwindow* window, int width, int height) {
 		WindowContext cb = *(WindowContext*)glfwGetWindowUserPointer(window);
 		WindowResizeEvent event(width, height);

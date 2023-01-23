@@ -1,9 +1,4 @@
 #pragma once
-
-#pragma comment(lib, "winmm.lib")
-
-#define NOMINMAX
-
 #include <iostream>
 #include <memory>
 #include <functional>
@@ -18,6 +13,8 @@
 #include <utility>
 #include <string>
 
+//#include "LSAP/Log.h"
+#define NOMINMAX
 #ifdef LS_PLATFORM_WINDOWS
 #include <Windows.h>
 #endif

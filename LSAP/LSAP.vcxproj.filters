@@ -7,6 +7,9 @@
     <Filter Include="LSAP\Events">
       <UniqueIdentifier>{5988FD05-C53D-76FB-4E32-70D2BAE66CFF}</UniqueIdentifier>
     </Filter>
+    <Filter Include="LSAP\ImGui">
+      <UniqueIdentifier>{FF161CAB-EBCE-5DF8-54D6-365440ADF8E8}</UniqueIdentifier>
+    </Filter>
     <Filter Include="LSAP\Synth">
       <UniqueIdentifier>{5A46D8AB-46FE-19F9-AF05-F3549BDCB4E9}</UniqueIdentifier>
     </Filter>
@@ -22,8 +25,23 @@
     <ClInclude Include="src\LSAP\EntryPoint.h">
       <Filter>LSAP</Filter>
     </ClInclude>
+    <ClInclude Include="src\LSAP\Events\ApplicationEvent.h">
+      <Filter>LSAP\Events</Filter>
+    </ClInclude>
     <ClInclude Include="src\LSAP\Events\Event.h">
       <Filter>LSAP\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LSAP\Events\KeyEvent.h">
+      <Filter>LSAP\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LSAP\Events\MouseEvent.h">
+      <Filter>LSAP\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LSAP\ImGui\LSGui.h">
+      <Filter>LSAP\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LSAP\Log.h">
+      <Filter>LSAP</Filter>
     </ClInclude>
     <ClInclude Include="src\LSAP\Synth\SoundGenerator.h">
       <Filter>LSAP\Synth</Filter>
@@ -35,13 +53,15 @@
       <Filter>LSAP</Filter>
     </ClInclude>
     <ClInclude Include="src\lspch.h" />
-    <ClInclude Include="src\LSAP\Log.h" />
-    <ClInclude Include="src\LSAP\Events\ApplicationEvent.h" />
-    <ClInclude Include="src\LSAP\Events\KeyEvent.h" />
-    <ClInclude Include="src\LSAP\Events\MouseEvent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\LSAP\Application.cpp">
+      <Filter>LSAP</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LSAP\ImGui\LSGui.cpp">
+      <Filter>LSAP\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LSAP\Log.cpp">
       <Filter>LSAP</Filter>
     </ClCompile>
     <ClCompile Include="src\LSAP\Synth\SoundGenerator.cpp">
@@ -51,6 +71,5 @@
       <Filter>LSAP</Filter>
     </ClCompile>
     <ClCompile Include="src\lspch.cpp" />
-    <ClCompile Include="src\LSAP\Log.cpp" />
   </ItemGroup>
 </Project>

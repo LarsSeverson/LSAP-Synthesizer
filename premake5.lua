@@ -12,8 +12,12 @@ workspace "LSAP"
 
     IncludeDir = {}
     IncludeDir["GLFW3"] = "LSAP/vendor/GLFW3/include"
+    IncludeDir["glad"] = "LSAP/vendor/glad/include"
+    IncludeDir["imGui"] = "LSAP/vendor/imGui"
 
     include "LSAP/vendor/GLFW3"
+    include "LSAP/vendor/glad"
+    include "LSAP/vendor/imGui"
 
     project "LSAP"
         location "LSAP"
@@ -35,23 +39,29 @@ workspace "LSAP"
         {
             "%{prj.name}/src",
             "%{IncludeDir.GLFW3}",
+            "%{IncludeDir.glad}",
+            "%{IncludeDir.imGui}",
             "%{prj.name}/vendor/spdlog/include"
         }
         links
         {
             "GLFW",
-            "opengl32.lib"
+            "opengl32.lib",
+            "glad",
+            "imGui",
+            "winmm.lib"
         }
 
         filter "system:windows"
         cppdialect "C++20"
-        staticruntime "On"
+        staticruntime "off"
         systemversion "latest"
 
         defines
         {
             "LS_PLATFORM_WINDOWS",
-            "LS_BUILD_DLL"
+            "LS_BUILD_DLL",
+            "GLFW_INCLUDE_NONE"
         }
 
         postbuildcommands
