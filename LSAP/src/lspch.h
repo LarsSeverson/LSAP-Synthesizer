@@ -15,5 +15,9 @@
 #include <algorithm>
 #include <limits>
 #include <vector>
+#include <utility>
+#include <string>
 
+#ifdef LS_PLATFORM_WINDOWS
 #include <Windows.h>
+#endif

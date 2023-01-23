@@ -80,7 +80,7 @@
       <PrecompiledHeaderFile>lspch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>LS_PLATFORM_WINDOWS;LS_BUILD_DLL;LS_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\GLFW3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\GLFW3\include;vendor\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -104,7 +104,7 @@
       <PrecompiledHeaderFile>lspch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>LS_PLATFORM_WINDOWS;LS_BUILD_DLL;LS_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\GLFW3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\GLFW3\include;vendor\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -132,7 +132,7 @@
       <PrecompiledHeaderFile>lspch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>LS_PLATFORM_WINDOWS;LS_BUILD_DLL;LS_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\GLFW3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\GLFW3\include;vendor\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -155,16 +155,22 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\LSAP\Events\ApplicationEvent.h" />
+    <ClInclude Include="src\LSAP\Events\KeyEvent.h" />
+    <ClInclude Include="src\LSAP\Events\MouseEvent.h" />
+    <ClInclude Include="src\LSAP\Log.h" />
     <ClInclude Include="src\LSAP.h" />
     <ClInclude Include="src\LSAP\Application.h" />
     <ClInclude Include="src\LSAP\Core.h" />
     <ClInclude Include="src\LSAP\EntryPoint.h" />
+    <ClInclude Include="src\LSAP\Events\Event.h" />
     <ClInclude Include="src\LSAP\Synth\SoundGenerator.h" />
     <ClInclude Include="src\LSAP\Window.h" />
     <ClInclude Include="src\LSAP\WindowGL.h" />
     <ClInclude Include="src\lspch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\LSAP\Log.cpp" />
     <ClCompile Include="src\LSAP\Application.cpp" />
     <ClCompile Include="src\LSAP\Synth\SoundGenerator.cpp" />
     <ClCompile Include="src\LSAP\WindowGL.cpp" />

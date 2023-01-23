@@ -9,3 +9,7 @@
 #else 
 #error LSAP is only for Windows.
 #endif
+
+#define LS_ASSERT(x, ...) { if (!(x)) {LS_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); }}
+#define LS_CORE_ASSERT(x, ...) { if (!(x)) {LS_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); }}
+#define BIT(x) (1 << x)

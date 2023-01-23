@@ -1,8 +1,8 @@
 #pragma once
 
 #include "lspch.h"
-
 #include "Core.h"
+#include "Events/Event.h"
 
 // This serves as an entry for app to access GLFW functions
 // If I wanted to have app access GLFW functions directly,
@@ -22,7 +22,11 @@ namespace LSAP {
 	class LSAP_API Window
 	{
 	public:
+		using EventCallbackW = std::function<void(Event&)>;
+
 		virtual ~Window() {}
+		virtual void onUpdate() = 0;
+		virtual void setEventCallback(const EventCallbackW& event) = 0;
 		static Window* createWindow(const WindowProperties& props = WindowProperties());
 	};
 }

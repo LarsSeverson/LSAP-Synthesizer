@@ -34,7 +34,8 @@ workspace "LSAP"
         includedirs
         {
             "%{prj.name}/src",
-            "%{IncludeDir.GLFW3}"
+            "%{IncludeDir.GLFW3}",
+            "%{prj.name}/vendor/spdlog/include"
         }
         links
         {
@@ -88,7 +89,8 @@ project "Sandbox"
         
         includedirs
         {
-            "LSAP/src"
+            "LSAP/src",
+            "LSAP/vendor/spdlog/include"
         }
 
         links

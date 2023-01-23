@@ -52,7 +52,7 @@ namespace LSAP {
 		int previousSample;
 		double offset = 1.0 / double(mSampleRate);
 		mThread = std::thread(&SoundGenerator::threadPlaySound, this, offset, mGlobalTime);
-		mThread.join();
+		mThread.detach();
 	}
 
 	void SoundGenerator::setSynthFunc(const EventFn& func) {
