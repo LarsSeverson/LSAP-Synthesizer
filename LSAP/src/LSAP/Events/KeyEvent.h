@@ -14,8 +14,9 @@ namespace LSAP {
 	class LSAP_API KeyPressedEvent : public KeyEvent
 	{
 	public:
-		KeyPressedEvent(int keyCode, int repeatCount) : KeyEvent(keyCode), mReapeatCount(repeatCount) {}
+		KeyPressedEvent(int keyCode, int repeatCount) : KeyEvent(keyCode), mReapeatCount(repeatCount), mKeyCode(keyCode) {}
 
+		inline int getKeyCode() const { return mKeyCode; }
 		inline int getRepeatCount() const { return mReapeatCount; }
 
 		std::string toString() const override {
@@ -29,12 +30,15 @@ namespace LSAP {
 
 	private:
 		int mReapeatCount;
+		int mKeyCode;
 	};
 
 	class LSAP_API KeyReleasedEvent : public KeyEvent
 	{
 	public:
-		KeyReleasedEvent(int keyCode) : KeyEvent(keyCode) {}
+		KeyReleasedEvent(int keyCode) : KeyEvent(keyCode), mKeyCode(keyCode) {}
+
+		inline int getKeyCode() const { return mKeyCode; }
 
 		std::string toString() const override {
 			std::stringstream ss;
@@ -44,5 +48,26 @@ namespace LSAP {
 		}
 
 		EVENT_CLASS_TYPE(KeyReleased)
+	private:
+		int mKeyCode;
+	};
+
+	class LSAP_API KeyTypedEvent : public KeyEvent
+	{
+	public:
+		KeyTypedEvent(int keyCode) : KeyEvent(keyCode), mKeyCode(keyCode){}
+
+		inline int getKeyCode() const { return mKeyCode; }
+
+		std::string toString() const override {
+			// cout
+			std::stringstream ss;
+
+			ss << "KeyTypedEvent: " << mKeyCode;
+			return ss.str();
+		}
+		EVENT_CLASS_TYPE(KeyTyped)
+	private:
+		int mKeyCode;
 	};
 }

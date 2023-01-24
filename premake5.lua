@@ -15,14 +15,18 @@ workspace "LSAP"
     IncludeDir["glad"] = "LSAP/vendor/glad/include"
     IncludeDir["imGui"] = "LSAP/vendor/imGui"
 
-    include "LSAP/vendor/GLFW3"
-    include "LSAP/vendor/glad"
-    include "LSAP/vendor/imGui"
+    group "Dependencies"
+        include "LSAP/vendor/GLFW3"
+        include "LSAP/vendor/glad"
+        include "LSAP/vendor/imGui"
+    
+    group ""
 
     project "LSAP"
         location "LSAP"
         kind "SharedLib"
         language "C++"
+        staticruntime "off"
 
         targetdir ("bin/" .. outputdir .. "/%{prj.name}")
         objdir    ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -54,7 +58,6 @@ workspace "LSAP"
 
         filter "system:windows"
         cppdialect "C++20"
-        staticruntime "off"
         systemversion "latest"
 
         defines
@@ -66,27 +69,28 @@ workspace "LSAP"
 
         postbuildcommands
         {
-            ("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
+            ("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
         }
         filter "configurations:Debug"
         defines "LS_DEBUG"
-        buildoptions "/LSd"
+        runtime "Debug"
         symbols "On"
 
         filter "configurations:Release"
         defines "LS_RELEASE"
-        buildoptions "/LS"
+        runtime "Release"
         optimize "On"
 
         filter "configurations:Dist"
         defines "LS_DIST"
-        buildoptions "/LS"
+        runtime "Release"
         optimize "On"
 
 project "Sandbox"
         location "Sandbox"
         kind "ConsoleApp"
         language "C++"
+        staticruntime "off"
 
         targetdir ("bin/" .. outputdir .. "/%{prj.name}")
         objdir    ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -110,7 +114,6 @@ project "Sandbox"
     
         filter "system:windows"
             cppdialect "C++20"
-            staticruntime "On"
             systemversion "latest"
     
             defines
@@ -120,15 +123,15 @@ project "Sandbox"
     
         filter "configurations:Debug"
             defines "LS_DEBUG"
-            buildoptions "/LSd"
+            runtime "Debug"
             symbols "On"
     
         filter "configurations:Release"
             defines "LS_RELEASE"
-            buildoptions "/LS"
+            runtime "Release"
             optimize "On"
     
         filter "configurations:Dist"
             defines "LS_DIST"
-            buildoptions "/LS"
+            runtime "Release"
             optimize "On"

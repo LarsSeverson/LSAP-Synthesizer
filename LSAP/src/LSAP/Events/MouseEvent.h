@@ -46,6 +46,7 @@ namespace LSAP {
 	{
 	public:
 		inline int getMouseButton() { return mButton; }
+		
 		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 	protected:
 		MouseButtonEvent(int button) : mButton(button) {}

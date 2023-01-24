@@ -9,8 +9,8 @@ namespace LSAP {
 		WindowGL(const WindowProperties& props);
 		virtual ~WindowGL();
 
-		inline unsigned int getWidth() const override { return wWidth; }
-		inline unsigned int getHeight() const override { return wHeight; }
+		inline unsigned int getWidth() const override { return mWindowContext.Width; }
+		inline unsigned int getHeight() const override { return mWindowContext.Height; }
 
 		void onUpdate() override;
 		inline void setEventCallback(const EventCallbackW& event) override { mWindowContext.EventCallback = event; }
@@ -25,6 +25,9 @@ namespace LSAP {
 		
 
 		struct WindowContext {
+			unsigned Width;
+			unsigned Height;
+			std::string Title;
 			EventCallbackW EventCallback;
 		};
 		WindowContext mWindowContext;

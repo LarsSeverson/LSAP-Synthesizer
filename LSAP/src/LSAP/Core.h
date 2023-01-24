@@ -10,6 +10,13 @@
 #error LSAP is only for Windows.
 #endif
 
+#ifdef LS_DEBUG
+#define LS_ENABLE_ASSERTS
+#endif
+
+#ifdef LS_ENABLE_ASSERTS
 #define LS_ASSERT(x, ...) { if (!(x)) {LS_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); }}
 #define LS_CORE_ASSERT(x, ...) { if (!(x)) {LS_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); }}
 #define BIT(x) (1 << x)
+#define LS_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
+#endif

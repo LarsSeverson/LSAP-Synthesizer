@@ -10,16 +10,18 @@
 #include <backends/imgui_impl_opengl3.cpp>
 
 #include "LSAP/Application.h"
+#include "LSAP/Log.h"
 
 namespace LSAP {
 	LSGui::LSGui() {
 
 	}
+
 	LSGui::~LSGui() {
 
 	}
 
-	void LSGui::onAttach() {
+	void LSGui::onGuiAttach() {
 		ImGui::CreateContext();
 		ImGui::StyleColorsDark();
 
@@ -27,7 +29,6 @@ namespace LSAP {
 		io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
 		io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
 
-		// TEMPORARY: should eventually use Hazel key codes
 		io.KeyMap[ImGuiKey_Tab] = GLFW_KEY_TAB;
 		io.KeyMap[ImGuiKey_LeftArrow] = GLFW_KEY_LEFT;
 		io.KeyMap[ImGuiKey_RightArrow] = GLFW_KEY_RIGHT;
@@ -50,9 +51,9 @@ namespace LSAP {
 		io.KeyMap[ImGuiKey_Y] = GLFW_KEY_Y;
 		io.KeyMap[ImGuiKey_Z] = GLFW_KEY_Z;
 
-		ImGui_ImplOpenGL3_Init("#version 410");
+		ImGui_ImplOpenGL3_Init("#version 430");
 	}
-	void LSGui::onUpdate() {
+	void LSGui::onGuiUpdate() {
 		ImGuiIO& io = ImGui::GetIO();
 		Application& app = Application::get();
 		io.DisplaySize = ImVec2(app.getWindow().getWidth(), app.getWindow().getHeight());
@@ -70,11 +71,87 @@ namespace LSAP {
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
-	void LSGui::onDetach() {
+	void LSGui::onGuiDetach() {
 
 	}
-	void LSGui::onEvent(Event& event) {
+	void LSGui::onGuiEvent(Event& event) {
+		EventDispatcher dispatcher(event);
+		dispatcher.dispatch<MouseButtonPressedEvent>(LS_BIND_EVENT_FN(LSGui::onMouseButtonPressedEvent));
+		dispatcher.dispatch<MouseButtonReleasedEvent>(LS_BIND_EVENT_FN(LSGui::onMouseButtonReleasedEvent));
+		dispatcher.dispatch<MouseMovedEvent>(LS_BIND_EVENT_FN(LSGui::onMouseMovedEvent));
+		dispatcher.dispatch<MouseScrolledEvent>(LS_BIND_EVENT_FN(LSGui::onMouseScrolledEvent));
+		dispatcher.dispatch<KeyPressedEvent>(LS_BIND_EVENT_FN(LSGui::onKeyPressedEvent));
+		dispatcher.dispatch<KeyReleasedEvent>(LS_BIND_EVENT_FN(LSGui::onKeyReleasedEvent));
+		dispatcher.dispatch<KeyTypedEvent>(LS_BIND_EVENT_FN(LSGui::onKeyTypedEvent));
+		dispatcher.dispatch<WindowResizeEvent>(LS_BIND_EVENT_FN(LSGui::onWindowResizeEvent));
 
+	}
+
+	bool LSGui::onMouseButtonPressedEvent(MouseButtonPressedEvent& event)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		io.MouseDown[event.getMouseButton()] = true;
+		return false;
+	}
+
+	bool LSGui::onMouseButtonReleasedEvent(MouseButtonReleasedEvent& event)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		io.MouseDown[event.getMouseButton()] = false;
+		return false;
+	}
+
+	bool LSGui::onMouseMovedEvent(MouseMovedEvent& event)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		io.MousePos = ImVec2(event.getMouseX(), event.getMouseY());
+		return false;
+	}
+
+	bool LSGui::onMouseScrolledEvent(MouseScrolledEvent& event)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		io.MouseWheelH += event.getOffsetX();
+		io.MouseWheel += event.getOffsetY();
+		return false;
+	}
+
+	bool LSGui::onKeyPressedEvent(KeyPressedEvent& event)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		io.KeysDown[event.getKeyCode()] = true;
+
+		io.KeyCtrl = io.KeysDown[GLFW_KEY_LEFT_CONTROL] || io.KeysDown[GLFW_KEY_RIGHT_CONTROL];
+		io.KeyShift = io.KeysDown[GLFW_KEY_LEFT_SHIFT] || io.KeysDown[GLFW_KEY_RIGHT_SHIFT];
+		io.KeyAlt = io.KeysDown[GLFW_KEY_LEFT_ALT] || io.KeysDown[GLFW_KEY_RIGHT_ALT];
+		io.KeySuper = io.KeysDown[GLFW_KEY_LEFT_SUPER] || io.KeysDown[GLFW_KEY_RIGHT_SUPER];
+		return false;
+	}
+
+	bool LSGui::onKeyReleasedEvent(KeyReleasedEvent& event)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		io.KeysDown[event.getKeyCode()] = false;
+		return false;
+	}
+
+	bool LSGui::onKeyTypedEvent(KeyTypedEvent& event)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		int keycode = event.getKeyCode();
+		if (keycode > 0 && keycode < 0x10000) {
+			io.AddInputCharacter((unsigned short)keycode);
+		}
+		return false;
+	}
+
+	bool LSGui::onWindowResizeEvent(WindowResizeEvent& event)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		io.DisplaySize = ImVec2(event.getWindowWidth(), event.getWindowHeight());
+		io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
+		glViewport(0, 0, event.getWindowWidth(), event.getWindowHeight());
+		return false;
 	}
 
 }

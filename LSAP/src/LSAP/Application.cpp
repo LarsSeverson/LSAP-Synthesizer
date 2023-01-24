@@ -13,7 +13,7 @@ namespace LSAP {
 	Application::Application() {
 		appWindow = std::unique_ptr<Window>(Window::createWindow());
 		appGui = std::unique_ptr<LSGui>(new LSGui());
-		appGui->onAttach();
+		appGui->onGuiAttach();
 		sInstance = this;
 
 		appWindow->setEventCallback(BIND_EVENT_FN(onEvent));
@@ -23,7 +23,7 @@ namespace LSAP {
 			glClearColor(1, 1, 1, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
 
-			appGui->onUpdate();
+			appGui->onGuiUpdate();
 			appWindow->onUpdate();
 		}
 	}
@@ -31,6 +31,8 @@ namespace LSAP {
 	void Application::onEvent(Event& event) {
 		EventDispatcher theEvent(event);
 		theEvent.dispatch<WindowCloseEvent>(BIND_EVENT_FN(onWindowClose));
+
+		appGui->onGuiEvent(event);
 		LS_CORE_TRACE("{0}", event);
 	}
 

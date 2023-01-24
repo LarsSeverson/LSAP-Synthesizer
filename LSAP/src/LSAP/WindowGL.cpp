@@ -25,7 +25,9 @@ namespace LSAP
 	}
 	
 	void WindowGL::initWindow(const WindowProperties& props) {
-
+		mWindowContext.Height = props.wHeight;
+		mWindowContext.Width = props.wWidth;
+		mWindowContext.Title = props.wTitle;
 		LS_CORE_INFO("Creating window {0} ({1}, {2})", props.wTitle, props.wWidth, props.wHeight);
 		
 		// GLFW and glad initializations
@@ -37,15 +39,17 @@ namespace LSAP
 
 		// Callbacks
 		glfwSetWindowSizeCallback(glfwWindow, [](GLFWwindow* window, int width, int height) {
-		WindowContext cb = *(WindowContext*)glfwGetWindowUserPointer(window);
+		WindowContext& windowData = *(WindowContext*)glfwGetWindowUserPointer(window);
+		windowData.Height = height;
+		windowData.Width = width;
 		WindowResizeEvent event(width, height);
-		cb.EventCallback(event);
+		windowData.EventCallback(event);
 		});
 
 		glfwSetWindowCloseCallback(glfwWindow, [](GLFWwindow* window) {
-		WindowContext& cb = *(WindowContext*)glfwGetWindowUserPointer(window);
+		WindowContext& windowData = *(WindowContext*)glfwGetWindowUserPointer(window);
 		WindowCloseEvent event;
-		cb.EventCallback(event);
+		windowData.EventCallback(event);
 		});
 
 		glfwSetKeyCallback(glfwWindow, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -69,6 +73,12 @@ namespace LSAP
 		}
 		});
 		
+		glfwSetCharCallback(glfwWindow, [](GLFWwindow* window, unsigned int keycode) {
+		WindowContext& cb = *(WindowContext*)glfwGetWindowUserPointer(window);
+		KeyTypedEvent event(keycode);
+		cb.EventCallback(event);
+		});
+
 		glfwSetMouseButtonCallback(glfwWindow, [](GLFWwindow* window, int button, int action, int mods) {
 		WindowContext& cb = *(WindowContext*)glfwGetWindowUserPointer(window);
 
@@ -97,7 +107,9 @@ namespace LSAP
 		MouseMovedEvent event((float)xPos, (float)yPos);
 		cb.EventCallback(event);
 		});
+	
 	}
+
 	void WindowGL::onUpdate() {
 		glfwPollEvents();
 		glfwSwapBuffers(glfwWindow);
