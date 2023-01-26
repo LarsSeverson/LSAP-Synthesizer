@@ -4,7 +4,7 @@
 #include "LSAP/Events/ApplicationEvent.h"
 #include "LSAP/Events/KeyEvent.h"
 #include "LSAP/Events/MouseEvent.h"
-#include "Log.h"
+#include "LSAP/Log.h"
 
 #include <glad/glad.h>
 

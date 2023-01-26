@@ -1,10 +1,10 @@
 #pragma once
 #include "Core.h"
 #include "Window.h"
-#include "Synth/SoundGenerator.h"
 #include "Events/Event.h"
+#include "Synth/SoundGenerator.h"
 #include "Events/ApplicationEvent.h"
-#include "LSAP/ImGui/LSGui.h"
+#include "LayerStack.h"
 
 namespace LSAP {
 	class LSAP_API Application
@@ -12,18 +12,25 @@ namespace LSAP {
 	public:
 		Application();
 
-		void run();
+		void runApplication();
 		void setSound(SoundGenerator* sound);
 		void onEvent(Event& event);
+		void pushLayer(Layer* layer);
+		void pushOverlay(Layer* overlay);
 
 		bool onWindowClose(WindowCloseEvent& event);
-
+		
 		inline Window& getWindow() { return *appWindow; }
-		inline static Application& get() { return *sInstance; }
+		
+		inline static Application& getApplication() { return *sInstance; }
+	
 	private:
 		std::unique_ptr<Window> appWindow;
-		std::unique_ptr<LSGui> appGui;
+		
+		LayerStack appLayerStack;
+
 		static Application* sInstance;
+
 		bool isRunning = true;
 
 		// To be put into Presets class later

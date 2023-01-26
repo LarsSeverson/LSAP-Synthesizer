@@ -28,9 +28,11 @@ namespace LSAP {
 
 		virtual unsigned int getWidth() const = 0;
 		virtual unsigned int getHeight() const = 0;
-
+		
+		virtual void* getNativeWindow() const = 0;
 		virtual void onUpdate() = 0;
 		virtual void setEventCallback(const EventCallbackW& event) = 0;
+		
 		static Window* createWindow(const WindowProperties& props = WindowProperties());
 	};
 }

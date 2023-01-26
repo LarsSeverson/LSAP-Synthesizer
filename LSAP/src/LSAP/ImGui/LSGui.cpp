@@ -13,15 +13,14 @@
 #include "LSAP/Log.h"
 
 namespace LSAP {
-	LSGui::LSGui() {
-
+	LSGui::LSGui() : Layer("GUI") {
 	}
 
 	LSGui::~LSGui() {
 
 	}
 
-	void LSGui::onGuiAttach() {
+	void LSGui::onLayerAttach() {
 		ImGui::CreateContext();
 		ImGui::StyleColorsDark();
 
@@ -53,9 +52,10 @@ namespace LSAP {
 
 		ImGui_ImplOpenGL3_Init("#version 430");
 	}
-	void LSGui::onGuiUpdate() {
+	void LSGui::onLayerUpdate() {
+
 		ImGuiIO& io = ImGui::GetIO();
-		Application& app = Application::get();
+		Application& app = Application::getApplication();
 		io.DisplaySize = ImVec2(app.getWindow().getWidth(), app.getWindow().getHeight());
 
 		float time = (float)glfwGetTime();
@@ -74,7 +74,7 @@ namespace LSAP {
 	void LSGui::onGuiDetach() {
 
 	}
-	void LSGui::onGuiEvent(Event& event) {
+	void LSGui::onLayerEvent(Event& event) {
 		EventDispatcher dispatcher(event);
 		dispatcher.dispatch<MouseButtonPressedEvent>(LS_BIND_EVENT_FN(LSGui::onMouseButtonPressedEvent));
 		dispatcher.dispatch<MouseButtonReleasedEvent>(LS_BIND_EVENT_FN(LSGui::onMouseButtonReleasedEvent));
@@ -84,7 +84,7 @@ namespace LSAP {
 		dispatcher.dispatch<KeyReleasedEvent>(LS_BIND_EVENT_FN(LSGui::onKeyReleasedEvent));
 		dispatcher.dispatch<KeyTypedEvent>(LS_BIND_EVENT_FN(LSGui::onKeyTypedEvent));
 		dispatcher.dispatch<WindowResizeEvent>(LS_BIND_EVENT_FN(LSGui::onWindowResizeEvent));
-
+		LS_CORE_INFO("{0}", event);
 	}
 
 	bool LSGui::onMouseButtonPressedEvent(MouseButtonPressedEvent& event)

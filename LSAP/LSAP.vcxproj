@@ -152,6 +152,8 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\LSAP\KeyCodes.h" />
+    <ClInclude Include="src\LSAP\LayerStack.h" />
     <ClInclude Include="src\LSAP.h" />
     <ClInclude Include="src\LSAP\Application.h" />
     <ClInclude Include="src\LSAP\Core.h" />
@@ -161,21 +163,26 @@
     <ClInclude Include="src\LSAP\Events\KeyEvent.h" />
     <ClInclude Include="src\LSAP\Events\MouseEvent.h" />
     <ClInclude Include="src\LSAP\ImGui\LSGui.h" />
+    <ClInclude Include="src\LSAP\Input.h" />
+    <ClInclude Include="src\LSAP\Layer.h" />
     <ClInclude Include="src\LSAP\Log.h" />
+    <ClInclude Include="src\LSAP\MouseCodes.h" />
     <ClInclude Include="src\LSAP\Synth\SoundGenerator.h" />
     <ClInclude Include="src\LSAP\Window.h" />
-    <ClInclude Include="src\LSAP\WindowGL.h" />
+    <ClInclude Include="src\Platform\Windows\WindowGL.h" />
     <ClInclude Include="src\lspch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\LSAP\LayerStack.cpp" />
     <ClCompile Include="src\LSAP\Application.cpp" />
     <ClCompile Include="src\LSAP\ImGui\LSGui.cpp" />
     <ClCompile Include="src\LSAP\Log.cpp" />
     <ClCompile Include="src\LSAP\Synth\SoundGenerator.cpp" />
-    <ClCompile Include="src\LSAP\WindowGL.cpp" />
+    <ClCompile Include="src\Platform\Windows\WindowGL.cpp" />
     <ClCompile Include="src\lspch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\GLFW3\GLFW.vcxproj">

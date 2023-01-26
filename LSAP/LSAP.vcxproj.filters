@@ -49,10 +49,15 @@
     <ClInclude Include="src\LSAP\Window.h">
       <Filter>LSAP</Filter>
     </ClInclude>
-    <ClInclude Include="src\LSAP\WindowGL.h">
+    <ClInclude Include="src\Platform\Windows\WindowGL.h">
       <Filter>LSAP</Filter>
     </ClInclude>
     <ClInclude Include="src\lspch.h" />
+    <ClInclude Include="src\LSAP\Input.h" />
+    <ClInclude Include="src\LSAP\Layer.h" />
+    <ClInclude Include="src\LSAP\LayerStack.h" />
+    <ClInclude Include="src\LSAP\KeyCodes.h" />
+    <ClInclude Include="src\LSAP\MouseCodes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\LSAP\Application.cpp">
@@ -67,9 +72,11 @@
     <ClCompile Include="src\LSAP\Synth\SoundGenerator.cpp">
       <Filter>LSAP\Synth</Filter>
     </ClCompile>
-    <ClCompile Include="src\LSAP\WindowGL.cpp">
+    <ClCompile Include="src\Platform\Windows\WindowGL.cpp">
       <Filter>LSAP</Filter>
     </ClCompile>
     <ClCompile Include="src\lspch.cpp" />
+    <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
+    <ClCompile Include="src\LSAP\LayerStack.cpp" />
   </ItemGroup>
 </Project>

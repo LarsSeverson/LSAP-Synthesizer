@@ -12,18 +12,18 @@ namespace LSAP {
 	
 	Application::Application() {
 		appWindow = std::unique_ptr<Window>(Window::createWindow());
-		appGui = std::unique_ptr<LSGui>(new LSGui());
-		appGui->onGuiAttach();
 		sInstance = this;
 
 		appWindow->setEventCallback(BIND_EVENT_FN(onEvent));
 	}
-	void Application::run() {
+	void Application::runApplication() {
 		while (isRunning) {
 			glClearColor(1, 1, 1, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
 
-			appGui->onGuiUpdate();
+			for (Layer* i : appLayerStack) {
+				i->onLayerUpdate();
+			}
 			appWindow->onUpdate();
 		}
 	}
@@ -31,9 +31,21 @@ namespace LSAP {
 	void Application::onEvent(Event& event) {
 		EventDispatcher theEvent(event);
 		theEvent.dispatch<WindowCloseEvent>(BIND_EVENT_FN(onWindowClose));
+		for (auto i = appLayerStack.end(); i != appLayerStack.begin();) {
+			(*--i)->onLayerEvent(event);
+			if (event.mEventHandled) {
+				break;
+			}
+		}
+	}
 
-		appGui->onGuiEvent(event);
-		LS_CORE_TRACE("{0}", event);
+	void Application::pushLayer(Layer* layer) {
+		appLayerStack.pushLayer(layer);
+		layer->onLayerAttach();
+	}
+	void Application::pushOverlay(Layer* overlay) {
+		appLayerStack.pushOverlay(overlay);
+		overlay->onLayerAttach();
 	}
 
 	void Application::setSound(SoundGenerator* sound) {

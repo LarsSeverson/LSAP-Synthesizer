@@ -3,19 +3,21 @@
 #include "LSAP/Events/ApplicationEvent.h"
 #include "LSAP/Events/MouseEvent.h"
 #include "LSAP/Events/KeyEvent.h"
+#include "LSAP/Layer.h"
 
 namespace LSAP {
 
-	class LSAP_API LSGui
+	class LSAP_API LSGui : public Layer
 	{
 	public:
 		LSGui();
 		~LSGui();
 
-		void onGuiUpdate();
-		void onGuiAttach();
+		void onLayerUpdate() override;
+		void onLayerAttach() override;
+		void onLayerEvent(Event& event) override;
+
 		void onGuiDetach();
-		void onGuiEvent(Event& event);
 
 		bool onMouseButtonPressedEvent(MouseButtonPressedEvent& event);
 		bool onMouseButtonReleasedEvent(MouseButtonReleasedEvent& event);
