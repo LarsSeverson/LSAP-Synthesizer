@@ -104,7 +104,8 @@ project "Sandbox"
         includedirs
         {
             "LSAP/src",
-            "LSAP/vendor/spdlog/include"
+            "LSAP/vendor/spdlog/include",
+            "LSAP/vendor"
         }
 
         links

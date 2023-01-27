@@ -15,10 +15,12 @@ namespace LSAP {
 	void LayerStack::pushLayer(Layer* layer)
 	{
 		layerInsert = layers.emplace(layerInsert, layer);
+		layer->onLayerAttach();
 	}
 	void LayerStack::pushOverlay(Layer* overlay)
 	{
 		layers.emplace_back(overlay);
+		overlay->onLayerAttach();
 	}
 	void LayerStack::popLayer(Layer* layer)
 	{

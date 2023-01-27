@@ -41,11 +41,9 @@ namespace LSAP {
 
 	void Application::pushLayer(Layer* layer) {
 		appLayerStack.pushLayer(layer);
-		layer->onLayerAttach();
 	}
 	void Application::pushOverlay(Layer* overlay) {
 		appLayerStack.pushOverlay(overlay);
-		overlay->onLayerAttach();
 	}
 
 	void Application::setSound(SoundGenerator* sound) {

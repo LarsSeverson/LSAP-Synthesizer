@@ -4,6 +4,4 @@
 [submodule "LSAP\\vendor\\spdlog"]
 	path = LSAP\\vendor\\spdlog
 	url = https://github.com/gabime/spdlog
-[submodule "LSAP\\vendor\\imGui"]
-	path = LSAP\\vendor\\imGui
-	url = https://github.com/TheCherno/imgui
+
