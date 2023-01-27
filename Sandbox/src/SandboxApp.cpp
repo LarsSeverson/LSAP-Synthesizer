@@ -1,6 +1,8 @@
 #pragma once
 #include <LSAP.h>
 
+#include "imGui/imgui.h"
+
 class ExampleLayer : public LSAP::Layer
 {
 public:
@@ -9,6 +11,11 @@ public:
 		if (LSAP::Input::sIsKeyPressed(LSAP::Key::Tab)) {
 			LS_TRACE("Tab key pressed");
 		}
+	}
+	virtual void onImGuiRenderer() override {
+		ImGui::Begin("Test");
+		ImGui::Text("Hello World");
+		ImGui::End();
 	}
 	void onLayerEvent(LSAP::Event& event) override {
 
@@ -28,7 +35,6 @@ public:
 	Sandbox() {
 		setSound(new ExampleSound());
 		pushLayer(new ExampleLayer());
-		pushOverlay(new LSAP::LSGui());
 	}
 };
 

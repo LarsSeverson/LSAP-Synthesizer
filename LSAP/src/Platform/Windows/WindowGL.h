@@ -15,10 +15,12 @@ namespace LSAP {
 		inline void* getNativeWindow() const override { return glfwWindow; }
 
 		void onUpdate() override;
+		void setVSync(bool enabled) override;
 		
 	private:
 		unsigned int wWidth;
 		unsigned int wHeight;
+		
 
 		void initWindow(const WindowProperties& props);
 		void shutDown();
@@ -30,8 +32,10 @@ namespace LSAP {
 			unsigned Width;
 			unsigned Height;
 			std::string Title;
+			bool VSync;
 			EventCallbackW EventCallback;
 		};
+
 		WindowContext mWindowContext;
 	};
 }

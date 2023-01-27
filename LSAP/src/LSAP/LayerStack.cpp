@@ -4,7 +4,7 @@
 namespace LSAP {
 	LayerStack::LayerStack()
 	{
-		layerInsert = layers.begin();
+	
 	}
 	LayerStack::~LayerStack()
 	{
@@ -14,7 +14,7 @@ namespace LSAP {
 	}
 	void LayerStack::pushLayer(Layer* layer)
 	{
-		layerInsert = layers.emplace(layerInsert, layer);
+		layers.emplace(layers.begin() + mLayerIndex++, layer);
 		layer->onLayerAttach();
 	}
 	void LayerStack::pushOverlay(Layer* overlay)
@@ -27,7 +27,7 @@ namespace LSAP {
 		auto it = std::find(layers.begin(), layers.end(), layer);
 		if (it != layers.end()) {
 			layers.erase(it);
-			layerInsert--;
+			mLayerIndex--;
 		}
 	}
 	void LayerStack::popOverlay(Layer* overlay)

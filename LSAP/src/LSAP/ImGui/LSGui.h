@@ -13,20 +13,13 @@ namespace LSAP {
 		LSGui();
 		~LSGui();
 
-		void onLayerUpdate() override;
-		void onLayerAttach() override;
-		void onLayerEvent(Event& event) override;
+		virtual void onLayerAttach() override;
+		virtual void onLayerDetatch() override;
+		virtual void onImGuiRenderer() override;
 
-		void onGuiDetach();
+		void GuiBegin();
+		void GuiEnd();
 
-		bool onMouseButtonPressedEvent(MouseButtonPressedEvent& event);
-		bool onMouseButtonReleasedEvent(MouseButtonReleasedEvent& event);
-		bool onMouseMovedEvent(MouseMovedEvent& event);
-		bool onMouseScrolledEvent(MouseScrolledEvent& event);
-		bool onKeyPressedEvent(KeyPressedEvent& event);
-		bool onKeyReleasedEvent(KeyReleasedEvent& event);
-		bool onKeyTypedEvent(KeyTypedEvent& event);
-		bool onWindowResizeEvent(WindowResizeEvent& event);
 	private:
 		float mTime = 0.0f;
 	};

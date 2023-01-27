@@ -15,6 +15,9 @@ namespace LSAP {
 		sInstance = this;
 
 		appWindow->setEventCallback(BIND_EVENT_FN(onEvent));
+
+		mGUILayer = new LSGui();
+		pushOverlay(mGUILayer);
 	}
 	void Application::runApplication() {
 		while (isRunning) {
@@ -24,6 +27,12 @@ namespace LSAP {
 			for (Layer* i : appLayerStack) {
 				i->onLayerUpdate();
 			}
+
+			mGUILayer->GuiBegin();
+			for (Layer* g : appLayerStack) {
+				g->onImGuiRenderer();
+			}
+			mGUILayer->GuiEnd();
 			appWindow->onUpdate();
 		}
 	}

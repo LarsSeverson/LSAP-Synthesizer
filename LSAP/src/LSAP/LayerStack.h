@@ -20,7 +20,7 @@ namespace LSAP {
 		std::vector<Layer*>::iterator end() { return layers.end(); }
 	private:
 		std::vector<Layer*> layers;
-		std::vector<Layer*>::iterator layerInsert;
+		unsigned int mLayerIndex = 0;
 	};
 }
 

@@ -36,6 +36,7 @@ namespace LSAP
 		glfwMakeContextCurrent(glfwWindow);
 		LS_ASSERT(gladLoadGLLoader((GLADloadproc)glfwGetProcAddress), "Could not initialize glad");
 		glfwSetWindowUserPointer(glfwWindow, &mWindowContext);
+		setVSync(true);
 
 		// Callbacks
 		glfwSetWindowSizeCallback(glfwWindow, [](GLFWwindow* window, int width, int height) {
@@ -113,6 +114,12 @@ namespace LSAP
 	void WindowGL::onUpdate() {
 		glfwPollEvents();
 		glfwSwapBuffers(glfwWindow);
+	}
+
+	void WindowGL::setVSync(bool enabled) {
+		if (enabled) { glfwSwapInterval(1); }
+		else { glfwSwapInterval(0); }
+		mWindowContext.VSync = enabled;
 	}
 
 	void WindowGL::shutDown() {

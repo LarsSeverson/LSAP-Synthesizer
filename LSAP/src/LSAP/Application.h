@@ -1,10 +1,11 @@
 #pragma once
 #include "Core.h"
 #include "Window.h"
+#include "LayerStack.h"
 #include "Events/Event.h"
 #include "Synth/SoundGenerator.h"
 #include "Events/ApplicationEvent.h"
-#include "LayerStack.h"
+#include "LSAP/ImGui/LSGui.h"
 
 namespace LSAP {
 	class LSAP_API Application
@@ -27,6 +28,7 @@ namespace LSAP {
 	private:
 		std::unique_ptr<Window> appWindow;
 		
+		LSGui* mGUILayer;
 		LayerStack appLayerStack;
 
 		static Application* sInstance;

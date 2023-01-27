@@ -79,6 +79,9 @@
     <ClCompile Include="src\LSAP\Application.cpp">
       <Filter>LSAP</Filter>
     </ClCompile>
+    <ClCompile Include="src\LSAP\ImGui\ImGuiBuild.cpp">
+      <Filter>LSAP\ImGui</Filter>
+    </ClCompile>
     <ClCompile Include="src\LSAP\ImGui\LSGui.cpp">
       <Filter>LSAP\ImGui</Filter>
     </ClCompile>

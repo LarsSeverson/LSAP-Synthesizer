@@ -32,6 +32,8 @@ namespace LSAP {
 		virtual void* getNativeWindow() const = 0;
 		virtual void onUpdate() = 0;
 		virtual void setEventCallback(const EventCallbackW& event) = 0;
+
+		virtual void setVSync(bool enabled) = 0;
 		
 		static Window* createWindow(const WindowProperties& props = WindowProperties());
 	};
