@@ -10,14 +10,14 @@
     <Filter Include="LSAP\ImGui">
       <UniqueIdentifier>{FF161CAB-EBCE-5DF8-54D6-365440ADF8E8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="LSAP\Synth">
-      <UniqueIdentifier>{5A46D8AB-46FE-19F9-AF05-F3549BDCB4E9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Platform">
       <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
     </Filter>
     <Filter Include="Platform\Windows">
       <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Synth">
+      <UniqueIdentifier>{1B2F210E-8743-49BF-50C5-EC1EBC9845F0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -64,14 +64,14 @@
     <ClInclude Include="src\LSAP\MouseCodes.h">
       <Filter>LSAP</Filter>
     </ClInclude>
-    <ClInclude Include="src\LSAP\Synth\SoundGenerator.h">
-      <Filter>LSAP\Synth</Filter>
-    </ClInclude>
     <ClInclude Include="src\LSAP\Window.h">
       <Filter>LSAP</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\Windows\WindowGL.h">
       <Filter>Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Synth\SoundGenerator.h">
+      <Filter>Synth</Filter>
     </ClInclude>
     <ClInclude Include="src\lspch.h" />
   </ItemGroup>
@@ -91,14 +91,14 @@
     <ClCompile Include="src\LSAP\Log.cpp">
       <Filter>LSAP</Filter>
     </ClCompile>
-    <ClCompile Include="src\LSAP\Synth\SoundGenerator.cpp">
-      <Filter>LSAP\Synth</Filter>
-    </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowGL.cpp">
       <Filter>Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp">
       <Filter>Platform\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Synth\SoundGenerator.cpp">
+      <Filter>Synth</Filter>
     </ClCompile>
     <ClCompile Include="src\lspch.cpp" />
   </ItemGroup>

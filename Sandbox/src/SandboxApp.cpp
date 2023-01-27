@@ -23,17 +23,13 @@ public:
 	}
 };
 
-class ExampleSound : public LSAP::SoundGenerator
-{
-public:
-	ExampleSound() : SoundGenerator(getActiveDevice(), 44100, 1, 8, 512){}
-};
+
 
 class Sandbox : public LSAP::Application
 {
 public:
 	Sandbox() {
-		setSound(new ExampleSound());
+		//setSound(new ExampleSound());
 		pushLayer(new ExampleLayer());
 	}
 };

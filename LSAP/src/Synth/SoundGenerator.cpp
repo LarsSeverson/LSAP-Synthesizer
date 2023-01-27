@@ -39,7 +39,7 @@ namespace LSAP {
 
 		mWaveHeaders = std::make_unique<WAVEHDR[]>(mBlockCount);
 
-		for (int i = 0; i < mBlockCount; ++i) {
+		for (unsigned int i = 0; i < mBlockCount; ++i) {
 
 			// 512 * 4 = 2048
 			mWaveHeaders[i].dwBufferLength = (DWORD)(mBlockSamples * sizeof(int));
@@ -49,7 +49,6 @@ namespace LSAP {
 	}
 
 	void SoundGenerator::playSound() {
-		int previousSample;
 		double offset = 1.0 / double(mSampleRate);
 		mThread = std::thread(&SoundGenerator::threadPlaySound, this, offset, mGlobalTime);
 		mThread.detach();
@@ -86,8 +85,7 @@ namespace LSAP {
 			}
 
 			mBlockZero--;
-
-			for (int i = 0; i < mBlockSamples; ++i) {
+			for (unsigned int i = 0; i < mBlockSamples; ++i) {
 				int newSample = (int)(std::clamp((mUserSynthFunction(mGlobalTime) * maxSample), minSample, maxSample));
 				mBlockMemory[i + (mBlockCurrent * mBlockSamples)] = newSample;
 				mGlobalTime += offset;

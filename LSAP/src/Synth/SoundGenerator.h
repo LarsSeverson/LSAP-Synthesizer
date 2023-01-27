@@ -1,10 +1,8 @@
 #pragma once
-#include "lspch.h"
-#include "LSAP/Core.h"
 
 namespace LSAP {
 
-	class LSAP_API SoundGenerator
+	class SoundGenerator
 	{
 		using EventFn = std::function<double(double T)>;
 	public:
