@@ -74,6 +74,8 @@
       <Filter>Synth</Filter>
     </ClInclude>
     <ClInclude Include="src\lspch.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
+    <ClInclude Include="src\LSAP\Renderer\GraphicsContext.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\LSAP\Application.cpp">
@@ -101,5 +103,6 @@
       <Filter>Synth</Filter>
     </ClCompile>
     <ClCompile Include="src\lspch.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
   </ItemGroup>
 </Project>

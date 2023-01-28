@@ -25,6 +25,7 @@ namespace LSAP {
 		
 		inline static Application& getApplication() { return *sInstance; }
 	
+		unsigned int mVertexArray, mVertexBuffer, mIndexBuffer;
 	private:
 		std::unique_ptr<Window> appWindow;
 		

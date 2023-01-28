@@ -4,9 +4,8 @@
 #include "LSAP/Events/ApplicationEvent.h"
 #include "LSAP/Events/KeyEvent.h"
 #include "LSAP/Events/MouseEvent.h"
-#include "LSAP/Log.h"
 
-#include <glad/glad.h>
+#include "Platform/OpenGL/OpenGLContext.h"
 
 namespace LSAP
 {
@@ -33,8 +32,10 @@ namespace LSAP
 		// GLFW and glad initializations
 		LS_ASSERT(glfwInit(), "Could not initialize GLFW");
 		glfwWindow = glfwCreateWindow((int)props.wWidth, (int)props.wHeight, props.wTitle.c_str(), nullptr, nullptr);
-		glfwMakeContextCurrent(glfwWindow);
-		LS_ASSERT(gladLoadGLLoader((GLADloadproc)glfwGetProcAddress), "Could not initialize glad");
+		
+		mContext = new OpenGLContext(glfwWindow);
+		mContext->Init();
+
 		glfwSetWindowUserPointer(glfwWindow, &mWindowContext);
 		setVSync(true);
 
@@ -113,7 +114,7 @@ namespace LSAP
 
 	void WindowGL::onUpdate() {
 		glfwPollEvents();
-		glfwSwapBuffers(glfwWindow);
+		mContext->SwapBuffers();
 	}
 
 	void WindowGL::setVSync(bool enabled) {

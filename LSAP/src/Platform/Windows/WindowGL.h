@@ -1,5 +1,7 @@
 #pragma once
 #include "LSAP/Window.h"
+#include "LSAP/Renderer/GraphicsContext.h"
+
 #include <GLFW/glfw3.h>
 
 namespace LSAP {
@@ -13,20 +15,19 @@ namespace LSAP {
 		inline unsigned int getHeight() const override { return mWindowContext.Height; }
 		inline void setEventCallback(const EventCallbackW& event) override { mWindowContext.EventCallback = event; }
 		inline void* getNativeWindow() const override { return glfwWindow; }
-
+		
 		void onUpdate() override;
 		void setVSync(bool enabled) override;
 		
 	private:
 		unsigned int wWidth;
 		unsigned int wHeight;
-		
 
-		void initWindow(const WindowProperties& props);
-		void shutDown();
+		virtual void shutDown();
+		virtual void initWindow(const WindowProperties& props);
 
 		GLFWwindow* glfwWindow;
-		
+		GraphicsContext* mContext;
 
 		struct WindowContext {
 			unsigned Width;
