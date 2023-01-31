@@ -11,9 +11,7 @@ public:
 
 	}
 	virtual void onImGuiRenderer() override {
-		ImGui::Begin("Test");
-		ImGui::Text("Hello World");
-		ImGui::End();
+	
 	}
 	void onLayerEvent(LSAP::Event& event) override {
 

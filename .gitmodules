@@ -8,3 +8,9 @@
 [submodule "LSAP/vendor/imGui"]
 	path = LSAP/vendor/imGui
 	url = https://github.com/ocornut/imgui
+[submodule "LSAP/vendor/glm"]
+	path = LSAP/vendor/glm
+	url = https://github.com/g-truc/glm
+[submodule "LSAP/vendor/stb_image"]
+	path = LSAP/vendor/stb_image
+	url = https://github.com/nothings/stb

@@ -14,6 +14,8 @@ workspace "LSAP"
     IncludeDir["GLFW3"] = "LSAP/vendor/GLFW3/include"
     IncludeDir["glad"] = "LSAP/vendor/glad/include"
     IncludeDir["imGui"] = "LSAP/vendor/imGui"
+    IncludeDir["glm"] = "LSAP/vendor/glm"
+    IncludeDir["stb_image"] = "LSAP/vendor/stb_image"
 
 
     group "Dependencies"
@@ -39,7 +41,11 @@ workspace "LSAP"
         files
         {
             "%{prj.name}/src/**.h",
-            "%{prj.name}/src/**.cpp"
+            "%{prj.name}/src/**.cpp",
+            "%{prj.name}/vendor/glm/glm/**.hpp",
+            "%{prj.name}/vendor/glm/glm/**.inl",
+            "%{prj.name}/vendor/stb_image/**.h",
+            "%{prj.name}/vendor/stb_image/**.cpp"
         }
 
         defines
@@ -52,7 +58,9 @@ workspace "LSAP"
             "%{IncludeDir.GLFW3}",
             "%{IncludeDir.glad}",
             "%{IncludeDir.imGui}",
-            "%{prj.name}/vendor/spdlog/include"
+            "%{IncludeDir.glm}",
+            "%{prj.name}/vendor/spdlog/include",
+            "%{IncludeDir.stb_image}"
         }
         links
         {
@@ -108,7 +116,8 @@ project "Sandbox"
         {
             "LSAP/src",
             "LSAP/vendor/spdlog/include",
-            "LSAP/vendor"
+            "LSAP/vendor",
+            "%{IncludeDir.glm}"
         }
 
         links
