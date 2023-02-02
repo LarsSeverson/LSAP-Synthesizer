@@ -3,8 +3,6 @@
 #include "LSAP/Application.h"
 #include "LSAP/ImGui/LSGui.h"
 
-#include "Synth/SoundGenerator.h"
-
 #include "LSAP/Log.h"
 #include "LSAP/Layer.h"
 #include "LSAP/Input.h"

@@ -1,26 +1,24 @@
-#include "lspch.h"
+#include "audiopch.h"
 #include "SoundGenerator.h"
 
 namespace LSAP {
 	// public
-	SoundGenerator::SoundGenerator(std::wstring outputDevice, unsigned int sampleRate, unsigned int nChannels,
-		unsigned int blockCount, unsigned int blockSamples)
-		: mOutputDevice(outputDevice), mSampleRate(sampleRate), mnChannels(nChannels),
-		mBlockCount(blockCount), mBlockSamples(blockSamples), mDevice(nullptr), mBlockCurrent(0),
-		mBlockMemory(nullptr), mBlockZero(mBlockCount), mGlobalTime(0.0), mWaveHeaders(nullptr)
+	SoundGenerator::SoundGenerator(const AudioData& audioData)
+		: mUserSynthFunction(nullptr), mGlobalTime(0), mBlockMemory(nullptr),
+		  mWaveHeaders(nullptr), mDevice(nullptr), mBlockZero(0)
 	{
-
+		openAudioDevice(audioData);
 	}
 	SoundGenerator::~SoundGenerator() {
 		delete[] mBlockMemory;
 	}
 
-	void SoundGenerator::openAudioDevice() {
+	void SoundGenerator::openAudioDevice(const AudioData& audioData) {
 		WAVEFORMATEX waveFormat;
 		waveFormat.wFormatTag = WAVE_FORMAT_PCM;
-		waveFormat.nSamplesPerSec = mSampleRate;
+		waveFormat.nSamplesPerSec = audioData.sampleRate;
 		waveFormat.wBitsPerSample = sizeof(int) * 8;
-		waveFormat.nChannels = mnChannels;
+		waveFormat.nChannels = audioData.nChannels;
 		waveFormat.nBlockAlign = (waveFormat.nChannels * waveFormat.wBitsPerSample) / 8;
 		waveFormat.nAvgBytesPerSec = waveFormat.nSamplesPerSec * waveFormat.nBlockAlign;
 		waveFormat.cbSize = 0;
@@ -29,27 +27,30 @@ namespace LSAP {
 			std::cout << "Could not open device";
 			return;
 		}
+
+		setBlockMemory(audioData);
 	}
 
-	void SoundGenerator::setBlockMemory() {
+	void SoundGenerator::setBlockMemory(const AudioData& audioData) {
 
 		// 8 * 512 = 4096
-		mBlockMemory = new int[mBlockCount * mBlockSamples];
-		ZeroMemory(mBlockMemory, sizeof(int) * mBlockCount * mBlockSamples);
+		mBlockMemory = new int[audioData.blockCount * audioData.blockSamples];
+		ZeroMemory(mBlockMemory, sizeof(int) * audioData.blockCount * audioData.blockSamples);
 
-		mWaveHeaders = std::make_unique<WAVEHDR[]>(mBlockCount);
+		mWaveHeaders = std::make_unique<WAVEHDR[]>(audioData.blockCount);
 
-		for (unsigned int i = 0; i < mBlockCount; ++i) {
+		for (unsigned int i = 0; i < audioData.blockCount; ++i) {
 
 			// 512 * 4 = 2048
-			mWaveHeaders[i].dwBufferLength = (DWORD)(mBlockSamples * sizeof(int));
+			mWaveHeaders[i].dwBufferLength = (DWORD)(audioData.blockSamples * sizeof(int));
 			// 0 -> 512 -> 1024 - > 1536
-			mWaveHeaders[i].lpData = (LPSTR)(mBlockMemory + (i * mBlockSamples));
+			mWaveHeaders[i].lpData = (LPSTR)(mBlockMemory + (i * audioData.blockSamples));
 		}
+		std::cout << "hi";
 	}
 
-	void SoundGenerator::playSound() {
-		double offset = 1.0 / double(mSampleRate);
+	void SoundGenerator::outputSound(double mGlobalTime) {
+		double offset = 1.0 / double(44100);
 		mThread = std::thread(&SoundGenerator::threadPlaySound, this, offset, mGlobalTime);
 		mThread.detach();
 	}
@@ -58,23 +59,13 @@ namespace LSAP {
 		mUserSynthFunction = func;
 	}
 
-	std::wstring SoundGenerator::getActiveDevice() {
-		int deviceCount = waveOutGetNumDevs();
-		std::vector<std::wstring> devices;
-		WAVEOUTCAPS woc;
-		for (int i = 0; i < deviceCount; ++i) {
-			if (waveOutGetDevCaps(i, &woc, sizeof(WAVEOUTCAPS)) == S_OK) {
-				devices.push_back(woc.szPname);
-			}
-		}
-		return devices[0];
-	}
-
 	// private:
 	void SoundGenerator::threadPlaySound(double offset, double mGlobalTime) {
 		constexpr double maxSample = std::numeric_limits<int>::max();
 		constexpr double minSample = std::numeric_limits<int>::min();
-
+		int mBlockCurrent = 0;
+		int mBlockSamples = 512;
+		int mBlockCount = 8;
 		while (true) {
 
 			if (mBlockZero == 0) {
@@ -113,4 +104,6 @@ namespace LSAP {
 		}
 		((SoundGenerator*)(dwInstance))->blockCount();
 	}
+
+
 }

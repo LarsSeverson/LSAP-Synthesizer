@@ -25,9 +25,6 @@
     <Filter Include="src\Platform\Windows">
       <UniqueIdentifier>{5B054582-4794-CE4B-F0B2-E246DC20DFF1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Synth">
-      <UniqueIdentifier>{723DDEB3-DEA7-922A-27E6-43D0938F707F}</UniqueIdentifier>
-    </Filter>
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
     </Filter>
@@ -120,11 +117,11 @@
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\Platform\Windows\WindowGL.h">
       <Filter>src\Platform\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Synth\SoundGenerator.h">
-      <Filter>src\Synth</Filter>
     </ClInclude>
     <ClInclude Include="src\lspch.h">
       <Filter>src</Filter>
@@ -1380,7 +1377,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\LSAP\Application.cpp">
@@ -1413,14 +1409,14 @@
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowGL.cpp">
       <Filter>src\Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp">
       <Filter>src\Platform\Windows</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Synth\SoundGenerator.cpp">
-      <Filter>src\Synth</Filter>
     </ClCompile>
     <ClCompile Include="src\lspch.cpp">
       <Filter>src</Filter>
@@ -1428,9 +1424,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="assets\textures\piano.png" />
   </ItemGroup>
 </Project>

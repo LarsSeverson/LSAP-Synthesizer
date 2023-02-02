@@ -81,13 +81,6 @@ namespace LSAP {
 		appLayerStack.pushOverlay(overlay);
 	}
 
-	void Application::setSound(SoundGenerator* sound) {
-		sound->openAudioDevice();
-		sound->setBlockMemory();
-		sound->setSynthFunc(BIND_EVENT_FN(SineWave));
-		sound->playSound();
-	}
-
 	bool Application::onWindowClose(WindowCloseEvent& event) {
 		isRunning = false;
 		return true;

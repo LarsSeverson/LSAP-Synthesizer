@@ -16,13 +16,14 @@ workspace "LSAP"
     IncludeDir["imGui"] = "LSAP/vendor/imGui"
     IncludeDir["glm"] = "LSAP/vendor/glm"
     IncludeDir["stb_image"] = "LSAP/vendor/stb_image"
+    IncludeDir["LSAPAudio"] = "LSAPAudio"
 
 
     group "Dependencies"
         include "LSAP/vendor/GLFW3"
         include "LSAP/vendor/glad"
         include "LSAP/vendor/imGui"
-    
+        include "LSAPAudio"
     group ""
 
     project "LSAP"
@@ -60,15 +61,15 @@ workspace "LSAP"
             "%{IncludeDir.imGui}",
             "%{IncludeDir.glm}",
             "%{prj.name}/vendor/spdlog/include",
-            "%{IncludeDir.stb_image}"
+            "%{IncludeDir.stb_image}",
+            "%{IncludeDir.LSAPAudio}"
         }
         links
         {
             "GLFW",
             "opengl32.lib",
             "glad",
-            "imGui",
-            "winmm.lib"
+            "imGui"
         }
 
         filter "system:windows"
@@ -117,12 +118,14 @@ project "Sandbox"
             "LSAP/src",
             "LSAP/vendor/spdlog/include",
             "LSAP/vendor",
-            "%{IncludeDir.glm}"
+            "%{IncludeDir.glm}",
+            "%{IncludeDir.LSAPAudio}/src"
         }
 
         links
         {
-            "LSAP"
+            "LSAP",
+            "LSAPAudio"
         }
     
         filter "system:windows"
