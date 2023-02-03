@@ -1,11 +1,13 @@
 #include "audiopch.h"
 #include "SoundGenerator.h"
 
+#include "Synth.h"
+
 namespace LSAP {
 	// public
 	SoundGenerator::SoundGenerator(const AudioData& audioData)
-		: mUserSynthFunction(nullptr), mGlobalTime(0), mBlockMemory(nullptr),
-		  mWaveHeaders(nullptr), mDevice(nullptr), mBlockZero(0)
+		: mUserSynthFunction(nullptr), mGlobalTime(0.0), mBlockMemory(nullptr),
+		  mWaveHeaders(nullptr), mDevice(nullptr), mBlockZero(8)
 	{
 		openAudioDevice(audioData);
 	}
@@ -46,10 +48,9 @@ namespace LSAP {
 			// 0 -> 512 -> 1024 - > 1536
 			mWaveHeaders[i].lpData = (LPSTR)(mBlockMemory + (i * audioData.blockSamples));
 		}
-		std::cout << "hi";
 	}
 
-	void SoundGenerator::outputSound(double mGlobalTime) {
+	void SoundGenerator::generateSound() {
 		double offset = 1.0 / double(44100);
 		mThread = std::thread(&SoundGenerator::threadPlaySound, this, offset, mGlobalTime);
 		mThread.detach();
@@ -61,20 +62,19 @@ namespace LSAP {
 
 	// private:
 	void SoundGenerator::threadPlaySound(double offset, double mGlobalTime) {
+
 		constexpr double maxSample = std::numeric_limits<int>::max();
 		constexpr double minSample = std::numeric_limits<int>::min();
 		int mBlockCurrent = 0;
 		int mBlockSamples = 512;
 		int mBlockCount = 8;
 		while (true) {
-
 			if (mBlockZero == 0) {
 				std::unique_lock<std::mutex> stop(mBlockFree);
 				while (mBlockZero == 0) {
 					mConditionNotZero.wait(stop);
 				}
 			}
-
 			mBlockZero--;
 			for (unsigned int i = 0; i < mBlockSamples; ++i) {
 				int newSample = (int)(std::clamp((mUserSynthFunction(mGlobalTime) * maxSample), minSample, maxSample));
@@ -98,7 +98,7 @@ namespace LSAP {
 		mConditionNotZero.notify_one();
 	}
 
-	void CALLBACK SoundGenerator::waveOutProcWrap(HWAVEOUT hWaveOut, UINT uMsg, unsigned long* dwInstance, DWORD dwParam1, DWORD dwParam2) {
+	void CALLBACK SoundGenerator::waveOutProcWrap(HWAVEOUT hWaveOut, UINT uMsg, unsigned long* dwInstance, DWORD dwParam1, DWORD dwParam2){
 		if (uMsg != WOM_DONE) {
 			return;
 		}

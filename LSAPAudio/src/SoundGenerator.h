@@ -29,16 +29,14 @@ namespace LSAP {
 
 	class SoundGenerator
 	{
-		using EventFn = std::function<double(double T)>;
+		using EventFn = std::function<double(double)>;
 	public:
 		SoundGenerator(const AudioData& audioData = AudioData());
 		~SoundGenerator();
 
 		void setSynthFunc(const EventFn& func);
-
-		// This function opens the given waveform-audio output device for playback.
-	protected:
-		void outputSound(double mGlobalTime);
+		void generateSound();
+	
 	private:
 		void openAudioDevice(const AudioData& audioData);
 		void setBlockMemory(const AudioData& audioData);

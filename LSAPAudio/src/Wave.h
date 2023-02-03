@@ -2,31 +2,39 @@
 
 namespace LSAP
 {
+	namespace WaveFunctions
+	{
+		/*double SineWave(double time) {
+			std::cout << (0.5 * sin(440.0 * 2.0 * 3.14159 * time)) * .1;
+			return 0;
+		}*/
+	}
+
 	class Wave
 	{
+	protected:
+		using WaveCallback = std::function<double(double)>;
 	public:
-		Wave() = default;
 		virtual ~Wave() = default;
 
-		virtual double getFrequency() const;
-		virtual double getAmplitude() const;
-		virtual double getAngle()	  const;
+		virtual void setWaveCallback() {}
+		virtual WaveCallback getWaveCallback() const = 0;
 	};
 
 
 	class SineWave : public Wave
 	{
 	public:
-		SineWave(double frequency);
+		SineWave();
 		~SineWave();
-		double SineWaveFunc(double frequency);
 
-		virtual double getFrequency() const override;
-		virtual double getAmplitude() const override;
-		virtual double getAngle()	  const override;
+		virtual void setWaveCallback() override;
+		virtual WaveCallback getWaveCallback() const override;
 	private:
-		double mFrequency;
-		double mAmplitude;
-		double mAngle;
+		WaveCallback mWaveCB;
+
+		double SineWaveFunc(double time) {
+			return (0.5 * sin(440.0 * 2.0 * 3.14159 * time)) * .1;
+		}
 	};
 }

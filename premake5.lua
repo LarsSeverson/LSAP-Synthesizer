@@ -62,7 +62,7 @@ workspace "LSAP"
             "%{IncludeDir.glm}",
             "%{prj.name}/vendor/spdlog/include",
             "%{IncludeDir.stb_image}",
-            "%{IncludeDir.LSAPAudio}"
+            "%{IncludeDir.LSAPAudio}/src"
         }
         links
         {

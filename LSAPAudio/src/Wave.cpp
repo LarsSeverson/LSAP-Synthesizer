@@ -3,38 +3,21 @@
 
 namespace LSAP
 {
-	double Wave::getFrequency() const
+	SineWave::SineWave()
 	{
-		return 0.0;
-	}
-	double Wave::getAmplitude() const
-	{
-		return 0.0;
-	}
-	double Wave::getAngle() const
-	{
-		return 0.0;
-	}
-	SineWave::SineWave(double frequency)
-	{
+		setWaveCallback();
 	}
 	SineWave::~SineWave()
 	{
+
 	}
-	double SineWave::SineWaveFunc(double frequency)
+	void SineWave::setWaveCallback()
 	{
-		return 0.0;
+		mWaveCB = std::bind(&SineWave::SineWaveFunc, this, std::placeholders::_1);
 	}
-	double SineWave::getFrequency() const
+
+	SineWave::WaveCallback SineWave::getWaveCallback() const
 	{
-		return 0.0;
-	}
-	double SineWave::getAmplitude() const
-	{
-		return 0.0;
-	}
-	double SineWave::getAngle() const
-	{
-		return 0.0;
+		return mWaveCB;
 	}
 }

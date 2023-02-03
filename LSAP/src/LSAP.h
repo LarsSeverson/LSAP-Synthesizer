@@ -1,6 +1,8 @@
 #pragma once
 
 #include "LSAP/Application.h"
+#include "Synth.h"
+
 #include "LSAP/ImGui/LSGui.h"
 
 #include "LSAP/Log.h"

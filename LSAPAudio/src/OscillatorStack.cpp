@@ -4,14 +4,18 @@
 namespace LSAP {
 	OscillatorStack::~OscillatorStack()
 	{
-
+		for (auto i : mOscillators) {
+			delete i;
+		}
 	}
-	void OscillatorStack::pushOsc(std::shared_ptr<Oscillator::Oscillator> osc)
+	void OscillatorStack::pushOsc(Oscillator::Oscillator* osc)
 	{
+
 		mOscillators.emplace(mOscillators.begin() + mOscIndex++, osc);
 		osc->onOscAttach();
 	}
-	void OscillatorStack::popOsc(std::shared_ptr<Oscillator::Oscillator> osc)
+
+	void OscillatorStack::popOsc(Oscillator::Oscillator* osc)
 	{
 		auto it = std::find(mOscillators.begin(), mOscillators.end(), osc);
 		if (it != mOscillators.end()) {

@@ -8,18 +8,18 @@ namespace LSAP
 	{
 	public:
 		OscillatorStack() = default;
-	   ~OscillatorStack();
+		~OscillatorStack();
 
-		void pushOsc(std::shared_ptr<Oscillator::Oscillator> osc);
-		void popOsc (std::shared_ptr<Oscillator::Oscillator> osc);
+		void pushOsc(Oscillator::Oscillator* osc);
+		void popOsc (Oscillator::Oscillator* osc);
 
 		void onOscStackUpdate();
 
-		std::vector<std::shared_ptr<Oscillator::Oscillator>>::iterator begin() {}
-		std::vector<std::shared_ptr<Oscillator::Oscillator>>::iterator end() {}
+		std::vector<Oscillator::Oscillator*>::iterator begin() {}
+		std::vector<Oscillator::Oscillator*>::iterator end() {}
 
 	private:
-		std::vector<std::shared_ptr<Oscillator::Oscillator>> mOscillators;
+		std::vector<Oscillator::Oscillator*> mOscillators;
 		unsigned int mOscIndex = 0;
 	};
 }

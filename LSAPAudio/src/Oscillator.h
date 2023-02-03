@@ -3,33 +3,31 @@
 #include <cmath>
 #include "Wave.h"
 
+
 namespace LSAP {
 	namespace Oscillator {
-
 		class Oscillator
 		{
+			using OscCallback = std::function<double(double)>;
 		public:
-			Oscillator();
+			Oscillator(Wave& wave);
 			virtual ~Oscillator() = default;
 
-			void onOscUpdate();
+			virtual void onOscUpdate() {}
 			void onOscAttach();
 			void onOscDetach();
 
 			void setOscillatorWave(const Wave& wave);
-			void playOscSound();
+			void playOscSound(const Wave& wave);
 		protected:
 			double mFrequency;
 			double mAmplitude;
 			double mAngle;
 
-			bool mIsActive;
+			bool mIsActive = false;
 
-			Wave mWave;
+			Wave& mOscillatorWave;
+			OscCallback mOscCallback;
 		};
 	}
 }
-
-//double SineWave(double time) {
-//	return (0.5 * sin(440.0 * 2.0 * 3.14159 * time)) * .1;
-//}

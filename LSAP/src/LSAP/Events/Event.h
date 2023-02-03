@@ -31,7 +31,7 @@ namespace LSAP {
 
 	class LSAP_API Event
 	{
-		friend class EventDispatcher;
+		//friend class EventDispatcher;
 	public:
 		bool mEventHandled = false;
 		virtual EventType getEventType() const = 0;
