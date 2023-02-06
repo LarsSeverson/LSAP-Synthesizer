@@ -6,90 +6,15 @@ class ExampleOsc : public LSAP::Oscillator::Oscillator
 {
 public:
 	ExampleOsc() 
-		: LSAP::Oscillator::Oscillator(d.sineWave), currentNote(nullptr)
+		: LSAP::Oscillator::Oscillator(d.sineWave)
 	{
 
-	}
-	void onOscUpdate() override {
-		LSAP::Input::mInputHandled = false;
-
-		// The keyboard
-		if (LSAP::Input::sIsKeyPressed(LSAP::Key::A)) {
-			LSAP::Note n(LSAP::Notes::C, 1);
-			currentNote = &n;
-			getOscillatorWave().setWaveAmplitude(.1);
-			pushNote(n);
-
-			LSAP::Input::mInputHandled = true;
-		}
-		if (LSAP::Input::sIsKeyPressed(LSAP::Key::S)) {
-			LSAP::Note n(LSAP::Notes::D, 1);
-			currentNote = &n;
-			getOscillatorWave().setWaveAmplitude(.1);
-			pushNote(n);
-
-			LSAP::Input::mInputHandled = true;
-		}
-		if (LSAP::Input::sIsKeyPressed(LSAP::Key::D)) {
-			LSAP::Note n(LSAP::Notes::E, 1);
-			currentNote = &n;
-			getOscillatorWave().setWaveAmplitude(.1);
-			pushNote(n);
-
-			LSAP::Input::mInputHandled = true;
-		}
-		if (LSAP::Input::sIsKeyPressed(LSAP::Key::F)) {
-			LSAP::Note n(LSAP::Notes::F, 1);
-			currentNote = &n;
-			getOscillatorWave().setWaveAmplitude(.1);
-			pushNote(n);
-
-			LSAP::Input::mInputHandled = true;
-		}
-		if (LSAP::Input::sIsKeyPressed(LSAP::Key::G)) {
-			LSAP::Note n(LSAP::Notes::G, 1);
-			currentNote = &n;
-			getOscillatorWave().setWaveAmplitude(.1);
-			pushNote(n);
-
-			LSAP::Input::mInputHandled = true;
-		}
-		if (LSAP::Input::sIsKeyPressed(LSAP::Key::H)) {
-			LSAP::Note n(LSAP::Notes::A, 1);
-			currentNote = &n;
-			getOscillatorWave().setWaveAmplitude(.1);
-			pushNote(n);
-
-			LSAP::Input::mInputHandled = true;
-		}
-		if (LSAP::Input::sIsKeyPressed(LSAP::Key::J)) {
-			LSAP::Note n(LSAP::Notes::B, 1);
-			currentNote = &n;
-			getOscillatorWave().setWaveAmplitude(.1);
-			pushNote(n);
-
-			LSAP::Input::mInputHandled = true;
-		}
-		if (LSAP::Input::sIsKeyPressed(LSAP::Key::K)) {
-			LSAP::Note n(LSAP::Notes::B, 2);
-			currentNote = &n;
-			getOscillatorWave().setWaveAmplitude(.1);
-			pushNote(n);
-
-			LSAP::Input::mInputHandled = true;
-		}
-		if (LSAP::Input::mInputHandled) {
-			popNote(currentNote);
-			return;
-		}
-		oscStandby();
 	}
 private:
 	struct Defaults{
 		LSAP::SineWave sineWave;
 	};
 	Defaults d;
-	LSAP::Note* currentNote;
 };
 
 class Sandbox : public LSAP::Application
@@ -106,6 +31,25 @@ class SandboxSynth : public LSAP::Synth
 public:
 	SandboxSynth() {
 		pushOscillator(new ExampleOsc());
+	}
+	void onSynthUpdate() override {
+		checkInput(LSAP::Key::A, LSAP::Note(LSAP::Notes::C, 1));
+		checkInput(LSAP::Key::W, LSAP::Note(LSAP::Notes::Db, 1));
+		checkInput(LSAP::Key::S, LSAP::Note(LSAP::Notes::D, 1));
+		checkInput(LSAP::Key::E, LSAP::Note(LSAP::Notes::Eb, 1));
+		checkInput(LSAP::Key::D, LSAP::Note(LSAP::Notes::E, 1));
+		checkInput(LSAP::Key::F, LSAP::Note(LSAP::Notes::F, 1));
+		checkInput(LSAP::Key::T, LSAP::Note(LSAP::Notes::Gb, 1));
+		checkInput(LSAP::Key::G, LSAP::Note(LSAP::Notes::G, 1));
+		checkInput(LSAP::Key::Y, LSAP::Note(LSAP::Notes::Ab, 1));
+		checkInput(LSAP::Key::H, LSAP::Note(LSAP::Notes::A, 1));
+		checkInput(LSAP::Key::U, LSAP::Note(LSAP::Notes::Bb, 1));
+		checkInput(LSAP::Key::J, LSAP::Note(LSAP::Notes::B, 1));
+
+		checkInput(LSAP::Key::K, LSAP::Note(LSAP::Notes::C, 2));
+		checkInput(LSAP::Key::O, LSAP::Note(LSAP::Notes::Db, 2));
+		checkInput(LSAP::Key::L, LSAP::Note(LSAP::Notes::D, 2));
+		checkInput(LSAP::Key::P, LSAP::Note(LSAP::Notes::Eb, 2));
 	}
 private:
 

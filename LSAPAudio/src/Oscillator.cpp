@@ -13,22 +13,9 @@ namespace LSAP
 
 		}
 
-		void Oscillator::oscStandby()
-		{
-			mOscillatorWave.setWaveAmplitude(0.0);
-		}
-
 		double Oscillator::onOscFill(Note n, double time)
 		{
 			return mOscCallback(n, time);
-		}
-
-		void Oscillator::pushNote(const Note& note)
-		{
-			Synth::getSynth().pushNote(note);
-		}
-		void Oscillator::popNote(Note* note) {
-			Synth::getSynth().popNote(note);
 		}
 
 		void Oscillator::onOscAttach()

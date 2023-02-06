@@ -17,12 +17,9 @@ namespace LSAP {
 
 			double onOscFill(Note n, double time);
 
-			void pushNote(const Note& note);
-			void popNote(Note* note);
 			void onOscAttach();
 			void onOscDetach();
 			void setOscillatorWave(const Wave& wave);
-			void oscStandby();
 
 			inline Wave& getOscillatorWave() { return mOscillatorWave; }
 		protected:

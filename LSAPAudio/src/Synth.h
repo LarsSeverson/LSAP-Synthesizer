@@ -1,4 +1,8 @@
 #pragma once
+
+#include "LSAP/Input.h"
+#include "LSAP/MouseCodes.h"
+
 #include "OscillatorStack.h"
 #include "Wave.h"
 #include "Note.h"
@@ -11,13 +15,14 @@ namespace LSAP {
 		Synth();
 		~Synth();
 
+		virtual void onSynthUpdate();
 		void outputSound();
-		void onSynthUpdate();
 		void onSynthStop();
 		void runSynth();
 		void pushOscillator(Oscillator::Oscillator* osc);
-		void pushNote(const Note& n);
-		void popNote(Note* n);
+		void pushNote(const Note& note);
+		void popNote(Note& note);
+		void checkInput(uint16_t key, Note note);
 
 		double fillOutputBuffer(double time);
 

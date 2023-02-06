@@ -162,6 +162,16 @@ project "LSAPAudio"
 
 	pchheader "audiopch.h"
 	pchsource "LSAPAudio/src/audiopch.cpp"
+    
+    includedirs
+    {
+        "LSAP/src"
+    }
+
+    defines
+    {
+        "LS_PLATFORM_WINDOWS"
+    }
 
 	files
 	{

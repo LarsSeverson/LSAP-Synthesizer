@@ -14,6 +14,7 @@ namespace LSAP
 		void popOsc (Oscillator::Oscillator* osc);
 
 		void onOscStackUpdate();
+		void onNotePressed(double amplitude);
 		double onOscStackFill(Note n, double time);
 
 		bool isEmpty() { return mOscIndex == 0; }

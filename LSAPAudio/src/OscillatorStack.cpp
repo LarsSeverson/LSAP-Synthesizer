@@ -29,6 +29,12 @@ namespace LSAP {
 			i->onOscUpdate();
 		}
 	}
+	void OscillatorStack::onNotePressed(double amplitude)
+	{
+		for (auto i : mOscillators) {
+			i->getOscillatorWave().setWaveAmplitude(amplitude);
+		}
+	}
 	double OscillatorStack::onOscStackFill(Note n, double time)
 	{
 		double data = 0;

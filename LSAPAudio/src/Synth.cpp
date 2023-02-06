@@ -1,6 +1,7 @@
 #include "audiopch.h"
 #include "Synth.h"
 
+
 namespace LSAP {
 
 	Synth* Synth::sSynthInstance = nullptr;
@@ -23,7 +24,7 @@ namespace LSAP {
 	}
 	void Synth::onSynthUpdate()
 	{
-		mOscStack.onOscStackUpdate();
+
 	}
 
 	void Synth::onSynthStop()
@@ -35,6 +36,7 @@ namespace LSAP {
 	{
 		while (true) {
 			onSynthUpdate();
+			mOscStack.onOscStackUpdate();
 		}
 	}
 
@@ -47,22 +49,30 @@ namespace LSAP {
 	{
 		// If found
 		notes.lock();
-		auto result = std::find_if(mNotes.begin(), mNotes.end(), [n](const Note& check) { return check.mID == n.mID; });
+		auto result = std::find_if(mNotes.begin(), mNotes.end(), [n](const Note& check) { return check.noteFrequency == n.noteFrequency; });
 		if (result == mNotes.end()) {
 			mNotes.emplace_back(n);
+			mOscStack.onNotePressed(.1);
 		}
 		notes.unlock();
-
 	}
-	void Synth::popNote(Note* n) {
-
-		// In progress...
-		auto it = std::find_if(mNotes.begin(), mNotes.end(), [&n](const Note& index) {
-			return &index == n; 
-		});
+	void Synth::popNote(Note& note) {
+		notes.lock();
+		auto it = std::find_if(mNotes.begin(), mNotes.end(), [note](Note& index) { return note.noteFrequency == index.noteFrequency; });
 		if (it != mNotes.end()) {
-			Note* p = n;
-			(*p).noteDone = true;
+			it->noteDone = true;
+		}
+		notes.unlock();
+	}
+
+	void Synth::checkInput(uint16_t key, Note note)
+	{
+		Note& newNote = note;
+		if (Input::sIsKeyPressed(key)) {
+			pushNote(newNote);
+		}
+		else {
+			popNote(newNote);
 		}
 	}
 
