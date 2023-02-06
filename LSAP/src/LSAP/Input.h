@@ -11,7 +11,11 @@ namespace LSAP {
 		static bool sIsKeyPressed(KeyCode key);
 		static bool sIsMouseButtonPressed(int button);
 
+		static bool sKeyPressed();
+
 		static float sGetMouseX();
 		static float sGetMouseY();
+
+		static bool mInputHandled;
 	};
 }

@@ -54,20 +54,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>bin\Debug-windows-x86_64\LSAPAudio\</OutDir>
-    <IntDir>bin-int\Debug-windows-x86_64\LSAPAudio\</IntDir>
+    <OutDir>..\bin\Debug-windows-x86_64\LSAPAudio\</OutDir>
+    <IntDir>..\bin-int\Debug-windows-x86_64\LSAPAudio\</IntDir>
     <TargetName>LSAPAudio</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>bin\Release-windows-x86_64\LSAPAudio\</OutDir>
-    <IntDir>bin-int\Release-windows-x86_64\LSAPAudio\</IntDir>
+    <OutDir>..\bin\Release-windows-x86_64\LSAPAudio\</OutDir>
+    <IntDir>..\bin-int\Release-windows-x86_64\LSAPAudio\</IntDir>
     <TargetName>LSAPAudio</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
-    <OutDir>bin\Dist-windows-x86_64\LSAPAudio\</OutDir>
-    <IntDir>bin-int\Dist-windows-x86_64\LSAPAudio\</IntDir>
+    <OutDir>..\bin\Dist-windows-x86_64\LSAPAudio\</OutDir>
+    <IntDir>..\bin-int\Dist-windows-x86_64\LSAPAudio\</IntDir>
     <TargetName>LSAPAudio</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
@@ -140,6 +140,8 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\LSAPAudio.h" />
+    <ClInclude Include="src\Note.h" />
     <ClInclude Include="src\Oscillator.h" />
     <ClInclude Include="src\OscillatorStack.h" />
     <ClInclude Include="src\SoundGenerator.h" />

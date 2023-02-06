@@ -14,6 +14,9 @@ namespace LSAP
 		void popOsc (Oscillator::Oscillator* osc);
 
 		void onOscStackUpdate();
+		double onOscStackFill(Note n, double time);
+
+		bool isEmpty() { return mOscIndex == 0; }
 
 		std::vector<Oscillator::Oscillator*>::iterator begin() {}
 		std::vector<Oscillator::Oscillator*>::iterator end() {}

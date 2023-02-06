@@ -1,23 +1,21 @@
 #pragma once
-
+#include "Note.h"
 namespace LSAP
 {
-	namespace WaveFunctions
-	{
-		/*double SineWave(double time) {
-			std::cout << (0.5 * sin(440.0 * 2.0 * 3.14159 * time)) * .1;
-			return 0;
-		}*/
-	}
-
 	class Wave
 	{
 	protected:
-		using WaveCallback = std::function<double(double)>;
+		using WaveCallback = std::function<double(Note, double)>;
 	public:
 		virtual ~Wave() = default;
 
-		virtual void setWaveCallback() {}
+		virtual void setWaveCallback() = 0;
+		virtual void setWaveFrequency(double frequency) = 0;
+		virtual void setWaveAmplitude(double amplitude)  = 0;
+		virtual void setWaveAngle(double angle) = 0;
+
+		virtual double getWaveFrequency() const = 0;
+
 		virtual WaveCallback getWaveCallback() const = 0;
 	};
 
@@ -29,12 +27,22 @@ namespace LSAP
 		~SineWave();
 
 		virtual void setWaveCallback() override;
+		virtual void setWaveFrequency(double frequency) override;
+		virtual void setWaveAmplitude(double amplitude) override;
+		virtual void setWaveAngle(double angle) override;
+		inline double getWaveFrequency() const override { return oscFrequency; }
+
 		virtual WaveCallback getWaveCallback() const override;
+
 	private:
 		WaveCallback mWaveCB;
 
-		double SineWaveFunc(double time) {
-			return (0.5 * sin(440.0 * 2.0 * 3.14159 * time)) * .1;
+		double SineWaveFunc(Note n, double time) {
+			return (0.5 * sin(n.noteFrequency * 2.0 * 3.14159 * time)) * oscAmplitude;
 		}
+
+		std::atomic<double> oscFrequency;
+		std::atomic<double> oscAmplitude;
+		std::atomic<double> oscAngle;
 	};
 }

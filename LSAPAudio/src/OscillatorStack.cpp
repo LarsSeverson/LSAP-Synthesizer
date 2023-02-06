@@ -29,4 +29,13 @@ namespace LSAP {
 			i->onOscUpdate();
 		}
 	}
+	double OscillatorStack::onOscStackFill(Note n, double time)
+	{
+		double data = 0;
+		for (auto i : mOscillators) {
+			data += i->onOscFill(n, time);
+		}
+
+		return data;
+	}
 }

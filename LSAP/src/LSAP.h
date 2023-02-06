@@ -1,7 +1,7 @@
 #pragma once
 
 #include "LSAP/Application.h"
-#include "Synth.h"
+#include "LSAPAudio.h"
 
 #include "LSAP/ImGui/LSGui.h"
 

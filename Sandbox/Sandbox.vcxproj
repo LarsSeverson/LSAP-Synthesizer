@@ -140,7 +140,7 @@
     <ProjectReference Include="..\LSAP\LSAP.vcxproj">
       <Project>{1526887C-015D-890D-AA49-6F10965F050F}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\LSAPAudio\LSAPAudio\LSAPAudio.vcxproj">
+    <ProjectReference Include="..\LSAPAudio\LSAPAudio.vcxproj">
       <Project>{A753666B-13BE-1AE2-5CFC-CB87C8A5F836}</Project>
     </ProjectReference>
   </ItemGroup>

@@ -11,11 +11,6 @@ project "LSAPAudio"
 	pchheader "audiopch.h"
 	pchsource "src/audiopch.cpp"
 
-	includedirs
-	{
-		"../LSAP/src"
-	}
-
 	files
 	{
 		"src/**.h",

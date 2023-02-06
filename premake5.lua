@@ -23,7 +23,6 @@ workspace "LSAP"
         include "LSAP/vendor/GLFW3"
         include "LSAP/vendor/glad"
         include "LSAP/vendor/imGui"
-        include "LSAPAudio"
     group ""
 
     project "LSAP"
@@ -150,3 +149,43 @@ project "Sandbox"
             defines "LS_DIST"
             runtime "Release"
             optimize "on"
+
+project "LSAPAudio"
+	location "LSAPAudio"
+	kind "StaticLib"
+	language "C++"
+	cppdialect "C++20"
+	staticruntime "on"
+
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	pchheader "audiopch.h"
+	pchsource "LSAPAudio/src/audiopch.cpp"
+
+	files
+	{
+		"LSAPAudio/src/**.h",
+        "LSAPAudio/src/**.cpp"
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+
+		links
+		{
+			"winmm.lib"
+		}
+
+	filter "configurations:Debug"
+     	defines "LS_DEBUG"
+    	runtime "Debug"        
+		symbols "on"
+    filter "configurations:Release"
+	    defines "LS_RELEASE"
+        runtime "Release"
+        optimize "on"
+    filter "configurations:Dist"
+        defines "LS_DIST"
+        runtime "Release"
+        optimize "on"

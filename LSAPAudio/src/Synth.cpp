@@ -9,15 +9,15 @@ namespace LSAP {
 		: mSoundGenerator(new SoundGenerator())
 	{
 		sSynthInstance = this;
-		//SineWave s;
-		//mOscStack.pushOsc(new Oscillator::Oscillator(s));
+		mSoundGenerator->setSynthFunc(std::bind(&Synth::fillOutputBuffer, this, std::placeholders::_1));
+		outputSound();
 	}
 	Synth::~Synth()
 	{
 		
 	}
 	
-	void Synth::outputSound(double frequency)
+	void Synth::outputSound()
 	{
 		mSoundGenerator->generateSound();
 	}
@@ -28,17 +28,55 @@ namespace LSAP {
 
 	void Synth::onSynthStop()
 	{
-		mIsPlaying = false;
+
 	}
 
 	void Synth::runSynth()
 	{
-		outputSound(440);
+		while (true) {
+			onSynthUpdate();
+		}
 	}
 
 	void Synth::pushOscillator(Oscillator::Oscillator* osc)
 	{
 		mOscStack.pushOsc(osc);
+	}
+
+	void Synth::pushNote(const Note& n)
+	{
+		// If found
+		notes.lock();
+		auto result = std::find_if(mNotes.begin(), mNotes.end(), [n](const Note& check) { return check.mID == n.mID; });
+		if (result == mNotes.end()) {
+			mNotes.emplace_back(n);
+		}
+		std::cout << &mNotes.back() << "\n";
+		notes.unlock();
+
+	}
+	void Synth::popNote(Note* n) {
+
+		// In progress...
+		auto it = std::find_if(mNotes.begin(), mNotes.end(), [&n](const Note& index) {
+			return &index == n; 
+		});
+		if (it != mNotes.end()) {
+			Note* p = n;
+			(*p).noteDone = true;
+		}
+	}
+
+	double Synth::fillOutputBuffer(double time)
+	{
+		std::unique_lock<std::mutex> lm(notes);
+
+		double data = 0;
+		for (auto& i : mNotes) {
+			data += mOscStack.onOscStackFill(i, time);
+		}
+		std::erase_if(mNotes, [](const Note& index) { return index.noteDone; });
+		return data;
 	}
 
 }
