@@ -3,6 +3,8 @@
 
 #include "LSAP/Log.h"
 
+#include "LSAPAudio.h"
+
 #include <glad/glad.h>
 
 namespace LSAP {
@@ -82,6 +84,7 @@ namespace LSAP {
 	}
 
 	bool Application::onWindowClose(WindowCloseEvent& event) {
+		Synth::getSynth().onSynthStop();
 		isRunning = false;
 		return true;
 	}

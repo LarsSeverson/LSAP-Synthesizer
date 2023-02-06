@@ -7,7 +7,7 @@ namespace LSAP {
 	Synth* Synth::sSynthInstance = nullptr;
 
 	Synth::Synth()
-		: mSoundGenerator(new SoundGenerator())
+		: mSoundGenerator(new SoundGenerator()), isRunning(true)
 	{
 		sSynthInstance = this;
 		mSoundGenerator->setSynthFunc(std::bind(&Synth::fillOutputBuffer, this, std::placeholders::_1));
@@ -29,12 +29,12 @@ namespace LSAP {
 
 	void Synth::onSynthStop()
 	{
-
+		isRunning = false;
 	}
 
 	void Synth::runSynth()
 	{
-		while (true) {
+		while (isRunning) {
 			onSynthUpdate();
 			mOscStack.onOscStackUpdate();
 		}

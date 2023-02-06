@@ -37,6 +37,8 @@ namespace LSAP {
 		std::shared_ptr<SoundGenerator> mSoundGenerator;
 
 		std::mutex notes;
+
+		bool isRunning;
 	};
 	Synth* createSynth();
 }
