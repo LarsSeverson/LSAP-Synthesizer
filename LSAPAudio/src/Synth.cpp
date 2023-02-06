@@ -51,7 +51,6 @@ namespace LSAP {
 		if (result == mNotes.end()) {
 			mNotes.emplace_back(n);
 		}
-		std::cout << &mNotes.back() << "\n";
 		notes.unlock();
 
 	}

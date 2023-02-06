@@ -15,55 +15,63 @@ public:
 
 		// The keyboard
 		if (LSAP::Input::sIsKeyPressed(LSAP::Key::A)) {
-			LSAP::Note n(LSAP::Notes::C);
+			LSAP::Note n(LSAP::Notes::C, 1);
 			currentNote = &n;
 			getOscillatorWave().setWaveAmplitude(.1);
 			pushNote(n);
 
 			LSAP::Input::mInputHandled = true;
 		}
-		else if (LSAP::Input::sIsKeyPressed(LSAP::Key::S)) {
-			LSAP::Note n(LSAP::Notes::D);
+		if (LSAP::Input::sIsKeyPressed(LSAP::Key::S)) {
+			LSAP::Note n(LSAP::Notes::D, 1);
 			currentNote = &n;
 			getOscillatorWave().setWaveAmplitude(.1);
 			pushNote(n);
 
 			LSAP::Input::mInputHandled = true;
 		}
-		else if (LSAP::Input::sIsKeyPressed(LSAP::Key::D)) {
-			LSAP::Note n(LSAP::Notes::E);
+		if (LSAP::Input::sIsKeyPressed(LSAP::Key::D)) {
+			LSAP::Note n(LSAP::Notes::E, 1);
 			currentNote = &n;
 			getOscillatorWave().setWaveAmplitude(.1);
 			pushNote(n);
 
 			LSAP::Input::mInputHandled = true;
 		}
-		else if (LSAP::Input::sIsKeyPressed(LSAP::Key::F)) {
-			LSAP::Note n(LSAP::Notes::F);
+		if (LSAP::Input::sIsKeyPressed(LSAP::Key::F)) {
+			LSAP::Note n(LSAP::Notes::F, 1);
 			currentNote = &n;
 			getOscillatorWave().setWaveAmplitude(.1);
 			pushNote(n);
 
 			LSAP::Input::mInputHandled = true;
 		}
-		else if (LSAP::Input::sIsKeyPressed(LSAP::Key::G)) {
-			LSAP::Note n(LSAP::Notes::G);
+		if (LSAP::Input::sIsKeyPressed(LSAP::Key::G)) {
+			LSAP::Note n(LSAP::Notes::G, 1);
 			currentNote = &n;
 			getOscillatorWave().setWaveAmplitude(.1);
 			pushNote(n);
 
 			LSAP::Input::mInputHandled = true;
 		}
-		else if (LSAP::Input::sIsKeyPressed(LSAP::Key::H)) {
-			LSAP::Note n(LSAP::Notes::A);
+		if (LSAP::Input::sIsKeyPressed(LSAP::Key::H)) {
+			LSAP::Note n(LSAP::Notes::A, 1);
 			currentNote = &n;
 			getOscillatorWave().setWaveAmplitude(.1);
 			pushNote(n);
 
 			LSAP::Input::mInputHandled = true;
 		}
-		else if (LSAP::Input::sIsKeyPressed(LSAP::Key::J)) {
-			LSAP::Note n(LSAP::Notes::B);
+		if (LSAP::Input::sIsKeyPressed(LSAP::Key::J)) {
+			LSAP::Note n(LSAP::Notes::B, 1);
+			currentNote = &n;
+			getOscillatorWave().setWaveAmplitude(.1);
+			pushNote(n);
+
+			LSAP::Input::mInputHandled = true;
+		}
+		if (LSAP::Input::sIsKeyPressed(LSAP::Key::K)) {
+			LSAP::Note n(LSAP::Notes::B, 2);
 			currentNote = &n;
 			getOscillatorWave().setWaveAmplitude(.1);
 			pushNote(n);
