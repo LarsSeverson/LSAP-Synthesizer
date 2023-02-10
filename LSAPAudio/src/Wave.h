@@ -5,7 +5,7 @@ namespace LSAP
 	class Wave
 	{
 	protected:
-		using WaveCallback = std::function<double(Note, double)>;
+		using WaveCallback = std::function<double(Note&, double)>;
 	public:
 		virtual ~Wave() = default;
 
@@ -37,9 +37,7 @@ namespace LSAP
 	private:
 		WaveCallback mWaveCB;
 
-		double SineWaveFunc(Note n, double time) {
-			return (0.5 * sin(n.noteFrequency * 2.0 * 3.14159 * time)) * oscAmplitude;
-		}
+		double SineWaveFunc(Note& n, double time);
 
 		std::atomic<double> oscFrequency;
 		std::atomic<double> oscAmplitude;

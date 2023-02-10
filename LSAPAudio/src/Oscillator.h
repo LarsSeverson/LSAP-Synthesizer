@@ -3,19 +3,20 @@
 #include <cmath>
 #include "Wave.h"
 #include "Note.h"
+#include "Envelope.h"
 
 namespace LSAP {
 	namespace Oscillator {
 		class Oscillator
 		{
-			using OscCallback = std::function<double(Note, double)>;
+			using OscCallback = std::function<double(Note&, double)>;
 		public:
 			Oscillator(Wave& wave);
 			virtual ~Oscillator() = default;
 
 			virtual void onOscUpdate() {}
 
-			double onOscFill(Note n, double time);
+			double onOscFill(Note& n, double time);
 
 			void onOscAttach();
 			void onOscDetach();
@@ -31,6 +32,8 @@ namespace LSAP {
 
 			Wave& mOscillatorWave;
 			OscCallback mOscCallback;
+
+			std::mutex oscMutex;
 		};
 	}
 }

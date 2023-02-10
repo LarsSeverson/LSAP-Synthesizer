@@ -5,6 +5,7 @@
 namespace LSAP {
 
 	Synth* Synth::sSynthInstance = nullptr;
+	uint16_t Synth::sOctave = 1;
 
 	Synth::Synth()
 		: mSoundGenerator(new SoundGenerator()), isRunning(true)
@@ -45,22 +46,26 @@ namespace LSAP {
 		mOscStack.pushOsc(osc);
 	}
 
-	void Synth::pushNote(const Note& n)
+	void Synth::pushNote(Note& n)
 	{
-		// If found
+
 		notes.lock();
-		auto result = std::find_if(mNotes.begin(), mNotes.end(), [n](const Note& check) { return check.noteFrequency == n.noteFrequency; });
+		auto result = std::find_if(mNotes.begin(), mNotes.end(), [&n](Note& check) { return check.noteFrequency == n.noteFrequency; });
 		if (result == mNotes.end()) {
-			mNotes.emplace_back(n);
-			mOscStack.onNotePressed(.1);
+			mNotes.emplace_back(n).noteEnv.setState(1);
+		}
+		// If note is found and is in release state (but pressed again),
+		// reset the state to attack
+		else if (result->noteEnv.getState() == 4) {
+			result->noteEnv.setState(1);
 		}
 		notes.unlock();
 	}
 	void Synth::popNote(Note& note) {
 		notes.lock();
-		auto it = std::find_if(mNotes.begin(), mNotes.end(), [note](Note& index) { return note.noteFrequency == index.noteFrequency; });
+		auto it = std::find_if(mNotes.begin(), mNotes.end(), [&note](Note& index) { return note.noteFrequency == index.noteFrequency; });
 		if (it != mNotes.end()) {
-			it->noteDone = true;
+			it->noteEnv.setState(4);
 		}
 		notes.unlock();
 	}
@@ -79,12 +84,13 @@ namespace LSAP {
 	double Synth::fillOutputBuffer(double time)
 	{
 		std::unique_lock<std::mutex> lm(notes);
-
 		double data = 0;
 		for (auto& i : mNotes) {
 			data += mOscStack.onOscStackFill(i, time);
 		}
-		std::erase_if(mNotes, [](const Note& index) { return index.noteDone; });
+		std::erase_if(mNotes, [](Note& index) {
+			return index.noteDone; });
+		
 		return data;
 	}
 

@@ -36,4 +36,8 @@ namespace LSAP
 	{
 		return mWaveCB;
 	}
+	double SineWave::SineWaveFunc(Note& n, double time)
+	{
+		return (sin(n.noteFrequency * 2.0 * 3.14159 * time));
+	}
 }

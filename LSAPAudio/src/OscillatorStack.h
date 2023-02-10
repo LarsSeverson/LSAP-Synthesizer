@@ -15,7 +15,7 @@ namespace LSAP
 
 		void onOscStackUpdate();
 		void onNotePressed(double amplitude);
-		double onOscStackFill(Note n, double time);
+		double onOscStackFill(Note& n, double time);
 
 		bool isEmpty() { return mOscIndex == 0; }
 

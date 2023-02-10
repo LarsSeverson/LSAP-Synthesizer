@@ -143,6 +143,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Envelope.h" />
     <ClInclude Include="src\LSAPAudio.h" />
     <ClInclude Include="src\Note.h" />
     <ClInclude Include="src\Oscillator.h" />
@@ -153,6 +154,7 @@
     <ClInclude Include="src\audiopch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Envelope.cpp" />
     <ClCompile Include="src\Oscillator.cpp" />
     <ClCompile Include="src\OscillatorStack.cpp" />
     <ClCompile Include="src\SoundGenerator.cpp" />

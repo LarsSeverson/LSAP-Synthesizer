@@ -7,15 +7,15 @@ namespace LSAP
 	namespace Oscillator {
 		Oscillator::Oscillator(Wave& wave)
 			// Defaults
-			: mFrequency(0.0), mAmplitude(0.0), mAngle(0.0), 
+			: mFrequency(0.0), mAmplitude(0.1), mAngle(0.0), 
 			  mOscillatorWave(wave)
 		{
 
 		}
 
-		double Oscillator::onOscFill(Note n, double time)
+		double Oscillator::onOscFill(Note& currentNote, double time)
 		{
-			return mOscCallback(n, time);
+			return ((mOscCallback(currentNote, time)) * currentNote.processEnv(currentNote)) * mAmplitude;
 		}
 
 		void Oscillator::onOscAttach()

@@ -19,9 +19,12 @@ namespace LSAP {
 		void outputSound();
 		void onSynthStop();
 		void runSynth();
+
 		void pushOscillator(Oscillator::Oscillator* osc);
-		void pushNote(const Note& note);
+
+		void pushNote(Note& note);
 		void popNote(Note& note);
+
 		void checkInput(uint16_t key, Note note);
 
 		double fillOutputBuffer(double time);
@@ -30,10 +33,10 @@ namespace LSAP {
 		inline SoundGenerator& getSoundGenerator() { return *mSoundGenerator; }
 
 		std::vector<Note> mNotes;
+		static uint16_t sOctave;
 	private:
 		OscillatorStack mOscStack;
 		static Synth* sSynthInstance;
-
 		std::shared_ptr<SoundGenerator> mSoundGenerator;
 
 		std::mutex notes;

@@ -62,7 +62,6 @@ namespace LSAP {
 
 	// private:
 	void SoundGenerator::threadPlaySound(double offset, double mGlobalTime) {
-
 		constexpr double maxSample = std::numeric_limits<int>::max();
 		constexpr double minSample = std::numeric_limits<int>::min();
 		int mBlockCurrent = 0;
