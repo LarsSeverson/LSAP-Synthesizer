@@ -18,6 +18,7 @@ namespace LSAP {
 		void pushOverlay(Layer* overlay);
 
 		bool onWindowClose(WindowCloseEvent& event);
+		void closeWindow();
 		
 		inline Window& getWindow() { return *appWindow; }
 		

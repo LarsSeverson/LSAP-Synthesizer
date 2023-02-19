@@ -11,4 +11,3 @@
 #include "LSAP/KeyCodes.h"
 #include "LSAP/MouseCodes.h"
 
-#include "LSAP/EntryPoint.h"

@@ -14,16 +14,19 @@ namespace LSAP
 		void popOsc (Oscillator::Oscillator* osc);
 
 		void onOscStackUpdate();
-		void onNotePressed(double amplitude);
-		double onOscStackFill(Note& n, double time);
+		Note& onNotePush(Note& note);
+		double onOscStackFill(Note& note, double time);
 
 		bool isEmpty() { return mOscIndex == 0; }
+
+		inline std::vector<Note>& getNotes() { return mNotes; }
 
 		std::vector<Oscillator::Oscillator*>::iterator begin() {}
 		std::vector<Oscillator::Oscillator*>::iterator end() {}
 
 	private:
 		std::vector<Oscillator::Oscillator*> mOscillators;
+		std::vector<Note> mNotes;
 		unsigned int mOscIndex = 0;
 	};
 }

@@ -29,16 +29,15 @@ namespace LSAP {
 			i->onOscUpdate();
 		}
 	}
-	void OscillatorStack::onNotePressed(double amplitude)
+	Note& OscillatorStack::onNotePush(Note& note)
 	{
-		for (auto i : mOscillators) {
-			i->getOscillatorWave().setWaveAmplitude(amplitude);
-		}
+		return mNotes.emplace_back(note);
 	}
 	double OscillatorStack::onOscStackFill(Note& n, double time)
 	{
 		double data = 0;
 		for (auto i : mOscillators) {
+			n.setEnvData(i->getEnvData());
 			data += i->onOscFill(n, time);
 		}
 		return data;

@@ -50,10 +50,14 @@ namespace LSAP {
 	{
 
 		notes.lock();
-		auto result = std::find_if(mNotes.begin(), mNotes.end(), [&n](Note& check) { return check.noteFrequency == n.noteFrequency; });
-		if (result == mNotes.end()) {
-			mNotes.emplace_back(n).noteEnv.setState(1);
+
+		auto result = std::find_if(mOscStack.getNotes().begin(), mOscStack.getNotes().end(), [&n](Note& check)
+			{ return check.noteFrequency == n.noteFrequency; });
+
+		if (result == mOscStack.getNotes().end()) {
+			mOscStack.onNotePush(n).noteEnv.setState(1);
 		}
+
 		// If note is found and is in release state (but pressed again),
 		// reset the state to attack
 		else if (result->noteEnv.getState() == 4) {
@@ -63,8 +67,9 @@ namespace LSAP {
 	}
 	void Synth::popNote(Note& note) {
 		notes.lock();
-		auto it = std::find_if(mNotes.begin(), mNotes.end(), [&note](Note& index) { return note.noteFrequency == index.noteFrequency; });
-		if (it != mNotes.end()) {
+		auto it = std::find_if(mOscStack.getNotes().begin(), mOscStack.getNotes().end(), [&note](Note& index)
+			{ return note.noteFrequency == index.noteFrequency; });
+		if (it != mOscStack.getNotes().end()) {
 			it->noteEnv.setState(4);
 		}
 		notes.unlock();
@@ -85,10 +90,10 @@ namespace LSAP {
 	{
 		std::unique_lock<std::mutex> lm(notes);
 		double data = 0;
-		for (auto& i : mNotes) {
+		for (auto& i : mOscStack.getNotes()) {
 			data += mOscStack.onOscStackFill(i, time);
 		}
-		std::erase_if(mNotes, [](Note& index) {
+		std::erase_if(mOscStack.getNotes(), [](Note& index) {
 			return index.noteDone; });
 		
 		return data;

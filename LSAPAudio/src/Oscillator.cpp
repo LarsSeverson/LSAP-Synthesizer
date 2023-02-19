@@ -8,19 +8,25 @@ namespace LSAP
 		Oscillator::Oscillator(Wave& wave)
 			// Defaults
 			: mFrequency(0.0), mAmplitude(0.1), mAngle(0.0), 
-			  mOscillatorWave(wave)
+			  mOscillatorWave(wave), envData(EnvelopeData(2.0,1.0,1.0,4.0))
 		{
 
 		}
 
 		double Oscillator::onOscFill(Note& currentNote, double time)
 		{
-			return ((mOscCallback(currentNote, time)) * currentNote.processEnv(currentNote)) * mAmplitude;
+			return ((mOscCallback(currentNote, time)) * currentNote.processEnv()) * mAmplitude;
 		}
 
 		void Oscillator::onOscAttach()
 		{
 			mOscCallback = mOscillatorWave.getWaveCallback();
+
+			// To be eventually implemented through user input
+			setAttackRate(5.0);
+			setDecayRate(1.0);
+			setSustainLevel(.5);
+			setReleaseRate(8.0);
 		}
 		void Oscillator::onOscDetach()
 		{
@@ -29,6 +35,25 @@ namespace LSAP
 		void Oscillator::setOscillatorWave(const Wave& wave)
 		{
 			mOscillatorWave = wave;
+		}
+		void Oscillator::setAttackRate(double attackRate)
+		{
+			envData.attack = attackRate * 44100;
+ 		}
+		void Oscillator::setDecayRate(double decayRate)
+		{
+			envData.decay = decayRate * 44100;
+		}
+		void Oscillator::setSustainLevel(double level)
+		{
+			if (level >= 1.0) {
+				level = 1.0;
+			}
+			envData.sustainLevel = level;
+		}
+		void Oscillator::setReleaseRate(double releaseRate)
+		{
+			envData.release = releaseRate * 44100;
 		}
 	}
 }

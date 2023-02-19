@@ -1,9 +1,9 @@
 #pragma once
 
-#include <cmath>
 #include "Wave.h"
 #include "Note.h"
 #include "Envelope.h"
+#include "frwddec.h"
 
 namespace LSAP {
 	namespace Oscillator {
@@ -23,6 +23,14 @@ namespace LSAP {
 			void setOscillatorWave(const Wave& wave);
 
 			inline Wave& getOscillatorWave() { return mOscillatorWave; }
+
+			// Envelope stuff
+			inline EnvelopeData& getEnvData() { return envData; }
+			
+			void setAttackRate(double attackRate);
+			void setDecayRate(double decayRate);
+			void setSustainLevel(double level);
+			void setReleaseRate(double releaseRate);
 		protected:
 			double mFrequency;
 			double mAmplitude;
@@ -32,6 +40,7 @@ namespace LSAP {
 
 			Wave& mOscillatorWave;
 			OscCallback mOscCallback;
+			EnvelopeData envData;
 
 			std::mutex oscMutex;
 		};

@@ -134,7 +134,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\SandboxSynth.h" />
+    <ClInclude Include="src\SynthUI.h" />
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="src\SandboxApp.cpp" />
+    <ClCompile Include="src\SandboxSynth.cpp" />
+    <ClCompile Include="src\SynthUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LSAP\LSAP.vcxproj">

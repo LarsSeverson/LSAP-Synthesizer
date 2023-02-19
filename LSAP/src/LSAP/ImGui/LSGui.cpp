@@ -14,6 +14,7 @@
 
 namespace LSAP {
 	LSGui::LSGui() : Layer("GUI") {
+
 	}
 
 	LSGui::~LSGui() {
@@ -31,8 +32,10 @@ namespace LSAP {
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
+		
+		
+
 		ImGui::StyleColorsDark();
-		//ImGui::StyleColorsClassic();
 
 		// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
 		ImGuiStyle& style = ImGui::GetStyle();
@@ -42,6 +45,8 @@ namespace LSAP {
 			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 		}
 
+		
+
 		Application& app = Application::getApplication();
 		GLFWwindow* window = static_cast<GLFWwindow*>(app.getWindow().getNativeWindow());
 
@@ -50,17 +55,11 @@ namespace LSAP {
 		ImGui_ImplOpenGL3_Init("#version 410");
 	}
 
-	void LSGui::onLayerDetatch()
+	void LSGui::onLayerDetach()
 	{
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
-	}
-
-	void LSGui::onImGuiRenderer()
-	{
-		static bool show = true;
-		ImGui::ShowDemoWindow(&show);
 	}
 
 	void LSGui::GuiBegin()

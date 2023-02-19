@@ -14,8 +14,7 @@ namespace LSAP {
 		~LSGui();
 
 		virtual void onLayerAttach() override;
-		virtual void onLayerDetatch() override;
-		virtual void onImGuiRenderer() override;
+		virtual void onLayerDetach() override;
 
 		void GuiBegin();
 		void GuiEnd();

@@ -12,7 +12,7 @@ namespace LSAP {
 
 		virtual void onLayerUpdate() {}
 		virtual void onLayerAttach() {}
-		virtual void onLayerDetatch() {}
+		virtual void onLayerDetach() {}
 		virtual void onImGuiRenderer() {}
 		virtual void onLayerEvent(Event& event) {}
 

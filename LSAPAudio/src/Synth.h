@@ -32,7 +32,6 @@ namespace LSAP {
 		static Synth& getSynth() { return *sSynthInstance; }
 		inline SoundGenerator& getSoundGenerator() { return *mSoundGenerator; }
 
-		std::vector<Note> mNotes;
 		static uint16_t sOctave;
 	private:
 		OscillatorStack mOscStack;

@@ -1,5 +1,6 @@
 #pragma once
 #include "Envelope.h"
+#include "frwddec.h"
 
 namespace LSAP {
 	enum Notes
@@ -20,14 +21,9 @@ namespace LSAP {
 	};
 	struct Note
 	{
-		Note(Notes id, float octave) 
-			: mID(id), noteDone(false)
+		Note(Notes id, int octave) 
+			: mID(id), noteDone(false), noteEnv(Envelope())
 		{
-			noteEnv = Envelope();
-			noteEnv.setAttackRate(2 * 44100);
-			noteEnv.setDecayRate(2 * 44100);
-			noteEnv.setReleaserate(5 * 44100);
-			noteEnv.setSustainLevel(1);
 			noteEnv.gate(true);
 			switch (id) {
 
@@ -49,11 +45,18 @@ namespace LSAP {
 		}
 		~Note() = default;
 
-		double processEnv(Note& currentNote) {
+		double processEnv() {
 			if (!noteEnv.getState()) {
-				currentNote.noteDone = true;
+				this->noteDone = true;
 			}
 			return noteEnv.processEnv();
+		}
+
+		void setEnvData(const EnvelopeData data) {
+			noteEnv.setAttackRate(data.attack);
+			noteEnv.setDecayRate(data.decay);
+			noteEnv.setSustainLevel(data.sustainLevel);
+			noteEnv.setReleaserate(data.release);
 		}
 
 		int mID;

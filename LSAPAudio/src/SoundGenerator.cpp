@@ -1,8 +1,6 @@
 #include "audiopch.h"
 #include "SoundGenerator.h"
 
-#include "Synth.h"
-
 namespace LSAP {
 	// public
 	SoundGenerator::SoundGenerator(const AudioData& audioData)
