@@ -3,7 +3,10 @@
 SandboxSynth::SandboxSynth()
 {
 	LSAP::SineWave s;
-	pushOscillator(new LSAP::Oscillator::Oscillator(s));
+	LSAP::SquareWave sq;
+	pushOscillator(new LSAP::Oscillator::Oscillator(s, "Oscillator 1"));
+	pushOscillator(new LSAP::Oscillator::Oscillator(sq, "Oscillator 2"));
+	pushOscillator(new LSAP::Oscillator::Oscillator(s, "Oscillator 3"));
 	mOctave = Synth::sOctave;
 }
 

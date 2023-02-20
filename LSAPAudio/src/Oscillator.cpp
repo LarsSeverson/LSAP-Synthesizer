@@ -5,10 +5,11 @@
 namespace LSAP
 {
 	namespace Oscillator {
-		Oscillator::Oscillator(Wave& wave)
+		Oscillator::Oscillator(Wave& wave, const std::string& name)
 			// Defaults
 			: mFrequency(0.0), mAmplitude(0.1), mAngle(0.0), 
-			  mOscillatorWave(wave), envData(EnvelopeData(2.0,1.0,1.0,4.0))
+			  mOscillatorWave(wave), envData(EnvelopeData(2.0,1.0,1.0,4.0)),
+			  mOscName(name)
 		{
 
 		}

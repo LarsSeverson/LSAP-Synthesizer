@@ -43,4 +43,28 @@ namespace LSAP
 		std::atomic<double> oscAmplitude;
 		std::atomic<double> oscAngle;
 	};
+
+	class SquareWave : public Wave
+	{
+	public:
+		SquareWave();
+		~SquareWave();
+
+		virtual void setWaveCallback() override;
+		virtual void setWaveFrequency(double frequency) override;
+		virtual void setWaveAmplitude(double amplitude) override;
+		virtual void setWaveAngle(double angle) override;
+		inline double getWaveFrequency() const override { return oscFrequency; }
+
+		virtual WaveCallback getWaveCallback() const override;
+
+	private:
+		WaveCallback mWaveCB;
+
+		double SquareWaveFunc(Note& n, double time);
+
+		std::atomic<double> oscFrequency;
+		std::atomic<double> oscAmplitude;
+		std::atomic<double> oscAngle;
+	};
 }

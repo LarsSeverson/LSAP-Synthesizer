@@ -14,6 +14,6 @@ public:
 	virtual void onImGuiRenderer() override;
 
 private:
-
+	std::mutex synthM;
 };
 

@@ -11,7 +11,7 @@ namespace LSAP {
 		{
 			using OscCallback = std::function<double(Note&, double)>;
 		public:
-			Oscillator(Wave& wave);
+			Oscillator(Wave& wave, const std::string& oscName);
 			virtual ~Oscillator() = default;
 
 			virtual void onOscUpdate() {}
@@ -23,6 +23,7 @@ namespace LSAP {
 			void setOscillatorWave(const Wave& wave);
 
 			inline Wave& getOscillatorWave() { return mOscillatorWave; }
+			inline const std::string getOscName() { return mOscName; }
 
 			// Envelope stuff
 			inline EnvelopeData& getEnvData() { return envData; }
@@ -35,6 +36,8 @@ namespace LSAP {
 			double mFrequency;
 			double mAmplitude;
 			double mAngle;
+
+			const std::string mOscName;
 
 			bool mIsActive = false;
 

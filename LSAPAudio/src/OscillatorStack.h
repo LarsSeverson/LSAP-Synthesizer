@@ -21,8 +21,8 @@ namespace LSAP
 
 		inline std::vector<Note>& getNotes() { return mNotes; }
 
-		std::vector<Oscillator::Oscillator*>::iterator begin() {}
-		std::vector<Oscillator::Oscillator*>::iterator end() {}
+		std::vector<Oscillator::Oscillator*>::iterator begin() { return mOscillators.begin(); }
+		std::vector<Oscillator::Oscillator*>::iterator end() { return mOscillators.end(); }
 
 	private:
 		std::vector<Oscillator::Oscillator*> mOscillators;

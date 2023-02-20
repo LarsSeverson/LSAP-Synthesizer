@@ -1,4 +1,5 @@
 #include "SynthUI.h"
+#include "SandboxSynth.h"
 #include <imGui/imgui.h>
 
 SynthUI::SynthUI()
@@ -89,13 +90,17 @@ void SynthUI::onImGuiRenderer()
             // which we can't undo at the moment without finer window depth/z control.
             ImGui::Separator();
 
-            if (ImGui::MenuItem("Exit"))
+            if (ImGui::MenuItem("Exit")) {
                 LSAP::Application::getApplication().closeWindow();
                 dockspace = false;
+            }
             ImGui::EndMenu();
         }
         ImGui::EndMenuBar();
     }
-
+    for (auto i : SandboxSynth::getSynth().getOscStack()) {
+        ImGui::Begin(i->getOscName().c_str());
+        ImGui::End();
+    }
     ImGui::End();
 }
