@@ -165,7 +165,8 @@ project "LSAPAudio"
     
     includedirs
     {
-        "LSAP/src"
+        "LSAP/src",
+        "LSAP/vendor/spdlog/include"
     }
 
     defines

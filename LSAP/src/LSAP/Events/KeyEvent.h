@@ -1,44 +1,43 @@
 #pragma once
 #include "Event.h"
+#include "LSAP/KeyCodes.h"
 
 namespace LSAP {
 	class LSAP_API KeyEvent : public Event
 	{
 	public:
+
+		KeyCode getKeyCode() const { return mKeyCode; }
+
 		EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
 	protected:
-		KeyEvent(int keyCode) : mKeyCode(keyCode) {}
-		int mKeyCode;
+		KeyEvent(const KeyCode keyCode) : mKeyCode(keyCode) {}
+		KeyCode mKeyCode;
 	};
 
 	class LSAP_API KeyPressedEvent : public KeyEvent
 	{
 	public:
-		KeyPressedEvent(int keyCode, int repeatCount) : KeyEvent(keyCode), mReapeatCount(repeatCount), mKeyCode(keyCode) {}
+		KeyPressedEvent(const KeyCode keyCode, bool repeat = false) : KeyEvent(keyCode), mIsRepeat(repeat) {}
 
-		inline int getKeyCode() const { return mKeyCode; }
-		inline int getRepeatCount() const { return mReapeatCount; }
+		bool isRepeat() const { return mIsRepeat; }
 
 		std::string toString() const override {
 			// cout
 			std::stringstream ss;
 
-			ss << "KeyPressedEvent: " << mKeyCode << " (" << mReapeatCount << " repeats)";
+			ss << "KeyPressedEvent: " << mKeyCode;
 			return ss.str();
 		}
 		EVENT_CLASS_TYPE(KeyPressed)
-
 	private:
-		int mReapeatCount;
-		int mKeyCode;
+		bool mIsRepeat;
 	};
 
 	class LSAP_API KeyReleasedEvent : public KeyEvent
 	{
 	public:
-		KeyReleasedEvent(int keyCode) : KeyEvent(keyCode), mKeyCode(keyCode) {}
-
-		inline int getKeyCode() const { return mKeyCode; }
+		KeyReleasedEvent(const KeyCode keyCode) : KeyEvent(keyCode) {}
 
 		std::string toString() const override {
 			std::stringstream ss;
@@ -48,8 +47,6 @@ namespace LSAP {
 		}
 
 		EVENT_CLASS_TYPE(KeyReleased)
-	private:
-		int mKeyCode;
 	};
 
 	class LSAP_API KeyTypedEvent : public KeyEvent

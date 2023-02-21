@@ -2,6 +2,8 @@
 #include "SandboxSynth.h"
 #include <imGui/imgui.h>
 
+#define SYNTH_BIND(x) std::bind(&x, SandboxSynth::getSBInstance(), std::placeholders::_1)
+
 SynthUI::SynthUI()
 	: Layer("SynthUI")
 {
@@ -19,14 +21,19 @@ void SynthUI::onLayerUpdate()
 
 void SynthUI::onLayerAttach()
 {
+    
 }
 
 void SynthUI::onLayerDetach()
 {
+
 }
 
 void SynthUI::onLayerEvent(LSAP::Event& event)
 {
+    LSAP::EventDispatcher dispatcher(event);
+    dispatcher.dispatch<LSAP::KeyPressedEvent>(SYNTH_BIND(SandboxSynth::onKeyPressed));
+    dispatcher.dispatch<LSAP::KeyReleasedEvent>(SYNTH_BIND(SandboxSynth::onKeyReleased));
 }
 
 void SynthUI::onImGuiRenderer()
@@ -102,5 +109,9 @@ void SynthUI::onImGuiRenderer()
         ImGui::Begin(i->getOscName().c_str());
         ImGui::End();
     }
+    ImGui::Begin("ADSR Panel");
+    ImGui::End();
+    ImGui::Begin("Effects Panel");
+    ImGui::End();
     ImGui::End();
 }

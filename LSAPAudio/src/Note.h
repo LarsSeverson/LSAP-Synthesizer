@@ -21,7 +21,7 @@ namespace LSAP {
 	};
 	struct Note
 	{
-		Note(Notes id, int octave) 
+		Note(Notes id, double octave) 
 			: mID(id), noteDone(false), noteEnv(Envelope())
 		{
 			noteEnv.gate(true);

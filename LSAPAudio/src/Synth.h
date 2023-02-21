@@ -2,10 +2,12 @@
 
 #include "LSAP/Input.h"
 #include "LSAP/MouseCodes.h"
+#include "LSAP/Events/Event.h"
+#include "LSAP/Events/KeyEvent.h"
 
-#include "OscillatorStack.h"
 #include "Wave.h"
 #include "Note.h"
+#include "OscillatorStack.h"
 #include "SoundGenerator.h"
 
 namespace LSAP {
@@ -16,16 +18,19 @@ namespace LSAP {
 		~Synth();
 
 		virtual void onSynthUpdate();
+
 		void outputSound();
 		void onSynthStop();
 		void runSynth();
 
 		void pushOscillator(Oscillator::Oscillator* osc);
 
-		void pushNote(Note& note);
-		void popNote(Note& note);
+		void pushNote(Note note);
+		void popNote(Note note);
 
-		void checkInput(uint16_t key, Note note);
+		void checkInput(Event& event, uint16_t octave);
+		bool onKeyPressed(KeyPressedEvent& event);
+		bool onKeyReleased(KeyReleasedEvent& event);
 
 		double fillOutputBuffer(double time);
 
@@ -33,7 +38,7 @@ namespace LSAP {
 		inline OscillatorStack& getOscStack() { return mOscStack;}
 		inline SoundGenerator& getSoundGenerator() { return *mSoundGenerator; }
 
-		static uint16_t sOctave;
+		static double sOctave;
 	private:
 		OscillatorStack mOscStack;
 		static Synth* sSynthInstance;
