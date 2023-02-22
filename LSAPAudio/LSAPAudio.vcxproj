@@ -156,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Envelope.cpp" />
+    <ClCompile Include="src\Note.cpp" />
     <ClCompile Include="src\Oscillator.cpp" />
     <ClCompile Include="src\OscillatorStack.cpp" />
     <ClCompile Include="src\SoundGenerator.cpp" />

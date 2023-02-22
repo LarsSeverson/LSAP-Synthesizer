@@ -24,11 +24,9 @@ namespace LSAP {
 		void runSynth();
 
 		void pushOscillator(Oscillator::Oscillator* osc);
-
 		void pushNote(Note note);
 		void popNote(Note note);
 
-		void checkInput(Event& event, uint16_t octave);
 		bool onKeyPressed(KeyPressedEvent& event);
 		bool onKeyReleased(KeyReleasedEvent& event);
 
@@ -38,7 +36,7 @@ namespace LSAP {
 		inline OscillatorStack& getOscStack() { return mOscStack;}
 		inline SoundGenerator& getSoundGenerator() { return *mSoundGenerator; }
 
-		static double sOctave;
+		static double sSynthOctave;
 	private:
 		OscillatorStack mOscStack;
 		static Synth* sSynthInstance;

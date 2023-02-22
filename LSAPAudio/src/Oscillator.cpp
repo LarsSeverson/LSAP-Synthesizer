@@ -26,8 +26,8 @@ namespace LSAP
 			// To be eventually implemented through user input
 			setAttackRate(5.0);
 			setDecayRate(1.0);
-			setSustainLevel(.5);
-			setReleaseRate(8.0);
+			setSustainLevel(1.0);
+			setReleaseRate(20.0);
 		}
 		void Oscillator::onOscDetach()
 		{

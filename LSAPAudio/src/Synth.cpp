@@ -5,7 +5,7 @@
 namespace LSAP {
 
 	Synth* Synth::sSynthInstance = nullptr;
-	double Synth::sOctave = 1.0;
+	double Synth::sSynthOctave = 0.0;
 
 	Synth::Synth()
 		: mSoundGenerator(new SoundGenerator()), isRunning(true)
@@ -74,96 +74,84 @@ namespace LSAP {
 		notes.unlock();
 	}
 
-	void Synth::checkInput(Event& event, uint16_t octave)
-	{
-		switch (event.isInCategory(EventCategory::EventCategoryKeyboard)) {
-		case Key::A:
-		{
-			pushNote(Note(Notes::C, octave));
-			break;
-		}
-		}
-
-
-		/*Note& newNote = note;
-		if (Input::sIsKeyPressed(key)) {
-			pushNote(newNote);
-		}
-		else {
-			popNote(newNote);
-		}*/
-	}
-
 	bool Synth::onKeyPressed(KeyPressedEvent& event)
 	{
 		switch (event.getKeyCode()) {
 		case Key::A:
-			pushNote(Note(Notes::C, sOctave));
+			pushNote(Note(Notes::C));
 			break;
 		case Key::W:
-			pushNote(Note(Notes::Db, sOctave));
+			pushNote(Note(Notes::Db));
 			break;
 		case Key::S:
-			pushNote(Note(Notes::D, sOctave));
+			pushNote(Note(Notes::D));
 			break;
 		case Key::E:
-			pushNote(Note(Notes::Eb, sOctave));
+			pushNote(Note(Notes::Eb));
 			break;
 		case Key::D:
-			pushNote(Note(Notes::E, sOctave));
+			pushNote(Note(Notes::E));
 			break;
 		case Key::F:
-			pushNote(Note(Notes::F, sOctave));
+			pushNote(Note(Notes::F));
 			break;
 		case Key::T:
-			pushNote(Note(Notes::Gb, sOctave));
+			pushNote(Note(Notes::Gb));
 			break;
 		case Key::G:
-			pushNote(Note(Notes::G, sOctave));
+			pushNote(Note(Notes::G));
 			break;
 		case Key::Y:
-			pushNote(Note(Notes::Ab, sOctave));
+			pushNote(Note(Notes::Ab));
 			break;
 		case Key::H:
-			pushNote(Note(Notes::A, sOctave));
+			pushNote(Note(Notes::A));
 			break;
 		case Key::U:
-			pushNote(Note(Notes::Bb, sOctave));
+			pushNote(Note(Notes::Bb));
 			break;
 		case Key::J:
-			pushNote(Note(Notes::B, sOctave));
+			pushNote(Note(Notes::B));
 			break;
 
 			// Octave higher
 		case Key::K:
-			pushNote(Note(Notes::C, sOctave + 1));
+			pushNote(Note(Notes::C2));
 			break;
 		case Key::O:
-			pushNote(Note(Notes::Db, sOctave + 1));
+			pushNote(Note(Notes::Db2));
 			break;
 		case Key::L:
-			pushNote(Note(Notes::D, sOctave + 1));
+			pushNote(Note(Notes::D2));
 			break;
 		case Key::P:
-			pushNote(Note(Notes::Eb, sOctave + 1));
+			pushNote(Note(Notes::Eb2));
 			break;
 		case Key::Semicolon:
-			pushNote(Note(Notes::E, sOctave + 1));
+			pushNote(Note(Notes::E2));
 			break;
 		case Key::Apostrophe:
-			pushNote(Note(Notes::F, sOctave + 1));
+			pushNote(Note(Notes::F2));
 			break;
 
-		/*case Key::Z:
+		case Key::Z:
 			if (!event.isRepeat()) {
-				sOctave /= 2;
+				for (auto& i : mOscStack.getNotes())
+				{
+					i.noteEnv.setState(4);
+				}
+				sSynthOctave -= 12.0;
 			}
 			break;
 		case Key::X:
 			if (!event.isRepeat()) {
-				sOctave *= 2;
+				for (auto& i : mOscStack.getNotes())
+				{
+					i.noteEnv.setState(4);
+				}
+				sSynthOctave += 12.0;
 			}
-			break;*/
+			break;
 		}
 
 
@@ -174,63 +162,61 @@ namespace LSAP {
 	{
 		switch (event.getKeyCode()) {
 		case Key::A:
-			popNote(Note(Notes::C, sOctave));
+			popNote(Note(Notes::C));
 			break;
 		case Key::W:
-			popNote(Note(Notes::Db, sOctave));
+			popNote(Note(Notes::Db));
 			break;
 		case Key::S:
-			popNote(Note(Notes::D, sOctave));
+			popNote(Note(Notes::D));
 			break;
 		case Key::E:
-			popNote(Note(Notes::Eb, sOctave));
+			popNote(Note(Notes::Eb));
 			break;
 		case Key::D:
-			popNote(Note(Notes::E, sOctave));
+			popNote(Note(Notes::E));
 			break;
 		case Key::F:
-			popNote(Note(Notes::F, sOctave));
+			popNote(Note(Notes::F));
 			break;
 		case Key::T:
-			popNote(Note(Notes::Gb, sOctave));
+			popNote(Note(Notes::Gb));
 			break;
 		case Key::G:
-			popNote(Note(Notes::G, sOctave));
+			popNote(Note(Notes::G));
 			break;
 		case Key::Y:
-			popNote(Note(Notes::Ab, sOctave));
+			popNote(Note(Notes::Ab));
 			break;
 		case Key::H:
-			popNote(Note(Notes::A, sOctave));
+			popNote(Note(Notes::A));
 			break;
 		case Key::U:
-			popNote(Note(Notes::Bb, sOctave));
+			popNote(Note(Notes::Bb));
 			break;
 		case Key::J:
-			popNote(Note(Notes::B, sOctave));
+			popNote(Note(Notes::B));
 			break;
 
 			// Octave higher
 		case Key::K:
-			popNote(Note(Notes::C, sOctave + 1));
+			popNote(Note(Notes::C2));
 			break;
 		case Key::O:
-			popNote(Note(Notes::Db, sOctave + 1));
+			popNote(Note(Notes::Db2));
 			break;
 		case Key::L:
-			popNote(Note(Notes::D, sOctave + 1));
+			popNote(Note(Notes::D2));
 			break;
 		case Key::P:
-			popNote(Note(Notes::Eb, sOctave + 1));
+			popNote(Note(Notes::Eb2));
 			break;
 		case Key::Semicolon:
-			popNote(Note(Notes::E, sOctave + 1));
+			popNote(Note(Notes::E2));
 			break;
 		case Key::Apostrophe:
-			popNote(Note(Notes::F, sOctave + 1));
+			popNote(Note(Notes::F2));
 			break;
-
-			
 		}
 		return false;
 	}
