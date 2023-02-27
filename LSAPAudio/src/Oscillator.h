@@ -20,6 +20,7 @@ namespace LSAP {
 
 			void onOscAttach();
 			void onOscDetach();
+			void onImGuiRender();
 			void setOscillatorWave(const Wave& wave);
 
 			inline Wave& getOscillatorWave() { return mOscillatorWave; }
@@ -36,6 +37,8 @@ namespace LSAP {
 			double mFrequency;
 			double mAmplitude;
 			double mAngle;
+
+			float mScaleAmp;
 
 			const std::string mOscName;
 

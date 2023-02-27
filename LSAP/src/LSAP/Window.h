@@ -13,7 +13,7 @@ namespace LSAP {
 		std::string wTitle;
 		unsigned int wWidth;
 		unsigned int wHeight;
-		WindowProperties(const std::string title = "LSAP Audio Synth", 
+		WindowProperties(const std::string title = "LSAP Synth", 
 			unsigned int width = 1280, unsigned int height = 720)
 			: wWidth(width), wHeight(height), wTitle(title)
 		{}

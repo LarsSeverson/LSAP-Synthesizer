@@ -10,6 +10,5 @@ public:
 
 	static SandboxSynth* getSBInstance() { return sSBSynthInstance; }
 private:
-	uint16_t mOctave;
 	static SandboxSynth* sSBSynthInstance;
 };

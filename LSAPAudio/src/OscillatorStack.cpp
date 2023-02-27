@@ -29,6 +29,13 @@ namespace LSAP {
 			i->onOscUpdate();
 		}
 	}
+	void OscillatorStack::onImGuiRender()
+	{
+		std::unique_lock<std::mutex> oscl(mOscStackMutex);
+		for (auto i : mOscillators) {
+			i->onImGuiRender();
+		}
+	}
 	Note& OscillatorStack::onNotePush(Note& note)
 	{
 		return mNotes.emplace_back(note);

@@ -33,8 +33,8 @@ namespace LSAP {
 		double fillOutputBuffer(double time);
 
 		static Synth& getSynth() { return *sSynthInstance; }
-		inline OscillatorStack& getOscStack() { return mOscStack;}
-		inline SoundGenerator& getSoundGenerator() { return *mSoundGenerator; }
+		OscillatorStack& getOscStack() { return mOscStack;}
+		SoundGenerator& getSoundGenerator() { return *mSoundGenerator; }
 
 		static double sSynthOctave;
 	private:

@@ -93,8 +93,7 @@ void SynthUI::onImGuiRenderer()
     {
         if (ImGui::BeginMenu("File"))
         {
-            // Disabling fullscreen would allow the window to be moved to the front of other windows,
-            // which we can't undo at the moment without finer window depth/z control.
+   
             ImGui::Separator();
 
             if (ImGui::MenuItem("Exit")) {
@@ -105,10 +104,9 @@ void SynthUI::onImGuiRenderer()
         }
         ImGui::EndMenuBar();
     }
-    for (auto i : SandboxSynth::getSynth().getOscStack()) {
-        ImGui::Begin(i->getOscName().c_str());
-        ImGui::End();
-    }
+
+    SandboxSynth::getSynth().getOscStack().onImGuiRender();
+
     ImGui::Begin("ADSR Panel");
     ImGui::End();
     ImGui::Begin("Effects Panel");

@@ -14,6 +14,7 @@ namespace LSAP
 		void popOsc (Oscillator::Oscillator* osc);
 
 		void onOscStackUpdate();
+		void onImGuiRender();
 		Note& onNotePush(Note& note);
 		double onOscStackFill(Note& note, double time);
 
@@ -27,6 +28,7 @@ namespace LSAP
 	private:
 		std::vector<Oscillator::Oscillator*> mOscillators;
 		std::vector<Note> mNotes;
+		std::mutex mOscStackMutex;
 		unsigned int mOscIndex = 0;
 	};
 }

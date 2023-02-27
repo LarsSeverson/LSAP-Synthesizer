@@ -166,7 +166,8 @@ project "LSAPAudio"
     includedirs
     {
         "LSAP/src",
-        "LSAP/vendor/spdlog/include"
+        "LSAP/vendor/spdlog/include",
+        "%{IncludeDir.imGui}"
     }
 
     defines
@@ -185,7 +186,8 @@ project "LSAPAudio"
 
 		links
 		{
-			"winmm.lib"
+			"winmm.lib",
+            "imGui"
 		}
 
 	filter "configurations:Debug"
