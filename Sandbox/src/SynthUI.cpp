@@ -1,8 +1,8 @@
 #include "SynthUI.h"
-#include "SandboxSynth.h"
+#include "Synth.h"
 #include <imGui/imgui.h>
 
-#define SYNTH_BIND(x) std::bind(&x, SandboxSynth::getSBInstance(), std::placeholders::_1)
+#define SYNTH_BIND(x) std::bind(&x, LSAP::Synth::getSynth(), std::placeholders::_1)
 
 SynthUI::SynthUI()
 	: Layer("SynthUI")
@@ -32,8 +32,9 @@ void SynthUI::onLayerDetach()
 void SynthUI::onLayerEvent(LSAP::Event& event)
 {
     LSAP::EventDispatcher dispatcher(event);
-    dispatcher.dispatch<LSAP::KeyPressedEvent>(SYNTH_BIND(SandboxSynth::onKeyPressed));
-    dispatcher.dispatch<LSAP::KeyReleasedEvent>(SYNTH_BIND(SandboxSynth::onKeyReleased));
+   
+    dispatcher.dispatch<LSAP::KeyPressedEvent>(SYNTH_BIND(LSAP::Synth::onKeyPressed));
+    dispatcher.dispatch<LSAP::KeyReleasedEvent>(SYNTH_BIND(LSAP::Synth::onKeyReleased));
 }
 
 void SynthUI::onImGuiRenderer()
@@ -105,7 +106,7 @@ void SynthUI::onImGuiRenderer()
         ImGui::EndMenuBar();
     }
 
-    SandboxSynth::getSynth().getOscStack().onImGuiRender();
+    LSAP::Synth::getSynth()->getOscStack().onImGuiRender();
 
     ImGui::Begin("ADSR Panel");
     ImGui::End();

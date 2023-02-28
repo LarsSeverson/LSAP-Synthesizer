@@ -4,7 +4,8 @@
 namespace LSAP
 {
 	SineWave::SineWave()
-		: oscFrequency(0), oscAmplitude(0), oscAngle(0)
+		: oscFrequency(0), oscAmplitude(0), oscAngle(0),
+		mWaveName("Sine")
 	{
 		setWaveCallback();
 	}
@@ -43,7 +44,8 @@ namespace LSAP
 
 	// ------------- Square Wave -------------
 	SquareWave::SquareWave()
-		: oscFrequency(0), oscAmplitude(0), oscAngle(0)
+		: oscFrequency(0), oscAmplitude(0), oscAngle(0),
+		mWaveName("Square")
 	{
 		setWaveCallback();
 	}

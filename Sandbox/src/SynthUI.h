@@ -12,8 +12,5 @@ public:
 	virtual void onLayerEvent(LSAP::Event& event) override;
 
 	virtual void onImGuiRenderer() override;
-
-private:
-	std::mutex synthM;
 };
 

@@ -35,6 +35,7 @@ namespace LSAP {
 		~SoundGenerator();
 
 		void setSynthFunc(const EventFn& func);
+		void stopSound() { isRunning = false; }
 		void generateSound();
 	
 	private:
@@ -46,6 +47,7 @@ namespace LSAP {
 
 		double mGlobalTime;
 		int* mBlockMemory;
+		bool isRunning;
 
 		std::unique_ptr<WAVEHDR[]> mWaveHeaders;
 		HWAVEOUT mDevice;

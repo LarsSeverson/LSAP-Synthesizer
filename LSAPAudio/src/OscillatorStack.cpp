@@ -10,7 +10,6 @@ namespace LSAP {
 	}
 	void OscillatorStack::pushOsc(Oscillator::Oscillator* osc)
 	{
-
 		mOscillators.emplace(mOscillators.begin() + mOscIndex++, osc);
 		osc->onOscAttach();
 	}
@@ -25,14 +24,13 @@ namespace LSAP {
 	}
 	void OscillatorStack::onOscStackUpdate()
 	{
-		for (auto i : mOscillators) {
+		for (auto& i : mOscillators) {
 			i->onOscUpdate();
 		}
 	}
 	void OscillatorStack::onImGuiRender()
 	{
-		std::unique_lock<std::mutex> oscl(mOscStackMutex);
-		for (auto i : mOscillators) {
+		for (auto& i : mOscillators) {
 			i->onImGuiRender();
 		}
 	}
@@ -42,11 +40,13 @@ namespace LSAP {
 	}
 	double OscillatorStack::onOscStackFill(Note& n, double time)
 	{
+		mOscStackMutex.lock();
 		double data = 0;
 		for (auto i : mOscillators) {
 			n.setEnvData(i->getEnvData());
 			data += i->onOscFill(n, time);
 		}
+		mOscStackMutex.unlock();
 		return data;
 	}
 }

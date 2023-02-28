@@ -17,11 +17,8 @@ namespace LSAP {
 		Synth();
 		~Synth();
 
-		virtual void onSynthUpdate();
-
 		void outputSound();
 		void onSynthStop();
-		void runSynth();
 
 		void pushOscillator(Oscillator::Oscillator* osc);
 		void pushNote(Note note);
@@ -32,7 +29,7 @@ namespace LSAP {
 
 		double fillOutputBuffer(double time);
 
-		static Synth& getSynth() { return *sSynthInstance; }
+		static Synth* getSynth() { return sSynthInstance; }
 		OscillatorStack& getOscStack() { return mOscStack;}
 		SoundGenerator& getSoundGenerator() { return *mSoundGenerator; }
 
@@ -43,9 +40,6 @@ namespace LSAP {
 		std::shared_ptr<SoundGenerator> mSoundGenerator;
 
 		std::mutex notes;
-
-		bool isRunning;
 	};
-	Synth* createSynth();
 }
 

@@ -11,29 +11,29 @@ namespace LSAP {
 		{
 			using OscCallback = std::function<double(Note&, double)>;
 		public:
-			Oscillator(Wave& wave, const std::string& oscName);
+			Oscillator(Wave* wave, const std::string& oscName);
 			virtual ~Oscillator() = default;
 
-			virtual void onOscUpdate() {}
+			virtual void onOscUpdate() { }
 
 			double onOscFill(Note& n, double time);
 
 			void onOscAttach();
 			void onOscDetach();
 			void onImGuiRender();
-			void setOscillatorWave(const Wave& wave);
+			void setOscillatorWave(Wave* wave);
 
-			inline Wave& getOscillatorWave() { return mOscillatorWave; }
-			inline const std::string getOscName() { return mOscName; }
+			Wave& getOscillatorWave() { return *mOscillatorWave; }
+			const std::string& getOscName() const { return mOscName; }
 
 			// Envelope stuff
-			inline EnvelopeData& getEnvData() { return envData; }
+			EnvelopeData& getEnvData() { return envData; }
 			
 			void setAttackRate(double attackRate);
 			void setDecayRate(double decayRate);
 			void setSustainLevel(double level);
 			void setReleaseRate(double releaseRate);
-		protected:
+		private:
 			double mFrequency;
 			double mAmplitude;
 			double mAngle;
@@ -44,7 +44,8 @@ namespace LSAP {
 
 			bool mIsActive = false;
 
-			Wave& mOscillatorWave;
+			std::shared_ptr<Wave> mOscillatorWave;
+			std::vector<std::unique_ptr<Wave>> mOscArray;
 			OscCallback mOscCallback;
 			EnvelopeData envData;
 

@@ -1,7 +1,5 @@
 #pragma once
 #include <LSAP.h>
-
-#include "SandboxSynth.h"
 #include "SynthUI.h"
 
 #include <LSAP/EntryPoint.h>
@@ -18,8 +16,4 @@ public:
 
 LSAP::Application* LSAP::CreateApplication() {
 	return new Sandbox();
-}
-
-LSAP::Synth* LSAP::createSynth() {
-	return new SandboxSynth();
 }

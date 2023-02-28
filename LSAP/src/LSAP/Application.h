@@ -4,6 +4,8 @@
 #include "LayerStack.h"
 #include "Events/Event.h"
 #include "Events/ApplicationEvent.h"
+
+#include "LSAPAudio.h"
 #include "LSAP/ImGui/LSGui.h"
 
 namespace LSAP {
@@ -20,13 +22,15 @@ namespace LSAP {
 		bool onWindowClose(WindowCloseEvent& event);
 		void closeWindow();
 		
-		inline Window& getWindow() { return *appWindow; }
+		Window& getWindow() { return *appWindow; }
+		Synth& getSynth() { return *appSynth; }
 		
 		inline static Application& getApplication() { return *sInstance; }
 	
 		unsigned int mVertexArray, mVertexBuffer, mIndexBuffer;
 	private:
 		std::unique_ptr<Window> appWindow;
+		std::unique_ptr<Synth> appSynth;
 		
 		LSGui* mGUILayer;
 		LayerStack appLayerStack;

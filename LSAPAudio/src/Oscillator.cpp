@@ -1,20 +1,23 @@
 #include "audiopch.h"
 #include "Oscillator.h"
 
-#include "Synth.h"
-
 #include <imgui.h>
 #include <imgui-knobs.h>
+
+#include "Synth.h"
 namespace LSAP
 {
 	namespace Oscillator {
-		Oscillator::Oscillator(Wave& wave, const std::string& name)
+		Oscillator::Oscillator(Wave* wave, const std::string& name)
 			// Defaults
 			: mFrequency(0.0), mAmplitude(0.0), mAngle(0.0), 
-			  mOscillatorWave(wave), envData(EnvelopeData(2.0,1.0,1.0,4.0)),
+			  envData(EnvelopeData(2.0,1.0,1.0,4.0)),
 			  mOscName(name), mScaleAmp(0.0)
 		{
+			mOscillatorWave = std::shared_ptr<Wave>(wave);
 
+			mOscArray.push_back(std::make_unique<SineWave>());
+			mOscArray.push_back(std::make_unique<SquareWave>());
 		}
 
 		double Oscillator::onOscFill(Note& currentNote, double time)
@@ -24,13 +27,15 @@ namespace LSAP
 
 		void Oscillator::onOscAttach()
 		{
-			mOscCallback = mOscillatorWave.getWaveCallback();
+			
+			mOscCallback = mOscillatorWave->getWaveCallback();
 
 			// To be eventually implemented through user input
 			setAttackRate(5.0);
 			setDecayRate(1.0);
 			setSustainLevel(1.0);
 			setReleaseRate(20.0);
+
 		}
 		void Oscillator::onOscDetach()
 		{
@@ -38,20 +43,27 @@ namespace LSAP
 		}
 		void Oscillator::onImGuiRender()
 		{
-			ImGui::Begin(this->mOscName.c_str());
-			if (ImGui::BeginMenu("Wave Type")) {
+			ImGui::Begin(mOscName.c_str());
+			if (ImGui::BeginMenu(mOscillatorWave->getWaveName().c_str())) {
+				if (ImGui::MenuItem(mOscArray[0]->getWaveName().c_str())) {
+					setOscillatorWave(new SineWave());
+				}
+				if (ImGui::MenuItem(mOscArray[1]->getWaveName().c_str())) {
+					setOscillatorWave(new SquareWave());
+				}
 				ImGui::EndMenu();
 			}
-			if (ImGuiKnobs::Knob("Volume", &mScaleAmp, 0.0f, 10.0f, 0.05f, "%.01fdB", ImGuiKnobVariant_Wiper)) {
+			if (ImGuiKnobs::Knob("Volume", &mScaleAmp, 0.0f, 10.0f, 0.05f, "%.001fdB", ImGuiKnobVariant_Wiper)) {
 				mAmplitude = mScaleAmp * .01; // For clipping
 			}
 			ImGui::End();
-
-
 		}
-		void Oscillator::setOscillatorWave(const Wave& wave)
+		void Oscillator::setOscillatorWave(Wave* wave)
 		{
-			mOscillatorWave = wave;
+			oscMutex.lock();
+			mOscillatorWave.reset(wave);
+			mOscCallback = mOscillatorWave->getWaveCallback();
+			oscMutex.unlock();
 		}
 		void Oscillator::setAttackRate(double attackRate)
 		{

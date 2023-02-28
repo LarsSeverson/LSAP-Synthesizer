@@ -8,10 +8,15 @@ namespace LSAP {
 	double Synth::sSynthOctave = 0.0;
 
 	Synth::Synth()
-		: mSoundGenerator(new SoundGenerator()), isRunning(true)
+		: mSoundGenerator(new SoundGenerator())
 	{
 		sSynthInstance = this;
 		mSoundGenerator->setSynthFunc(std::bind(&Synth::fillOutputBuffer, this, std::placeholders::_1));
+		
+		pushOscillator(new LSAP::Oscillator::Oscillator(new SineWave(), "Oscillator 1"));
+		pushOscillator(new LSAP::Oscillator::Oscillator(new SquareWave(), "Oscillator 2"));
+		pushOscillator(new LSAP::Oscillator::Oscillator(new SineWave(), "Oscillator 3"));
+		
 		outputSound();
 	}
 	Synth::~Synth()
@@ -23,22 +28,10 @@ namespace LSAP {
 	{
 		mSoundGenerator->generateSound();
 	}
-	void Synth::onSynthUpdate()
-	{
-
-	}
 
 	void Synth::onSynthStop()
 	{
-		isRunning = false;
-	}
-
-	void Synth::runSynth()
-	{
-		while (isRunning) {
-			onSynthUpdate();
-			mOscStack.onOscStackUpdate();
-		}
+		mSoundGenerator->stopSound();
 	}
 
 	void Synth::pushOscillator(Oscillator::Oscillator* osc)
@@ -49,7 +42,6 @@ namespace LSAP {
 	void Synth::pushNote(Note n)
 	{
 		notes.lock();
-
 		auto result = std::find_if(mOscStack.getNotes().begin(), mOscStack.getNotes().end(), [&n](Note& check)
 			{ return check.noteFrequency == n.noteFrequency; });
 

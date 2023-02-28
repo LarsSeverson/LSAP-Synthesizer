@@ -5,7 +5,7 @@ namespace LSAP {
 	// public
 	SoundGenerator::SoundGenerator(const AudioData& audioData)
 		: mUserSynthFunction(nullptr), mGlobalTime(0.0), mBlockMemory(nullptr),
-		  mWaveHeaders(nullptr), mDevice(nullptr), mBlockZero(8)
+		  mWaveHeaders(nullptr), mDevice(nullptr), mBlockZero(8), isRunning(true)
 	{
 		openAudioDevice(audioData);
 	}
@@ -65,7 +65,7 @@ namespace LSAP {
 		int mBlockCurrent = 0;
 		int mBlockSamples = 512;
 		int mBlockCount = 8;
-		while (true) {
+		while (isRunning) {
 			if (mBlockZero == 0) {
 				std::unique_lock<std::mutex> stop(mBlockFree);
 				while (mBlockZero == 0) {

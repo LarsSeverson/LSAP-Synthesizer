@@ -14,6 +14,7 @@ namespace LSAP {
 	
 	Application::Application() {
 		appWindow = std::unique_ptr<Window>(Window::createWindow());
+		appSynth = std::unique_ptr<Synth>(new Synth());
 		sInstance = this;
 
 		appWindow->setEventCallback(BIND_EVENT_FN(onEvent));
@@ -59,13 +60,13 @@ namespace LSAP {
 	}
 
 	bool Application::onWindowClose(WindowCloseEvent& event) {
-		Synth::getSynth().onSynthStop();
+		appSynth->onSynthStop();
 		isRunning = false;
 		return true;
 	}
 	void Application::closeWindow()
 	{
-		Synth::getSynth().onSynthStop();
+		appSynth->onSynthStop();
 		isRunning = false;
 	}
 }
