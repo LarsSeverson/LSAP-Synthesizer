@@ -7,82 +7,80 @@
 #include "Synth.h"
 namespace LSAP
 {
-	namespace Oscillator {
-		Oscillator::Oscillator(Wave* wave, const std::string& name)
-			// Defaults
-			: mFrequency(0.0), mAmplitude(0.0), mAngle(0.0), 
-			  envData(EnvelopeData(2.0,1.0,1.0,4.0)),
-			  mOscName(name), mScaleAmp(0.0)
-		{
-			mOscillatorWave = std::shared_ptr<Wave>(wave);
+	Oscillator::Oscillator(Wave* wave, const std::string& name)
+		// Defaults
+		: mFrequency(0.0), mAmplitude(0.0), mAngle(0.0),
+		envData(EnvelopeData(2.0, 1.0, 1.0, 4.0)),
+		mOscName(name), mScaleAmp(0.0)
+	{
+		mOscillatorWave = std::shared_ptr<Wave>(wave);
 
-			mOscArray.push_back(std::make_unique<SineWave>());
-			mOscArray.push_back(std::make_unique<SquareWave>());
-		}
+		mOscArray.push_back(std::make_unique<SineWave>());
+		mOscArray.push_back(std::make_unique<SquareWave>());
+	}
 
-		double Oscillator::onOscFill(Note& currentNote, double time)
-		{
-			return ((mOscCallback(currentNote, time)) * currentNote.processEnv()) * mAmplitude;
-		}
+	double Oscillator::onOscFill(Note& currentNote, double time)
+	{
+		return ((mOscCallback(currentNote, time)) * currentNote.processEnv()) * mAmplitude;
+	}
 
-		void Oscillator::onOscAttach()
-		{
-			
-			mOscCallback = mOscillatorWave->getWaveCallback();
+	void Oscillator::onOscAttach()
+	{
 
-			// To be eventually implemented through user input
-			setAttackRate(5.0);
-			setDecayRate(1.0);
-			setSustainLevel(1.0);
-			setReleaseRate(20.0);
+		mOscCallback = mOscillatorWave->getWaveCallback();
 
-		}
-		void Oscillator::onOscDetach()
-		{
+		// To be eventually implemented through user input
+		setAttackRate(5.0);
+		setDecayRate(1.0);
+		setSustainLevel(1.0);
+		setReleaseRate(20.0);
 
-		}
-		void Oscillator::onImGuiRender()
-		{
-			ImGui::Begin(mOscName.c_str());
-			if (ImGui::BeginMenu(mOscillatorWave->getWaveName().c_str())) {
-				if (ImGui::MenuItem(mOscArray[0]->getWaveName().c_str())) {
-					setOscillatorWave(new SineWave());
-				}
-				if (ImGui::MenuItem(mOscArray[1]->getWaveName().c_str())) {
-					setOscillatorWave(new SquareWave());
-				}
-				ImGui::EndMenu();
+	}
+	void Oscillator::onOscDetach()
+	{
+
+	}
+	void Oscillator::onImGuiRender()
+	{
+		ImGui::Begin(mOscName.c_str());
+		if (ImGui::BeginMenu(mOscillatorWave->getWaveName().c_str())) {
+			if (ImGui::MenuItem(mOscArray[0]->getWaveName().c_str())) {
+				setOscillatorWave(new SineWave());
 			}
-			if (ImGuiKnobs::Knob("Volume", &mScaleAmp, 0.0f, 10.0f, 0.05f, "%.001fdB", ImGuiKnobVariant_Wiper)) {
-				mAmplitude = mScaleAmp * .01; // For clipping
+			if (ImGui::MenuItem(mOscArray[1]->getWaveName().c_str())) {
+				setOscillatorWave(new SquareWave());
 			}
-			ImGui::End();
+			ImGui::EndMenu();
 		}
-		void Oscillator::setOscillatorWave(Wave* wave)
-		{
-			oscMutex.lock();
-			mOscillatorWave.reset(wave);
-			mOscCallback = mOscillatorWave->getWaveCallback();
-			oscMutex.unlock();
+		if (ImGuiKnobs::Knob("Volume", &mScaleAmp, 0.0f, 10.0f, 0.05f, "%.001fdB", ImGuiKnobVariant_Wiper)) {
+			mAmplitude = mScaleAmp * .01; // For clipping
 		}
-		void Oscillator::setAttackRate(double attackRate)
-		{
-			envData.attack = attackRate * 44100;
- 		}
-		void Oscillator::setDecayRate(double decayRate)
-		{
-			envData.decay = decayRate * 44100;
+		ImGui::End();
+	}
+	void Oscillator::setOscillatorWave(Wave* wave)
+	{
+		oscMutex.lock();
+		mOscillatorWave.reset(wave);
+		mOscCallback = mOscillatorWave->getWaveCallback();
+		oscMutex.unlock();
+	}
+	void Oscillator::setAttackRate(double attackRate)
+	{
+		envData.attack = attackRate * 44100;
+	}
+	void Oscillator::setDecayRate(double decayRate)
+	{
+		envData.decay = decayRate * 44100;
+	}
+	void Oscillator::setSustainLevel(double level)
+	{
+		if (level >= 1.0) {
+			level = 1.0;
 		}
-		void Oscillator::setSustainLevel(double level)
-		{
-			if (level >= 1.0) {
-				level = 1.0;
-			}
-			envData.sustainLevel = level;
-		}
-		void Oscillator::setReleaseRate(double releaseRate)
-		{
-			envData.release = releaseRate * 44100;
-		}
+		envData.sustainLevel = level;
+	}
+	void Oscillator::setReleaseRate(double releaseRate)
+	{
+		envData.release = releaseRate * 44100;
 	}
 }

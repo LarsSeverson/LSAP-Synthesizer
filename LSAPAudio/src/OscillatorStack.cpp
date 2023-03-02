@@ -8,13 +8,13 @@ namespace LSAP {
 			delete i;
 		}
 	}
-	void OscillatorStack::pushOsc(Oscillator::Oscillator* osc)
+	void OscillatorStack::pushOsc(Oscillator* osc)
 	{
 		mOscillators.emplace(mOscillators.begin() + mOscIndex++, osc);
 		osc->onOscAttach();
 	}
 
-	void OscillatorStack::popOsc(Oscillator::Oscillator* osc)
+	void OscillatorStack::popOsc(Oscillator* osc)
 	{
 		auto it = std::find(mOscillators.begin(), mOscillators.end(), osc);
 		if (it != mOscillators.end()) {

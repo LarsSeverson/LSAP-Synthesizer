@@ -1,7 +1,6 @@
 #include "audiopch.h"
 #include "Synth.h"
 
-
 namespace LSAP {
 
 	Synth* Synth::sSynthInstance = nullptr;
@@ -13,9 +12,9 @@ namespace LSAP {
 		sSynthInstance = this;
 		mSoundGenerator->setSynthFunc(std::bind(&Synth::fillOutputBuffer, this, std::placeholders::_1));
 		
-		pushOscillator(new LSAP::Oscillator::Oscillator(new SineWave(), "Oscillator 1"));
-		pushOscillator(new LSAP::Oscillator::Oscillator(new SquareWave(), "Oscillator 2"));
-		pushOscillator(new LSAP::Oscillator::Oscillator(new SineWave(), "Oscillator 3"));
+		pushOscillator(new Oscillator(new SineWave(), "Oscillator 1"));
+		pushOscillator(new Oscillator(new SquareWave(), "Oscillator 2"));
+		pushOscillator(new Oscillator(new SineWave(), "Oscillator 3"));
 		
 		outputSound();
 	}
@@ -34,14 +33,14 @@ namespace LSAP {
 		mSoundGenerator->stopSound();
 	}
 
-	void Synth::pushOscillator(Oscillator::Oscillator* osc)
+	void Synth::pushOscillator(Oscillator* osc)
 	{
 		mOscStack.pushOsc(osc);
 	}
 
 	void Synth::pushNote(Note n)
 	{
-		notes.lock();
+		std::unique_lock<std::mutex> lm(notes);
 		auto result = std::find_if(mOscStack.getNotes().begin(), mOscStack.getNotes().end(), [&n](Note& check)
 			{ return check.noteFrequency == n.noteFrequency; });
 
@@ -54,16 +53,14 @@ namespace LSAP {
 		else if (result->noteEnv.getState() == 4) {
 			result->noteEnv.setState(1);
 		}
-		notes.unlock();
 	}
 	void Synth::popNote(Note note) {
-		notes.lock();
+		std::unique_lock<std::mutex> lm(notes);
 		auto it = std::find_if(mOscStack.getNotes().begin(), mOscStack.getNotes().end(), [&note](Note& index)
 			{ return note.noteFrequency == index.noteFrequency; });
 		if (it != mOscStack.getNotes().end()) {
 			it->noteEnv.setState(4);
 		}
-		notes.unlock();
 	}
 
 	bool Synth::onKeyPressed(KeyPressedEvent& event)
@@ -126,6 +123,7 @@ namespace LSAP {
 			pushNote(Note(Notes::F2));
 			break;
 
+		// Octave control
 		case Key::Z:
 			if (!event.isRepeat()) {
 				for (auto& i : mOscStack.getNotes())

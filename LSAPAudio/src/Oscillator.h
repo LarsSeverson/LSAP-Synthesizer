@@ -6,50 +6,48 @@
 #include "frwddec.h"
 
 namespace LSAP {
-	namespace Oscillator {
-		class Oscillator
-		{
-			using OscCallback = std::function<double(Note&, double)>;
-		public:
-			Oscillator(Wave* wave, const std::string& oscName);
-			virtual ~Oscillator() = default;
+	class Oscillator
+	{
+		using OscCallback = std::function<double(Note&, double)>;
+	public:
+		Oscillator(Wave* wave, const std::string& oscName);
+		virtual ~Oscillator() = default;
 
-			virtual void onOscUpdate() { }
+		virtual void onOscUpdate() { }
 
-			double onOscFill(Note& n, double time);
+		double onOscFill(Note& n, double time);
 
-			void onOscAttach();
-			void onOscDetach();
-			void onImGuiRender();
-			void setOscillatorWave(Wave* wave);
+		void onOscAttach();
+		void onOscDetach();
+		void onImGuiRender();
+		void setOscillatorWave(Wave* wave);
 
-			Wave& getOscillatorWave() { return *mOscillatorWave; }
-			const std::string& getOscName() const { return mOscName; }
+		Wave& getOscillatorWave() { return *mOscillatorWave; }
+		const std::string& getOscName() const { return mOscName; }
 
-			// Envelope stuff
-			EnvelopeData& getEnvData() { return envData; }
-			
-			void setAttackRate(double attackRate);
-			void setDecayRate(double decayRate);
-			void setSustainLevel(double level);
-			void setReleaseRate(double releaseRate);
-		private:
-			double mFrequency;
-			double mAmplitude;
-			double mAngle;
+		// Envelope stuff
+		EnvelopeData& getEnvData() { return envData; }
 
-			float mScaleAmp;
+		void setAttackRate(double attackRate);
+		void setDecayRate(double decayRate);
+		void setSustainLevel(double level);
+		void setReleaseRate(double releaseRate);
+	private:
+		double mFrequency;
+		double mAmplitude;
+		double mAngle;
 
-			const std::string mOscName;
+		float mScaleAmp;
 
-			bool mIsActive = false;
+		const std::string mOscName;
 
-			std::shared_ptr<Wave> mOscillatorWave;
-			std::vector<std::unique_ptr<Wave>> mOscArray;
-			OscCallback mOscCallback;
-			EnvelopeData envData;
+		bool mIsActive = false;
 
-			std::mutex oscMutex;
-		};
-	}
+		std::shared_ptr<Wave> mOscillatorWave;
+		std::vector<std::unique_ptr<Wave>> mOscArray;
+		OscCallback mOscCallback;
+		EnvelopeData envData;
+
+		std::mutex oscMutex;
+	};
 }

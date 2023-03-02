@@ -1,11 +1,9 @@
-#pragma once
-
 namespace LSAP {
 
 	struct AudioData {
 
-		AudioData(std::wstring outputD = getActiveDevice(), unsigned int sampleRate = 44100, unsigned int nChannels = 1, unsigned int blockCount = 8, unsigned int blockSamples = 512)
-			: outputDevice(outputD), sampleRate(sampleRate), nChannels(nChannels), blockCount(blockCount), blockSamples(blockSamples)
+		AudioData(std::wstring outputD = getActiveDevice(), unsigned int sampleRate = 44100, unsigned int nChannels = 1, unsigned int countBlock = 8, unsigned int blockSamples = 512)
+			: outputDevice(outputD), sampleRate(sampleRate), nChannels(nChannels), blockCount(countBlock), blockSamples(blockSamples)
 		{}
 
 		std::wstring outputDevice;
@@ -29,38 +27,41 @@ namespace LSAP {
 
 	class SoundGenerator
 	{
-		using EventFn = std::function<double(double)>;
 	public:
 		SoundGenerator(const AudioData& audioData = AudioData());
 		~SoundGenerator();
 
-		void setSynthFunc(const EventFn& func);
-		void stopSound() { isRunning = false; }
+		void setSynthFunc(const std::function<double(double)>& func);
+		void stopSound();
 		void generateSound();
-	
+
 	private:
-		void openAudioDevice(const AudioData& audioData);
-		void setBlockMemory(const AudioData& audioData);
+		void fillOutputBuffer();
+		void openAudioDevice();
+		void setBlockMemory();
+		void countBlock();
+
+		static void CALLBACK waveOutProcWrap(HWAVEOUT hWaveOut, UINT uMsg, unsigned long* dwInstance, DWORD dwParam1, DWORD dwParam2);
+
 	private:
+		std::function<double(double)> mUserSynthFunction;
 
-		EventFn mUserSynthFunction;
+		int mCurrentBlock;
+		double mDeltaTime;
+		bool mIsRunning;
 
-		double mGlobalTime;
-		int* mBlockMemory;
-		bool isRunning;
-
-		std::unique_ptr<WAVEHDR[]> mWaveHeaders;
-		HWAVEOUT mDevice;
+		std::unique_ptr<WAVEHDR[]> mWaveOutBuffer;
+		std::unique_ptr<std::vector<int>[]> mOutputBuffer;
 
 		std::thread mThread;
-		std::mutex mBlockFree;
-		std::atomic<unsigned int> mBlockZero;
-		std::condition_variable mConditionNotZero;
+		std::mutex mSoundGenMutex;
+		std::condition_variable mSoundGenCondition;
 
-		void blockCount();
-		// If dwInstance was a DWORD, it would be undefined behavior to cast to SoundGenerator* in 64 bit...
-		// unsigned long ptr is compatible for both 64 bit and 32 bit
-		static void CALLBACK waveOutProcWrap(HWAVEOUT hWaveOut, UINT uMsg, unsigned long* dwInstance, DWORD dwParam1, DWORD dwParam2);
-		void threadPlaySound(double offset, double mGlobalTime);
+		std::atomic<unsigned int> mBlockZero;
+		std::atomic<double> mTime;
+
+
+		HWAVEOUT mDevice;
+		AudioData mAudioData;
 	};
 }

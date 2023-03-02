@@ -20,7 +20,7 @@ namespace LSAP {
 		void outputSound();
 		void onSynthStop();
 
-		void pushOscillator(Oscillator::Oscillator* osc);
+		void pushOscillator(Oscillator* osc);
 		void pushNote(Note note);
 		void popNote(Note note);
 

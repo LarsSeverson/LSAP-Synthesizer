@@ -10,8 +10,8 @@ namespace LSAP
 		OscillatorStack() = default;
 		~OscillatorStack();
 
-		void pushOsc(Oscillator::Oscillator* osc);
-		void popOsc (Oscillator::Oscillator* osc);
+		void pushOsc(Oscillator* osc);
+		void popOsc (Oscillator* osc);
 
 		void onOscStackUpdate();
 		void onImGuiRender();
@@ -22,11 +22,11 @@ namespace LSAP
 
 		inline std::vector<Note>& getNotes() { return mNotes; }
 
-		std::vector<Oscillator::Oscillator*>::iterator begin() { return mOscillators.begin(); }
-		std::vector<Oscillator::Oscillator*>::iterator end() { return mOscillators.end(); }
+		std::vector<Oscillator*>::iterator begin() { return mOscillators.begin(); }
+		std::vector<Oscillator*>::iterator end() { return mOscillators.end(); }
 
 	private:
-		std::vector<Oscillator::Oscillator*> mOscillators;
+		std::vector<Oscillator*> mOscillators;
 		std::vector<Note> mNotes;
 		std::mutex mOscStackMutex;
 		unsigned int mOscIndex = 0;

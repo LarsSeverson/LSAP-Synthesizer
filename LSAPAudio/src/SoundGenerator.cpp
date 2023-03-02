@@ -1,105 +1,108 @@
 #include "audiopch.h"
 #include "SoundGenerator.h"
+#include "LSAP/Log.h"
 
 namespace LSAP {
 	// public
 	SoundGenerator::SoundGenerator(const AudioData& audioData)
-		: mUserSynthFunction(nullptr), mGlobalTime(0.0), mBlockMemory(nullptr),
-		  mWaveHeaders(nullptr), mDevice(nullptr), mBlockZero(8), isRunning(true)
+		: mTime(0.0), mIsRunning(true), mAudioData(audioData)
 	{
-		openAudioDevice(audioData);
+		mDeltaTime = 1.0 / (double)mAudioData.sampleRate;
+		mCurrentBlock = 0;
+		mBlockZero = mAudioData.blockCount;
+		openAudioDevice();
 	}
 	SoundGenerator::~SoundGenerator() {
-		delete[] mBlockMemory;
 	}
 
-	void SoundGenerator::openAudioDevice(const AudioData& audioData) {
+	void SoundGenerator::openAudioDevice() {
 		WAVEFORMATEX waveFormat;
 		waveFormat.wFormatTag = WAVE_FORMAT_PCM;
-		waveFormat.nSamplesPerSec = audioData.sampleRate;
+		waveFormat.nSamplesPerSec = mAudioData.sampleRate;
 		waveFormat.wBitsPerSample = sizeof(int) * 8;
-		waveFormat.nChannels = audioData.nChannels;
+		waveFormat.nChannels = mAudioData.nChannels;
 		waveFormat.nBlockAlign = (waveFormat.nChannels * waveFormat.wBitsPerSample) / 8;
 		waveFormat.nAvgBytesPerSec = waveFormat.nSamplesPerSec * waveFormat.nBlockAlign;
 		waveFormat.cbSize = 0;
 
-		if (waveOutOpen(&mDevice, 0, &waveFormat, (DWORD_PTR)waveOutProcWrap, (DWORD_PTR)this, CALLBACK_FUNCTION) != S_OK) {
-			std::cout << "Could not open device";
+		if (waveOutOpen(&mDevice, WAVE_MAPPER, &waveFormat, (DWORD_PTR)waveOutProcWrap, (DWORD_PTR)this, CALLBACK_FUNCTION) != S_OK) {
+			LS_CORE_ERROR("Could not open device.");
 			return;
 		}
-
-		setBlockMemory(audioData);
+		setBlockMemory();
 	}
 
-	void SoundGenerator::setBlockMemory(const AudioData& audioData) {
+	void SoundGenerator::setBlockMemory() {
 
-		// 8 * 512 = 4096
-		mBlockMemory = new int[audioData.blockCount * audioData.blockSamples];
-		ZeroMemory(mBlockMemory, sizeof(int) * audioData.blockCount * audioData.blockSamples);
+		mOutputBuffer = std::make_unique<std::vector<int>[]>(mAudioData.blockCount);
+		mWaveOutBuffer = std::make_unique<WAVEHDR[]>(mAudioData.blockCount);
 
-		mWaveHeaders = std::make_unique<WAVEHDR[]>(audioData.blockCount);
-
-		for (unsigned int i = 0; i < audioData.blockCount; ++i) {
-
-			// 512 * 4 = 2048
-			mWaveHeaders[i].dwBufferLength = (DWORD)(audioData.blockSamples * sizeof(int));
-			// 0 -> 512 -> 1024 - > 1536
-			mWaveHeaders[i].lpData = (LPSTR)(mBlockMemory + (i * audioData.blockSamples));
+		for (unsigned int i = 0; i < mAudioData.blockCount; ++i) {
+			mOutputBuffer[i].resize(mAudioData.blockSamples * mAudioData.nChannels);
+			mWaveOutBuffer[i].dwBufferLength = (DWORD)(mAudioData.blockSamples * sizeof(int));
+			mWaveOutBuffer[i].lpData = (LPSTR)mOutputBuffer[i].data();
 		}
 	}
 
 	void SoundGenerator::generateSound() {
-		double offset = 1.0 / double(44100);
-		mThread = std::thread(&SoundGenerator::threadPlaySound, this, offset, mGlobalTime);
-		mThread.detach();
+		mThread = std::thread(&SoundGenerator::fillOutputBuffer, this);
 	}
 
-	void SoundGenerator::setSynthFunc(const EventFn& func) {
+	void SoundGenerator::setSynthFunc(const std::function<double(double)>& func) {
 		mUserSynthFunction = func;
 	}
 
-	// private:
-	void SoundGenerator::threadPlaySound(double offset, double mGlobalTime) {
+	void SoundGenerator::stopSound()
+	{
+		mIsRunning = false;
+		if (mThread.joinable()) {
+			mThread.join();
+		}
+	}
+
+	void SoundGenerator::fillOutputBuffer() {
 		constexpr double maxSample = std::numeric_limits<int>::max();
 		constexpr double minSample = std::numeric_limits<int>::min();
-		int mBlockCurrent = 0;
-		int mBlockSamples = 512;
-		int mBlockCount = 8;
-		while (isRunning) {
+
+		while (mIsRunning) {
+			if (mTime >= std::numeric_limits<double>::max()) {
+				std::unique_lock<std::mutex> timelock(mSoundGenMutex);
+				mTime = 0.0;
+			}
 			if (mBlockZero == 0) {
-				std::unique_lock<std::mutex> stop(mBlockFree);
+				std::unique_lock<std::mutex> stop(mSoundGenMutex);
 				while (mBlockZero == 0) {
-					mConditionNotZero.wait(stop);
+					mSoundGenCondition.wait(stop);
 				}
 			}
 			mBlockZero--;
-			for (unsigned int i = 0; i < mBlockSamples; ++i) {
-				int newSample = (int)(std::clamp((mUserSynthFunction(mGlobalTime) * maxSample), minSample, maxSample));
-				mBlockMemory[i + (mBlockCurrent * mBlockSamples)] = newSample;
-				mGlobalTime += offset;
+			for (int i = 0; i < mOutputBuffer[mCurrentBlock].size(); ++i) {
+				mOutputBuffer[mCurrentBlock][i] = (int)std::clamp((mUserSynthFunction(mTime) * maxSample), minSample, maxSample);
+				mTime = mTime + mDeltaTime;
 			}
 
-			// Now we write to the output device
-			waveOutPrepareHeader(mDevice, &mWaveHeaders[mBlockCurrent], sizeof(WAVEHDR));
-			waveOutWrite(mDevice, &mWaveHeaders[mBlockCurrent], sizeof(WAVEHDR));
+			waveOutPrepareHeader(mDevice, &mWaveOutBuffer[mCurrentBlock], sizeof(WAVEHDR));
+			waveOutWrite(mDevice, &mWaveOutBuffer[mCurrentBlock], sizeof(WAVEHDR));
 
-			mBlockCurrent++;
+			mCurrentBlock++;
 			// So it doesn't go over threshold
-			mBlockCurrent %= mBlockCount;
+			mCurrentBlock %= mAudioData.blockCount;
 		}
 	}
-	void SoundGenerator::blockCount() {
+
+	// private:
+	void SoundGenerator::countBlock() {
 		mBlockZero++;
 
-		std::unique_lock<std::mutex> stop(mBlockFree);
-		mConditionNotZero.notify_one();
+		std::unique_lock<std::mutex> stop(mSoundGenMutex);
+		mSoundGenCondition.notify_one();
 	}
 
-	void CALLBACK SoundGenerator::waveOutProcWrap(HWAVEOUT hWaveOut, UINT uMsg, unsigned long* dwInstance, DWORD dwParam1, DWORD dwParam2){
+	void CALLBACK SoundGenerator::waveOutProcWrap(HWAVEOUT hWaveOut, UINT uMsg, unsigned long* dwInstance, DWORD dwParam1, DWORD dwParam2) {
 		if (uMsg != WOM_DONE) {
 			return;
 		}
-		((SoundGenerator*)(dwInstance))->blockCount();
+		((SoundGenerator*)(dwInstance))->countBlock();
 	}
 
 
