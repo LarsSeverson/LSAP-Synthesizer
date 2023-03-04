@@ -9,7 +9,7 @@ class Sandbox : public LSAP::Application
 public:
 	Sandbox()
 	{
-		pushLayer(new SynthUI());
+		pushLayer(new LSAP::SynthUI());
 	}
 };
 

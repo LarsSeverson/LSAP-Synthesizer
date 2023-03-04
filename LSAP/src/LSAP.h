@@ -1,7 +1,9 @@
 #pragma once
 
 #include "LSAP/Application.h"
+
 #include "LSAPAudio.h"
+#include "Panels/EnvelopePanel.h"
 
 #include "LSAP/ImGui/LSGui.h"
 

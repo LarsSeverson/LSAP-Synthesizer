@@ -20,7 +20,7 @@ namespace LSAP
 		return noteEnv.processEnv();
 	}
 
-	void Note::setEnvData(const EnvelopeData data) {
+	void Note::setEnvData(const EnvelopeData& data) {
 		noteEnv.setAttackRate(data.attack);
 		noteEnv.setDecayRate(data.decay);
 		noteEnv.setSustainLevel(data.sustainLevel);

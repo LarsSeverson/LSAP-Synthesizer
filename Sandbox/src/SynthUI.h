@@ -1,16 +1,23 @@
 #pragma once
 #include <LSAP.h>
-class SynthUI : public LSAP::Layer
-{
-public:
-	SynthUI();
-	~SynthUI();
 
-	virtual void onLayerUpdate() override;
-	virtual void onLayerAttach() override;
-	virtual void onLayerDetach() override;
-	virtual void onLayerEvent(LSAP::Event& event) override;
+namespace LSAP {
+	class SynthUI : public Layer
+	{
+	public:
+		SynthUI();
+		~SynthUI();
 
-	virtual void onImGuiRenderer() override;
-};
+		virtual void onLayerUpdate() override;
+		virtual void onLayerAttach() override;
+		virtual void onLayerDetach() override;
+		virtual void onLayerEvent(Event& event) override;
 
+		virtual void onImGuiRenderer() override;
+
+	private:
+
+		// Panels
+		EnvelopePanel mEnvelopePanel;
+	};
+}

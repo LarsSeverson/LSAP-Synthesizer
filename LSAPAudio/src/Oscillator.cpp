@@ -10,7 +10,7 @@ namespace LSAP
 	Oscillator::Oscillator(Wave* wave, const std::string& name)
 		// Defaults
 		: mFrequency(0.0), mAmplitude(0.0), mAngle(0.0),
-		envData(EnvelopeData(2.0, 1.0, 1.0, 4.0)),
+		envData(EnvelopeData(0.0,0.0,0.0,0.0)),
 		mOscName(name), mScaleAmp(0.0)
 	{
 		mOscillatorWave = std::shared_ptr<Wave>(wave);
@@ -52,6 +52,7 @@ namespace LSAP
 			}
 			ImGui::EndMenu();
 		}
+		ImGui::SetCursorPosY(50);
 		if (ImGuiKnobs::Knob("Volume", &mScaleAmp, 0.0f, 10.0f, 0.05f, "%.001fdB", ImGuiKnobVariant_Wiper)) {
 			mAmplitude = mScaleAmp * .01; // For clipping
 		}

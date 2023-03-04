@@ -34,7 +34,7 @@ namespace LSAP {
 		~Note() = default;
 
 		double processEnv();
-		void setEnvData(const EnvelopeData data);
+		void setEnvData(const EnvelopeData& data);
 
 		double mID;
 		double noteFrequency;

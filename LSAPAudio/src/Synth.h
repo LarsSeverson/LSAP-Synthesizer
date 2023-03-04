@@ -7,6 +7,7 @@
 
 #include "Wave.h"
 #include "Note.h"
+#include "frwddec.h"
 #include "OscillatorStack.h"
 #include "SoundGenerator.h"
 
@@ -27,10 +28,13 @@ namespace LSAP {
 		bool onKeyPressed(KeyPressedEvent& event);
 		bool onKeyReleased(KeyReleasedEvent& event);
 
+		void setEnvelope(EnvelopeData& data);
+
 		double fillOutputBuffer(double time);
 
 		static Synth* getSynth() { return sSynthInstance; }
 		OscillatorStack& getOscStack() { return mOscStack;}
+		EnvelopeData& getEnvelope() { return *mEnvelope; }
 		SoundGenerator& getSoundGenerator() { return *mSoundGenerator; }
 
 		static double sSynthOctave;
@@ -38,8 +42,9 @@ namespace LSAP {
 		OscillatorStack mOscStack;
 		static Synth* sSynthInstance;
 		std::shared_ptr<SoundGenerator> mSoundGenerator;
+		std::shared_ptr<EnvelopeData> mEnvelope;
 
-		std::mutex notes;
+		std::mutex synthMutex;
 	};
 }
 

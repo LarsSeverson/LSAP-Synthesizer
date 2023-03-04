@@ -166,6 +166,7 @@ project "LSAPAudio"
     includedirs
     {
         "LSAP/src",
+        "LSAPAudio/src",
         "LSAP/vendor/spdlog/include",
         "%{IncludeDir.imGui}"
     }

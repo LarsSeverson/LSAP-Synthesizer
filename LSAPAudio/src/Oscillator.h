@@ -3,7 +3,6 @@
 #include "Wave.h"
 #include "Note.h"
 #include "Envelope.h"
-#include "frwddec.h"
 
 namespace LSAP {
 	class Oscillator
@@ -46,6 +45,8 @@ namespace LSAP {
 		std::shared_ptr<Wave> mOscillatorWave;
 		std::vector<std::unique_ptr<Wave>> mOscArray;
 		OscCallback mOscCallback;
+
+		// For future use -- each oscillator will have its own envelope
 		EnvelopeData envData;
 
 		std::mutex oscMutex;
