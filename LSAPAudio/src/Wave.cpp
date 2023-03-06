@@ -39,7 +39,7 @@ namespace LSAP
 	}
 	double SineWave::SineWaveFunc(Note& n, double time)
 	{
-		return (sin(n.noteFrequency * 2.0 * 3.14159 * time));
+		return sin((n.noteFrequency + n.frequencyOffset) * 2.0 * 3.14159 * time);
 	}
 
 	// ------------- Square Wave -------------
@@ -74,6 +74,6 @@ namespace LSAP
 	}
 	double SquareWave::SquareWaveFunc(Note& n, double time)
 	{
-		return (sin(n.noteFrequency * 2.0 * 3.14159 * time)) > 0 ? 1.0 : -1.0;
+		return (sin((n.noteFrequency + n.frequencyOffset) * 2.0 * 3.14159 * time)) > 0 ? 1.0 : -1.0;
 	}
 }

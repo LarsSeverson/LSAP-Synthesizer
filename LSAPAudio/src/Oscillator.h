@@ -18,7 +18,9 @@ namespace LSAP {
 
 		void onOscAttach();
 		void onOscDetach();
+
 		void onImGuiRender();
+		void drawOscKnobs();
 		void setOscillatorWave(Wave* wave);
 
 		Wave& getOscillatorWave() { return *mOscillatorWave; }
@@ -32,11 +34,13 @@ namespace LSAP {
 		void setSustainLevel(double level);
 		void setReleaseRate(double releaseRate);
 	private:
-		double mFrequency;
 		double mAmplitude;
-		double mAngle;
+		float smoothFreq;
 
 		float mScaleAmp;
+		float mScaleFreq;
+		float mFreqOffset;
+		float mScaleSub;
 
 		const std::string mOscName;
 

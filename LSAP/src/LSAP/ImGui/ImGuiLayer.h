@@ -7,17 +7,19 @@
 
 namespace LSAP {
 
-	class LSAP_API LSGui : public Layer
+	class ImGuiLayer : public Layer
 	{
 	public:
-		LSGui();
-		~LSGui();
+		ImGuiLayer();
+		~ImGuiLayer();
 
 		virtual void onLayerAttach() override;
 		virtual void onLayerDetach() override;
 
-		void GuiBegin();
-		void GuiEnd();
+		void guiBegin();
+		void guiEnd();
+
+		void setDarkThemeColors();
 
 	private:
 		float mTime = 0.0f;

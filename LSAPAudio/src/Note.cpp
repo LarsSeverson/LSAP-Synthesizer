@@ -7,7 +7,7 @@ namespace LSAP
 {
 	Note::Note(Notes note)
 		: mID((double)note + Synth::sSynthOctave), 
-		noteDone(false), noteEnv(Envelope())
+		noteDone(false), noteEnv(Envelope()), frequencyOffset(0.0)
 	{
 		noteEnv.gate(true);
 		noteFrequency = 130.81 * pow(2.0, (mID / 12.0));

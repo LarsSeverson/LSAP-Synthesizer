@@ -38,6 +38,7 @@ namespace LSAP {
 
 		double mID;
 		double noteFrequency;
+		double frequencyOffset;
 		bool noteDone;
 
 		Envelope noteEnv;

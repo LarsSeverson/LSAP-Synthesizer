@@ -66,13 +66,12 @@ namespace LSAP {
 
 		while (mIsRunning) {
 			if (mTime >= std::numeric_limits<double>::max()) {
-				std::unique_lock<std::mutex> timelock(mSoundGenMutex);
 				mTime = 0.0;
 			}
 			if (mBlockZero == 0) {
-				std::unique_lock<std::mutex> stop(mSoundGenMutex);
+				std::unique_lock<std::mutex> countBlocks(mSoundGenMutex);
 				while (mBlockZero == 0) {
-					mSoundGenCondition.wait(stop);
+					mSoundGenCondition.wait(countBlocks);
 				}
 			}
 			mBlockZero--;

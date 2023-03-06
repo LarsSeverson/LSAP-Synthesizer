@@ -1,6 +1,7 @@
 #include "SynthUI.h"
 #include "Synth.h"
 #include <imGui/imgui.h>
+#include <imGui/imgui_internal.h>
 
 namespace LSAP {
 #define SYNTH_BIND(x) std::bind(&x, LSAP::Synth::getSynth(), std::placeholders::_1)
@@ -75,6 +76,7 @@ namespace LSAP {
         // any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
         if (!opt_padding)
             ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+        window_flags |= ImGuiWindowFlags_NoScrollbar;
         ImGui::Begin("DockSpace", &dockspace, window_flags);
         if (!opt_padding)
             ImGui::PopStyleVar();
@@ -84,32 +86,43 @@ namespace LSAP {
 
         // Submit the DockSpace
         ImGuiIO& io = ImGui::GetIO();
+        dockspace_flags |= ImGuiDockNodeFlags_NoResize;
+        
         if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
         {
             ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
             ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
         }
-
-        if (ImGui::BeginMenuBar())
-        {
+        ImGuiWindowClass window_class;
+        window_class.DockNodeFlagsOverrideSet = ImGuiDockNodeFlags_NoTabBar;
+        ImGui::SetNextWindowClass(&window_class);
+        ImGui::Begin("##Topbar");
+        ImGui::SetCursorPosX(ImGui::GetWindowWidth() - 100);
             if (ImGui::BeginMenu("File"))
             {
-
                 ImGui::Separator();
-
                 if (ImGui::MenuItem("Exit")) {
                     LSAP::Application::getApplication().closeWindow();
                     dockspace = false;
                 }
                 ImGui::EndMenu();
             }
-            ImGui::EndMenuBar();
-        }
 
         LSAP::Synth::getSynth()->getOscStack().onImGuiRender();
         mEnvelopePanel.onImGuiRender();
+        ImGui::Begin("ViewPort");
+        ImGui::End();
 
+        // To mostly be implemented in the corresponding classes
+        ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
         ImGui::Begin("Effects Panel");
+        ImGui::Begin("Filter A");
+        ImGui::Begin("Filter B");
+        ImGui::PopStyleColor();
+        ImGui::End();
+
+        ImGui::End();
+        ImGui::End();
         ImGui::End();
         ImGui::End();
     }

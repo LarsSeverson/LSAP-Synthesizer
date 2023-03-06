@@ -35,6 +35,10 @@ namespace LSAP {
 		void stopSound();
 		void generateSound();
 
+		double getTime() {
+			return mDeltaTime;
+		}
+
 	private:
 		void fillOutputBuffer();
 		void openAudioDevice();

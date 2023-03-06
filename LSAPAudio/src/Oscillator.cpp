@@ -1,7 +1,10 @@
 #include "audiopch.h"
 #include "Oscillator.h"
 
+#include "LSAP/Log.h"
+
 #include <imgui.h>
+#include <imgui_internal.h>
 #include <imgui-knobs.h>
 
 #include "Synth.h"
@@ -9,9 +12,9 @@ namespace LSAP
 {
 	Oscillator::Oscillator(Wave* wave, const std::string& name)
 		// Defaults
-		: mFrequency(0.0), mAmplitude(0.0), mAngle(0.0),
-		envData(EnvelopeData(0.0,0.0,0.0,0.0)),
-		mOscName(name), mScaleAmp(0.0)
+		: mAmplitude(0.0), mScaleFreq(0.0f), smoothFreq(0.0f),
+		envData(EnvelopeData(0.0, 0.0, 0.0, 0.0)), mOscName(name),
+		mScaleAmp(0.0f), mScaleSub(0.0f), mFreqOffset(0.0f)
 	{
 		mOscillatorWave = std::shared_ptr<Wave>(wave);
 
@@ -20,7 +23,10 @@ namespace LSAP
 	}
 
 	double Oscillator::onOscFill(Note& currentNote, double time)
-	{
+	{	
+		// Commenting this out until I implement frequency change smoothing
+		// currentNote.frequencyOffset = mFreqOffset;
+
 		return ((mOscCallback(currentNote, time)) * currentNote.processEnv()) * mAmplitude;
 	}
 
@@ -42,8 +48,21 @@ namespace LSAP
 	}
 	void Oscillator::onImGuiRender()
 	{
-		ImGui::Begin(mOscName.c_str());
-		if (ImGui::BeginMenu(mOscillatorWave->getWaveName().c_str())) {
+		ImGuiIO& io = ImGui::GetIO();
+		auto regularFont = io.Fonts->Fonts[0];
+
+		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
+		ImGui::Begin(mOscName.c_str(), nullptr, ImGuiWindowFlags_NoScrollbar);
+
+		ImGui::Text(mOscName.c_str());
+		ImGui::SameLine();
+
+		ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
+		ImGui::SameLine();
+		ImGui::Text(mOscillatorWave->getWaveName().c_str());
+		ImGui::SameLine();
+		ImGui::SetCursorPosX(280);
+		if (ImGui::BeginMenu("Wave")) {
 			if (ImGui::MenuItem(mOscArray[0]->getWaveName().c_str())) {
 				setOscillatorWave(new SineWave());
 			}
@@ -52,11 +71,39 @@ namespace LSAP
 			}
 			ImGui::EndMenu();
 		}
-		ImGui::SetCursorPosY(50);
-		if (ImGuiKnobs::Knob("Volume", &mScaleAmp, 0.0f, 10.0f, 0.05f, "%.001fdB", ImGuiKnobVariant_Wiper)) {
-			mAmplitude = mScaleAmp * .01; // For clipping
-		}
+
+		drawOscKnobs();
+
+		ImGui::SetWindowFontScale(1.0f);
+		ImGui::PopStyleColor(2);
 		ImGui::End();
+	}
+	void Oscillator::drawOscKnobs()
+	{
+		ImGui::SetCursorPosX(50);
+		ImGui::SetCursorPosY(45);
+		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(200.0f / 255.0f, 200.0f / 255.0f, 200.0f / 255.0f, 1.0f));
+		ImGui::SetWindowFontScale(1.15f);
+		if (ImGuiKnobs::Knob("Amp", &mScaleAmp, 0.0f, 10.0f, 0.05f, "##%.01f", ImGuiKnobVariant_Wiper, 60)) {
+			mAmplitude = mScaleAmp * 0.01f;
+		}
+
+		ImGui::SameLine();
+		ImGui::SetCursorPosX(160);
+		ImGui::SetCursorPosY(55);
+		ImGui::SetWindowFontScale(1.05f);
+
+		if (ImGuiKnobs::Knob("Pitch", &mScaleFreq, -60.0f, 60.0f, 0.5f, "##%.01f", ImGuiKnobVariant_WiperDot, 50)) {
+			mFreqOffset = mScaleFreq;
+		}
+
+		ImGui::SameLine();
+		ImGui::SetCursorPosX(260);
+		ImGui::SetCursorPosY(55);
+		if (ImGuiKnobs::Knob("Sub", &mScaleSub, 0.0f, 10.0f, 0.05f, "##%.01fdb", ImGuiKnobVariant_Wiper, 50)) {
+
+		}
+
 	}
 	void Oscillator::setOscillatorWave(Wave* wave)
 	{

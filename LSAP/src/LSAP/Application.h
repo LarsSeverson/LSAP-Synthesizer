@@ -6,7 +6,7 @@
 #include "Events/ApplicationEvent.h"
 
 #include "LSAPAudio.h"
-#include "LSAP/ImGui/LSGui.h"
+#include "LSAP/ImGui/ImGuiLayer.h"
 
 namespace LSAP {
 	class LSAP_API Application
@@ -32,7 +32,7 @@ namespace LSAP {
 		std::unique_ptr<Window> appWindow;
 		std::unique_ptr<Synth> appSynth;
 		
-		LSGui* mGUILayer;
+		ImGuiLayer* mGUILayer;
 		LayerStack appLayerStack;
 
 		static Application* sInstance;

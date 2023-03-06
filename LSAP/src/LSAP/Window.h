@@ -4,9 +4,6 @@
 #include "Core.h"
 #include "Events/Event.h"
 
-// This serves as an entry for app to access GLFW functions
-// If I wanted to have app access GLFW functions directly,
-// I would include GLFW/include into Sandbox properties
 namespace LSAP {
 
 	struct WindowProperties {
@@ -14,7 +11,7 @@ namespace LSAP {
 		unsigned int wWidth;
 		unsigned int wHeight;
 		WindowProperties(const std::string title = "LSAP Synth", 
-			unsigned int width = 1280, unsigned int height = 720)
+			unsigned int width = 1200, unsigned int height = 880)
 			: wWidth(width), wHeight(height), wTitle(title)
 		{}
 	};

@@ -5,7 +5,7 @@
 #include "LSAPAudio.h"
 #include "Panels/EnvelopePanel.h"
 
-#include "LSAP/ImGui/LSGui.h"
+#include "LSAP/ImGui/ImGuiLayer.h"
 
 #include "LSAP/Log.h"
 #include "LSAP/Layer.h"
