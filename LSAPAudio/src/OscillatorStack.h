@@ -15,19 +15,15 @@ namespace LSAP
 
 		void onOscStackUpdate();
 		void onImGuiRender();
-		Note& onNotePush(Note& note);
-		double onOscStackFill(Note& note, double time);
+		double onOscStackFill(const Note& note, double time);
 
 		bool isEmpty() { return mOscIndex == 0; }
-
-		inline std::vector<Note>& getNotes() { return mNotes; }
 
 		std::vector<Oscillator*>::iterator begin() { return mOscillators.begin(); }
 		std::vector<Oscillator*>::iterator end() { return mOscillators.end(); }
 
 	private:
 		std::vector<Oscillator*> mOscillators;
-		std::vector<Note> mNotes;
 		std::mutex mOscStackMutex;
 		unsigned int mOscIndex = 0;
 	};

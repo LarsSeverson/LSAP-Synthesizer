@@ -34,11 +34,7 @@ namespace LSAP {
 			i->onImGuiRender();
 		}
 	}
-	Note& OscillatorStack::onNotePush(Note& note)
-	{
-		return mNotes.emplace_back(note);
-	}
-	double OscillatorStack::onOscStackFill(Note& n, double time)
+	double OscillatorStack::onOscStackFill(const Note& n, double time)
 	{
 		double data = 0;
 		for (auto& i : mOscillators) {

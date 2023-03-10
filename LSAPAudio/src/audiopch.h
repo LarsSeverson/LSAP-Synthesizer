@@ -1,7 +1,6 @@
 
 
 #pragma once
-#define NOMINMAX
 #include <Windows.h>
 
 #include <iostream>
@@ -12,6 +11,7 @@
 #include <condition_variable>
 #include <mutex>
 #include <functional>
+#define _USE_MATH_DEFINES
 #include <cmath>
 
 //#include "SoundGenerator.h"

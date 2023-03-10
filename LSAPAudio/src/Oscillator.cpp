@@ -22,12 +22,9 @@ namespace LSAP
 		mOscArray.push_back(std::make_unique<SquareWave>());
 	}
 
-	double Oscillator::onOscFill(Note& currentNote, double time)
+	double Oscillator::onOscFill(const Note& currentNote, double time)
 	{	
-		// Commenting this out until I implement frequency change smoothing
-		// currentNote.frequencyOffset = mFreqOffset;
-
-		return ((mOscCallback(currentNote, time)) * currentNote.processEnv()) * mAmplitude;
+		return ((mOscCallback(currentNote, time)) * mAmplitude);
 	}
 
 	void Oscillator::onOscAttach()

@@ -37,7 +37,7 @@ namespace LSAP
 	{
 		return mWaveCB;
 	}
-	double SineWave::SineWaveFunc(Note& n, double time)
+	double SineWave::SineWaveFunc(const Note& n, double time)
 	{
 		return sin((n.noteFrequency + n.frequencyOffset) * 2.0 * 3.14159 * time);
 	}
@@ -72,7 +72,7 @@ namespace LSAP
 	{
 		return mWaveCB;
 	}
-	double SquareWave::SquareWaveFunc(Note& n, double time)
+	double SquareWave::SquareWaveFunc(const Note& n, double time)
 	{
 		return (sin((n.noteFrequency + n.frequencyOffset) * 2.0 * 3.14159 * time)) > 0 ? 1.0 : -1.0;
 	}

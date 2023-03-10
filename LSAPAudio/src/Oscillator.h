@@ -7,14 +7,14 @@
 namespace LSAP {
 	class Oscillator
 	{
-		using OscCallback = std::function<double(Note&, double)>;
+		using OscCallback = std::function<double(const Note&, double)>;
 	public:
 		Oscillator(Wave* wave, const std::string& oscName);
 		virtual ~Oscillator() = default;
 
 		virtual void onOscUpdate() { }
 
-		double onOscFill(Note& n, double time);
+		double onOscFill(const Note& n, double time);
 
 		void onOscAttach();
 		void onOscDetach();

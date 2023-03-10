@@ -6,30 +6,30 @@ namespace LSAP {
 	Synth* Synth::sSynthInstance = nullptr;
 	double Synth::sSynthOctave = 0.0;
 	Synth::Synth()
-		: mSoundGenerator(new SoundGenerator()), mEnvelope(new EnvelopeData(0.0, 0.0, 1.0, 0.0))
+		: mEnvelope(new EnvelopeData(0.0, 0.0, 1.0, 0.0))
 	{
 		sSynthInstance = this;
-		mSoundGenerator->setSynthFunc(std::bind(&Synth::fillOutputBuffer, this, std::placeholders::_1));
 		
 		pushOscillator(new Oscillator(new SineWave(),   "Oscillator 1"));
 		pushOscillator(new Oscillator(new SquareWave(), "Oscillator 2"));
 		pushOscillator(new Oscillator(new SineWave(),   "Oscillator 3"));
 		
-		outputSound();
+		startSoundThread();
 	}
 	Synth::~Synth()
 	{
 		
 	}
-	
-	void Synth::outputSound()
+
+	void Synth::onSynthUpdate()
 	{
-		mSoundGenerator->generateSound();
+		std::unique_lock<std::mutex> lm(synthMutex);
+		std::erase_if(mNotes, [](Note& index) { return index.noteDone; });
 	}
 
 	void Synth::onSynthStop()
 	{
-		mSoundGenerator->stopSound();
+		stopSound();
 	}
 
 	void Synth::pushOscillator(Oscillator* osc)
@@ -44,12 +44,11 @@ namespace LSAP {
 
 	void Synth::pushNote(Note n)
 	{
-		std::unique_lock<std::mutex> lm(synthMutex);
-		auto result = std::find_if(mOscStack.getNotes().begin(), mOscStack.getNotes().end(), [&n](Note& check)
+		auto result = std::find_if(mNotes.begin(), mNotes.end(), [&n](Note& check)
 			{ return check.noteFrequency == n.noteFrequency; });
 
-		if (result == mOscStack.getNotes().end()) {
-			mOscStack.onNotePush(n).noteEnv.setState(1);
+		if (result == mNotes.end()) {
+			mNotes.emplace_back(n).noteEnv.setState(1);
 		}
 
 		// If note is found and is in release state (but pressed again),
@@ -59,16 +58,16 @@ namespace LSAP {
 		}
 	}
 	void Synth::popNote(Note note) {
-		std::unique_lock<std::mutex> lm(synthMutex);
-		auto it = std::find_if(mOscStack.getNotes().begin(), mOscStack.getNotes().end(), [&note](Note& index)
+		auto it = std::find_if(mNotes.begin(), mNotes.end(), [&note](Note& index)
 			{ return note.noteFrequency == index.noteFrequency; });
-		if (it != mOscStack.getNotes().end()) {
+		if (it != mNotes.end()) {
 			it->noteEnv.setState(4);
 		}
 	}
 
 	bool Synth::onKeyPressed(KeyPressedEvent& event)
 	{
+		std::lock_guard<std::mutex> lock(synthMutex);
 		switch (event.getKeyCode()) {
 		case Key::A:
 			pushNote(Note(Notes::C));
@@ -130,7 +129,7 @@ namespace LSAP {
 		// Octave control
 		case Key::Z:
 			if (!event.isRepeat()) {
-				for (auto& i : mOscStack.getNotes())
+				for (auto& i : mNotes)
 				{
 					i.noteEnv.setState(4);
 				}
@@ -139,7 +138,7 @@ namespace LSAP {
 			break;
 		case Key::X:
 			if (!event.isRepeat()) {
-				for (auto& i : mOscStack.getNotes())
+				for (auto& i : mNotes)
 				{
 					i.noteEnv.setState(4);
 				}
@@ -154,6 +153,7 @@ namespace LSAP {
 
 	bool Synth::onKeyReleased(KeyReleasedEvent& event)
 	{
+		std::lock_guard<std::mutex> lock(synthMutex);
 		switch (event.getKeyCode()) {
 		case Key::A:
 			popNote(Note(Notes::C));
@@ -215,18 +215,19 @@ namespace LSAP {
 		return false;
 	}
 
-	double Synth::fillOutputBuffer(double time)
+	void Synth::getNextAudioBlock(SynthBackend& data) 
 	{
-		std::unique_lock<std::mutex> lm(synthMutex);
-		double data = 0;
-		for (auto& i : mOscStack.getNotes()) {
-			i.setEnvData(*mEnvelope);
-			data += mOscStack.onOscStackFill(i, time);
-		}
-		std::erase_if(mOscStack.getNotes(), [](Note& index) {
-			return index.noteDone; });
-		
-		return data;
-	}
+		int bufferSize = data.frameCount;
 
+		for (unsigned int i = 0; i < bufferSize; ++i) {
+			double value = 0;
+			for (Note& note : mNotes) {
+				note.setEnvData(*mEnvelope);
+				value += mOscStack.onOscStackFill(note, data.time) * note.processEnv();
+			}
+			data.outputBuffer[i * data.wfx.nChannels] = static_cast<short>(value * 32767);
+			data.outputBuffer[i * data.wfx.nChannels + 1] = static_cast<short>(value * 32767);
+			data.time += 1.f / data.mAudioData.sampleRate;
+		}
+	}
 }

@@ -17,7 +17,7 @@ namespace LSAP {
 
     void SynthUI::onLayerUpdate()
     {
-
+        Synth::getSynth()->onSynthUpdate();
     }
 
     void SynthUI::onLayerAttach()

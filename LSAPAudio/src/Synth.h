@@ -9,16 +9,16 @@
 #include "Note.h"
 #include "frwddec.h"
 #include "OscillatorStack.h"
-#include "SoundGenerator.h"
+#include "SynthBackend.h"
 
 namespace LSAP {
-	class Synth
+	class Synth : public SynthBackend
 	{
 	public:
 		Synth();
 		~Synth();
 
-		void outputSound();
+		void onSynthUpdate();
 		void onSynthStop();
 
 		void pushOscillator(Oscillator* osc);
@@ -30,19 +30,19 @@ namespace LSAP {
 
 		void setEnvelope(EnvelopeData& data);
 
-		double fillOutputBuffer(double time);
+		void getNextAudioBlock(SynthBackend& data) override;
 
 		static Synth* getSynth() { return sSynthInstance; }
 		OscillatorStack& getOscStack() { return mOscStack;}
 		EnvelopeData& getEnvelope() { return *mEnvelope; }
-		SoundGenerator& getSoundGenerator() { return *mSoundGenerator; }
 
 		static double sSynthOctave;
 	private:
 		OscillatorStack mOscStack;
 		static Synth* sSynthInstance;
-		std::shared_ptr<SoundGenerator> mSoundGenerator;
 		std::shared_ptr<EnvelopeData> mEnvelope;
+
+		std::vector<Note> mNotes;
 
 		std::mutex synthMutex;
 	};

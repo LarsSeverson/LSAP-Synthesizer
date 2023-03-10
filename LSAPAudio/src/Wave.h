@@ -14,7 +14,7 @@ namespace LSAP
 	class Wave
 	{
 	protected:
-		using WaveCallback = std::function<double(Note&, double)>;
+		using WaveCallback = std::function<double(const Note&, double)>;
 	public:
 		virtual void setWaveCallback() = 0;
 		virtual void setWaveFrequency(double frequency) = 0;
@@ -53,7 +53,7 @@ namespace LSAP
 		WaveCallback mWaveCB;
 		std::string mWaveName;
 
-		double SineWaveFunc(Note& n, double time);
+		double SineWaveFunc(const Note& n, double time);
 
 		std::atomic<double> oscFrequency;
 		std::atomic<double> oscAmplitude;
@@ -82,7 +82,7 @@ namespace LSAP
 		WaveCallback mWaveCB;
 		std::string mWaveName;
 
-		double SquareWaveFunc(Note& n, double time);
+		double SquareWaveFunc(const Note& n, double time);
 
 		std::atomic<double> oscFrequency;
 		std::atomic<double> oscAmplitude;
