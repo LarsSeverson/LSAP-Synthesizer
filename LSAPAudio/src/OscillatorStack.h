@@ -13,14 +13,14 @@ namespace LSAP
 		void pushOsc(Oscillator* osc);
 		void popOsc (Oscillator* osc);
 
-		void onOscStackUpdate();
 		void onImGuiRender();
-		double onOscStackFill(const Note& note, double time);
 
 		bool isEmpty() { return mOscIndex == 0; }
 
 		std::vector<Oscillator*>::iterator begin() { return mOscillators.begin(); }
 		std::vector<Oscillator*>::iterator end() { return mOscillators.end(); }
+
+		std::vector<Oscillator*> getOscillators() { return mOscillators; }
 
 	private:
 		std::vector<Oscillator*> mOscillators;

@@ -22,8 +22,8 @@ namespace LSAP {
 		void onSynthStop();
 
 		void pushOscillator(Oscillator* osc);
-		void pushNote(Note note);
-		void popNote(Note note);
+		void pushNote(const Notes& note);
+		void popNote(const Notes& note);
 
 		bool onKeyPressed(KeyPressedEvent& event);
 		bool onKeyReleased(KeyReleasedEvent& event);
@@ -36,13 +36,13 @@ namespace LSAP {
 		OscillatorStack& getOscStack() { return mOscStack;}
 		EnvelopeData& getEnvelope() { return *mEnvelope; }
 
-		static double sSynthOctave;
+		static int sSynthOctave;
 	private:
 		OscillatorStack mOscStack;
 		static Synth* sSynthInstance;
 		std::shared_ptr<EnvelopeData> mEnvelope;
 
-		std::vector<Note> mNotes;
+		std::unordered_map<double, Note> notes;
 
 		std::mutex synthMutex;
 	};

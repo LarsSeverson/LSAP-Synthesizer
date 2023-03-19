@@ -1,5 +1,4 @@
 #pragma once
-#include "Note.h"
 namespace LSAP
 {
 	enum class WaveType
@@ -14,14 +13,10 @@ namespace LSAP
 	class Wave
 	{
 	protected:
-		using WaveCallback = std::function<double(const Note&, double)>;
+		using WaveCallback = std::function<double(double)>;
 	public:
 		virtual void setWaveCallback() = 0;
-		virtual void setWaveFrequency(double frequency) = 0;
-		virtual void setWaveAmplitude(double amplitude)  = 0;
-		virtual void setWaveAngle(double angle) = 0;
 
-		virtual double getWaveFrequency() const = 0;
 		virtual std::string getWaveName() const = 0;
 		virtual WaveType getWaveType() const = 0;
 
@@ -38,12 +33,8 @@ namespace LSAP
 		~SineWave();
 
 		virtual void setWaveCallback() override;
-		virtual void setWaveFrequency(double frequency) override;
-		virtual void setWaveAmplitude(double amplitude) override;
-		virtual void setWaveAngle(double angle) override;
 
 		std::string getWaveName() const override { return mWaveName; }
-		virtual double getWaveFrequency() const override { return oscFrequency; }
 
 		virtual WaveCallback getWaveCallback() const override;
 
@@ -53,11 +44,7 @@ namespace LSAP
 		WaveCallback mWaveCB;
 		std::string mWaveName;
 
-		double SineWaveFunc(const Note& n, double time);
-
-		std::atomic<double> oscFrequency;
-		std::atomic<double> oscAmplitude;
-		std::atomic<double> oscAngle;
+		double SineWaveFunc(double phase);
 	};
 
 	class SquareWave : public Wave
@@ -67,11 +54,7 @@ namespace LSAP
 		~SquareWave();
 
 		virtual void setWaveCallback() override;
-		virtual void setWaveFrequency(double frequency) override;
-		virtual void setWaveAmplitude(double amplitude) override;
-		virtual void setWaveAngle(double angle) override;
-		
-		virtual double getWaveFrequency() const override { return oscFrequency; }
+
 		std::string getWaveName() const override { return mWaveName; }
 
 		virtual WaveCallback getWaveCallback() const override;
@@ -82,10 +65,6 @@ namespace LSAP
 		WaveCallback mWaveCB;
 		std::string mWaveName;
 
-		double SquareWaveFunc(const Note& n, double time);
-
-		std::atomic<double> oscFrequency;
-		std::atomic<double> oscAmplitude;
-		std::atomic<double> oscAngle;
+		double SquareWaveFunc(double phase);
 	};
 }

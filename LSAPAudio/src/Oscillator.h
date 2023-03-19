@@ -1,20 +1,19 @@
 #pragma once
 
 #include "Wave.h"
-#include "Note.h"
-#include "Envelope.h"
+#include "Util/Smoothing.h"
+#include "frwddec.h"
 
 namespace LSAP {
 	class Oscillator
 	{
-		using OscCallback = std::function<double(const Note&, double)>;
+		using OscCallback = std::function<double(double)>;
 	public:
 		Oscillator(Wave* wave, const std::string& oscName);
+		Oscillator() = default;
 		virtual ~Oscillator() = default;
 
-		virtual void onOscUpdate() { }
-
-		double onOscFill(const Note& n, double time);
+		double onOscFill(double frequency);
 
 		void onOscAttach();
 		void onOscDetach();
@@ -25,34 +24,27 @@ namespace LSAP {
 
 		Wave& getOscillatorWave() { return *mOscillatorWave; }
 		const std::string& getOscName() const { return mOscName; }
+		const float getFreqScale() const { return mScaleFreq; }
 
-		// Envelope stuff
-		EnvelopeData& getEnvData() { return envData; }
+		double freqOffset;
 
-		void setAttackRate(double attackRate);
-		void setDecayRate(double decayRate);
-		void setSustainLevel(double level);
-		void setReleaseRate(double releaseRate);
-	private:
 		double mAmplitude;
-		float smoothFreq;
+		double phase;
+
+		OscCallback mOscCallback;
+
+	private:
 
 		float mScaleAmp;
 		float mScaleFreq;
-		float mFreqOffset;
 		float mScaleSub;
 
-		const std::string mOscName;
-
-		bool mIsActive = false;
+		std::string mOscName;
 
 		std::shared_ptr<Wave> mOscillatorWave;
-		std::vector<std::unique_ptr<Wave>> mOscArray;
-		OscCallback mOscCallback;
 
-		// For future use -- each oscillator will have its own envelope
-		EnvelopeData envData;
+		Smoother<lowpassSmooth> freqSmoother;
+		Smoother<lowpassSmooth> ampSmoother;
 
-		std::mutex oscMutex;
 	};
 }

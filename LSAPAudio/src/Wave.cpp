@@ -4,7 +4,7 @@
 namespace LSAP
 {
 	SineWave::SineWave()
-		: oscFrequency(0), oscAmplitude(0), oscAngle(0),
+		: 
 		mWaveName("Sine")
 	{
 		setWaveCallback();
@@ -15,36 +15,21 @@ namespace LSAP
 	}
 	void SineWave::setWaveCallback()
 	{
-		mWaveCB = std::bind(&SineWave::SineWaveFunc, this, std::placeholders::_1, std::placeholders::_2);
-	}
-
-	void SineWave::setWaveFrequency(double frequency)
-	{
-		oscFrequency = frequency;
-	}
-
-	void SineWave::setWaveAmplitude(double amplitude)
-	{
-		oscAmplitude = amplitude;
-	}
-
-	void SineWave::setWaveAngle(double angle)
-	{
-		oscAngle = angle;
+		mWaveCB = std::bind(&SineWave::SineWaveFunc, this, std::placeholders::_1);
 	}
 
 	SineWave::WaveCallback SineWave::getWaveCallback() const
 	{
 		return mWaveCB;
 	}
-	double SineWave::SineWaveFunc(const Note& n, double time)
+	double SineWave::SineWaveFunc(double phase)
 	{
-		return sin((n.noteFrequency + n.frequencyOffset) * 2.0 * 3.14159 * time);
+		return sin(phase);
 	}
 
 	// ------------- Square Wave -------------
 	SquareWave::SquareWave()
-		: oscFrequency(0), oscAmplitude(0), oscAngle(0),
+		:
 		mWaveName("Square")
 	{
 		setWaveCallback();
@@ -54,26 +39,15 @@ namespace LSAP
 	}
 	void SquareWave::setWaveCallback()
 	{
-		mWaveCB = std::bind(&SquareWave::SquareWaveFunc, this, std::placeholders::_1, std::placeholders::_2);
+		mWaveCB = std::bind(&SquareWave::SquareWaveFunc, this, std::placeholders::_1);
 	}
-	void SquareWave::setWaveFrequency(double frequency)
-	{
-		oscFrequency = frequency;
-	}
-	void SquareWave::setWaveAmplitude(double amplitude)
-	{
-		oscAmplitude = amplitude;
-	}
-	void SquareWave::setWaveAngle(double angle)
-	{
-		oscAngle = angle;
-	}
+
 	SquareWave::WaveCallback SquareWave::getWaveCallback() const
 	{
 		return mWaveCB;
 	}
-	double SquareWave::SquareWaveFunc(const Note& n, double time)
+	double SquareWave::SquareWaveFunc(double phase)
 	{
-		return (sin((n.noteFrequency + n.frequencyOffset) * 2.0 * 3.14159 * time)) > 0 ? 1.0 : -1.0;
+		return sin(phase) >= 0 ? 1.0 : -1.0;
 	}
 }

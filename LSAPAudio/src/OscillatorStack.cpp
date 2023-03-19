@@ -22,24 +22,12 @@ namespace LSAP {
 			mOscIndex--;
 		}
 	}
-	void OscillatorStack::onOscStackUpdate()
-	{
-		for (auto& i : mOscillators) {
-			i->onOscUpdate();
-		}
-	}
+
 	void OscillatorStack::onImGuiRender()
 	{
 		for (auto& i : mOscillators) {
 			i->onImGuiRender();
 		}
 	}
-	double OscillatorStack::onOscStackFill(const Note& n, double time)
-	{
-		double data = 0;
-		for (auto& i : mOscillators) {
-			data += i->onOscFill(n, time);
-		}
-		return data;
-	}
+
 }
