@@ -1,7 +1,5 @@
 #pragma once
-#include "OscillatorStack.h"
 #include "Util/Envelope.h"
-#include "frwddec.h"
 
 namespace LSAP {
 	enum Notes
@@ -30,20 +28,14 @@ namespace LSAP {
 
 	struct Note
 	{
-		Note(const Notes& note, const std::vector<Oscillator*> synthOsc);
+		Note(Notes note);
+		Note() = default;
 		~Note() = default;
 
-		double processEnv(const EnvelopeData& data);
-		double getSample(const std::vector<Oscillator*> synthOsc);
 
-		void   setEnvData(const EnvelopeData& data);
-
-		double mID;
-		double noteFrequency;
+		double location;
+		double frequency;
 		bool noteDone;
-
-		Envelope noteEnv;
-		std::vector<Oscillator> oscs;
 
 		static double calcFrequency(Notes note);
 	};

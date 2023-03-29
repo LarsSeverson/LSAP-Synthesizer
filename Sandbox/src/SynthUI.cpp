@@ -108,8 +108,7 @@ namespace LSAP {
                 ImGui::EndMenu();
             }
 
-        LSAP::Synth::getSynth()->getOscStack().onImGuiRender();
-        mEnvelopePanel.onImGuiRender();
+        LSAP::Synth::getSynth()->onGuiRender();
         ImGui::Begin("ViewPort");
         ImGui::End();
 

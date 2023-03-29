@@ -2,25 +2,24 @@
 
 namespace LSAP {
 
-
 	class Envelope
 	{
 	public:
 		Envelope();
 		~Envelope();
 
-		double processEnv();
-		double getEnvOutput();
+		float processEnv();
+		float getEnvOutput();
 
 		void gate(int on);
-		void setAttackRate(double rate);
-		void setDecayRate(double rate);
-		void setReleaserate(double rate);
-		void setSustainLevel(double level);
-		void setTargetRatioA(double target);
-		void setTargetRatioDR(double target);
+		void setAttackRate(float& rate);
+		void setDecayRate(float& rate);
+		void setReleaserate(float& rate);
+		void setSustainLevel(float& level);
+		void setTargetRatioA(float target);
+		void setTargetRatioDR(float target);
 
-		inline double getAttackRate() { return attackRate; }
+		inline double getAttackRate() { return *attackRate; }
 		inline int getState() { return state; }
 		inline void setState(int i) { state = i; }
 
@@ -37,24 +36,30 @@ namespace LSAP {
 
 		int state;
 
-		double output;
+		float output;
 
-		double attackRate;
-		double decayRate;
-		double releaseRate;
+		float* attackRate;
+		float* decayRate;
+		float* releaseRate;
+		float* sustainLevel;
 
-		double attackCoef;
-		double decayCoef;
-		double releaseCoef;
+		float attackCoef;
+		float decayCoef;
+		float releaseCoef;
 		
-		double sustainLevel;
-		double targetRatioA;
-		double targetRatioDR;
 
-		double attackBase;
-		double decayBase;
-		double releaseBase;
+		float targetRatioA;
+		float targetRatioDR;
 
-		double calcCoef(double rate, double targetRatio);
+		float attackBase;
+		float decayBase;
+		float releaseBase;
+
+		float calcCoef(float rate, float targetRatio);
+
+		float attack = 0.0f;
+		float decay = 0.0f;
+		float sustain = 1.0f;
+		float release = 0.0f;
 	};
 }

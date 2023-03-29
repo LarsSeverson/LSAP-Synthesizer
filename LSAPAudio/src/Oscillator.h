@@ -1,50 +1,28 @@
 #pragma once
-
 #include "Wave.h"
 #include "Util/Smoothing.h"
-#include "frwddec.h"
 
 namespace LSAP {
 	class Oscillator
 	{
-		using OscCallback = std::function<double(double)>;
 	public:
-		Oscillator(Wave* wave, const std::string& oscName);
-		Oscillator() = default;
-		virtual ~Oscillator() = default;
+		Oscillator();
+
+		void syncAmplitude(float* amplitude);
+		void syncSubAmplitude(float* subAmplitude);
+		void syncFrequencyOffset(float* freqOffset);
+		void setWaveType(WaveformType type);
+
+		const std::shared_ptr<Wave>& getWave() const { return waveType; }
 
 		double onOscFill(double frequency);
 
-		void onOscAttach();
-		void onOscDetach();
-
-		void onImGuiRender();
-		void drawOscKnobs();
-		void setOscillatorWave(Wave* wave);
-
-		Wave& getOscillatorWave() { return *mOscillatorWave; }
-		const std::string& getOscName() const { return mOscName; }
-		const float getFreqScale() const { return mScaleFreq; }
-
-		double freqOffset;
-
-		double mAmplitude;
-		double phase;
-
-		OscCallback mOscCallback;
-
 	private:
+		double phase;
+		float* amplitude;
+		float* freqOffset;
+		float* subAmplitude;
 
-		float mScaleAmp;
-		float mScaleFreq;
-		float mScaleSub;
-
-		std::string mOscName;
-
-		std::shared_ptr<Wave> mOscillatorWave;
-
-		Smoother<lowpassSmooth> freqSmoother;
-		Smoother<lowpassSmooth> ampSmoother;
-
+		std::shared_ptr<Wave> waveType;
 	};
 }

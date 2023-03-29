@@ -1,6 +1,9 @@
-
-
 #pragma once
+
+namespace Backend {
+	static float sampleRate = 44100.0;
+}
+
 #define _USE_MATH_DEFINES
 #define NOMINMAX
 #include <Windows.h>
@@ -15,8 +18,8 @@
 #include <functional>
 #include <tuple>
 #include <unordered_map>
-
-
+#include <map>
+#include <future>
 #include <cmath>
-
-//#include "SoundGenerator.h"
+#include <type_traits>
+#include <queue>

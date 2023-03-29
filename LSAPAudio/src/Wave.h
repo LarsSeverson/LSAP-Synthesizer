@@ -1,70 +1,40 @@
 #pragma once
 namespace LSAP
 {
-	enum class WaveType
-	{
-		None = 0,
-		SineWave, SquareWave
+	namespace Waveforms {
+		struct Sinewave {
+			static double sineAlgorithm(double phase) {
+				return sin(phase);
+			}
+		};
+		struct Squarewave {
+			static double squareAlgorithm(double phase) {
+				return sin(phase) >= 0 ? 1 : -1;
+			}
+		};
+	}
+
+	enum WaveformType {
+		sine,
+		square
 	};
 
-#define WAVE_CLASS_TYPE(type) static WaveType getStaticType() { return WaveType::##type;}\
-							  virtual WaveType getWaveType() const override { return getStaticType();}
-
+	// Eventually will convert over to wavetables
 	class Wave
 	{
-	protected:
-		using WaveCallback = std::function<double(double)>;
+		using waveFunc = std::function<double(double)>;
+
 	public:
-		virtual void setWaveCallback() = 0;
+		Wave(WaveformType type = sine);
+		void setWaveform(WaveformType type);
 
-		virtual std::string getWaveName() const = 0;
-		virtual WaveType getWaveType() const = 0;
+		const std::string getWaveName() const { return waveName; }
+		const WaveformType getWaveType() const { return waveType; }
 
-		virtual WaveCallback getWaveCallback() const = 0;
-	private: 
-
-	};
-
-
-	class SineWave : public Wave
-	{
-	public:
-		SineWave();
-		~SineWave();
-
-		virtual void setWaveCallback() override;
-
-		std::string getWaveName() const override { return mWaveName; }
-
-		virtual WaveCallback getWaveCallback() const override;
-
-		WAVE_CLASS_TYPE(SineWave)
+		waveFunc waveAlgorithm;
 
 	private:
-		WaveCallback mWaveCB;
-		std::string mWaveName;
-
-		double SineWaveFunc(double phase);
-	};
-
-	class SquareWave : public Wave
-	{
-	public:
-		SquareWave();
-		~SquareWave();
-
-		virtual void setWaveCallback() override;
-
-		std::string getWaveName() const override { return mWaveName; }
-
-		virtual WaveCallback getWaveCallback() const override;
-
-		WAVE_CLASS_TYPE(SquareWave)
-
-	private:
-		WaveCallback mWaveCB;
-		std::string mWaveName;
-
-		double SquareWaveFunc(double phase);
+		std::string waveName;
+		WaveformType waveType;
 	};
 }

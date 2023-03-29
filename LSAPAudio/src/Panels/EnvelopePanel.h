@@ -7,13 +7,18 @@ namespace LSAP {
 		EnvelopePanel();
 		~EnvelopePanel() = default;
 
-		void onImGuiRender();
+		void onGuiRender();
+
+		float& getAttack()  { return attack; }
+		float& getDecay() { return decay; }
+		float& getSustain() { return sustainLevel; }
+		float& getRelease() { return release; }
 	private:
 		bool mIsOpen = true;
 
-		float mAttack;
-		float mDecay;
-		float mSustainLevel;
-		float mRelease;
+		float attack;
+		float decay;
+		float sustainLevel;
+		float release;
 	};
 }

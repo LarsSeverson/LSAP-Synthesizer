@@ -6,13 +6,23 @@ namespace LSAP {
 	Synth* Synth::sSynthInstance = nullptr;
 	int Synth::sSynthOctave = 0;
 	Synth::Synth()
-		: mEnvelope(new EnvelopeData(0.0, 0.0, 1.0, 0.0))
+		:
+		voicePool(std::make_unique<VoicePool>(16, 3)),
+		envelopeGui(std::make_unique<EnvelopePanel>()),
+		oscillatorGui(std::make_unique<OscillatorPanels>())
 	{
 		sSynthInstance = this;
+
+		oscillatorGui->addOscillator(0, std::make_unique<OscillatorGui>(WaveformType::sine,	0,	"Oscillator 1"));
+		oscillatorGui->addOscillator(1, std::make_unique<OscillatorGui>(WaveformType::square,	1,  "Oscillator 2"));
+		oscillatorGui->addOscillator(2, std::make_unique<OscillatorGui>(WaveformType::sine,	2,	"Oscillator 3"));
+
+		voicePool->syncOscillators(oscillatorGui->get(0));
+		voicePool->syncOscillators(oscillatorGui->get(1));
+		voicePool->syncOscillators(oscillatorGui->get(2));
+		voicePool->syncEnvelope(*envelopeGui);
 		
-		pushOscillator(new Oscillator(new SineWave(),   "Oscillator 1"));
-		pushOscillator(new Oscillator(new SquareWave(), "Oscillator 2"));
-		pushOscillator(new Oscillator(new SineWave(),   "Oscillator 3"));
+		LS_CORE_INFO("Synth Created");
 		startSoundThread();
 	}
 	Synth::~Synth()
@@ -22,8 +32,6 @@ namespace LSAP {
 
 	void Synth::onSynthUpdate()
 	{
-		std::lock_guard<std::mutex> lock(synthMutex);
-		std::erase_if(notes, [](const auto& note) { return note.second.noteDone; });
 
 	}
 
@@ -32,122 +40,109 @@ namespace LSAP {
 		stopSound();
 	}
 
-	void Synth::pushOscillator(Oscillator* osc)
+	void Synth::onGuiRender()
 	{
-		mOscStack.pushOsc(osc);
+		oscillatorGui->onGuiRender();
+		envelopeGui->onGuiRender();
 	}
 
-	void Synth::setEnvelope(EnvelopeData& data)
+	void Synth::pushNote(Notes note)
 	{
-		mEnvelope.reset(&data);
+		Voice& freeVoice = voicePool->getFreeVoice();
+		freeVoice.setNote(Note(note));
+		freeVoice.getEnvelope().gate(true);
+		freeVoice.voiceOn = true;
 	}
 
-	void Synth::pushNote(const Notes& note)
+	void Synth::popNote(Notes note) 
 	{
-		double freq = Note::calcFrequency(note);
-		auto it = notes.try_emplace(freq, Note(note, mOscStack.getOscillators()));
-
-		if (!it.second) {
-			if(notes.at(freq).noteEnv.getState() == 4)
-				it.first->second.noteEnv.setState(1);
-		}
-	}
-	void Synth::popNote(const Notes& note) {
-		double freq = Note::calcFrequency(note);
-		if (notes.contains(freq)) {
-			notes.at(freq).noteEnv.setState(4);
-		}
+		voicePool->freeVoice(note);
 	}
 
 	bool Synth::onKeyPressed(KeyPressedEvent& event)
 	{
-		std::lock_guard<std::mutex> lock(synthMutex);
-		switch (event.getKeyCode()) {
-		case Key::A:
-			pushNote(Notes::C);
-			break;
-		case Key::W:
-			pushNote(Notes::Db);
-			break;
-		case Key::S:
-			pushNote(Notes::D);
-			break;
-		case Key::E:
-			pushNote(Notes::Eb);
-			break;
-		case Key::D:
-			pushNote(Notes::E);
-			break;
-		case Key::F:
-			pushNote(Notes::F);
-			break;
-		case Key::T:
-			pushNote(Notes::Gb);
-			break;
-		case Key::G:
-			pushNote(Notes::G);
-			break;
-		case Key::Y:
-			pushNote(Notes::Ab);
-			break;
-		case Key::H:
-			pushNote(Notes::A);
-			break;
-		case Key::U:
-			pushNote(Notes::Bb);
-			break;
-		case Key::J:
-			pushNote(Notes::B);
-			break;
+		std::unique_lock<std::mutex> lock(synthMutex);
+		if (!event.isRepeat()) {
+			switch (event.getKeyCode()) {
+			case Key::A:
+				pushNote(Notes::C);
+				break;
+			case Key::W:
+				pushNote(Notes::Db);
+				break;
+			case Key::S:
+				pushNote(Notes::D);
+				break;
+			case Key::E:
+				pushNote(Notes::Eb);
+				break;
+			case Key::D:
+				pushNote(Notes::E);
+				break;
+			case Key::F:
+				pushNote(Notes::F);
+				break;
+			case Key::T:
+				pushNote(Notes::Gb);
+				break;
+			case Key::G:
+				pushNote(Notes::G);
+				break;
+			case Key::Y:
+				pushNote(Notes::Ab);
+				break;
+			case Key::H:
+				pushNote(Notes::A);
+				break;
+			case Key::U:
+				pushNote(Notes::Bb);
+				break;
+			case Key::J:
+				pushNote(Notes::B);
+				break;
 
-			// Octave higher
-		case Key::K:
-			pushNote(Notes::C2);
-			break;
-		case Key::O:
-			pushNote(Notes::Db2);
-			break;
-		case Key::L:
-			pushNote(Notes::D2);
-			break;
-		case Key::P:
-			pushNote(Notes::Eb2);
-			break;
-		case Key::Semicolon:
-			pushNote(Notes::E2);
-			break;
-		case Key::Apostrophe:
-			pushNote(Notes::F2);
-			break;
+				// Octave higher
+			case Key::K:
+				pushNote(Notes::C2);
+				break;
+			case Key::O:
+				pushNote(Notes::Db2);
+				break;
+			case Key::L:
+				pushNote(Notes::D2);
+				break;
+			case Key::P:
+				pushNote(Notes::Eb2);
+				break;
+			case Key::Semicolon:
+				pushNote(Notes::E2);
+				break;
+			case Key::Apostrophe:
+				pushNote(Notes::F2);
+				break;
 
-		// Octave control
-		case Key::Z:
-			if (!event.isRepeat()) {
-				for (auto& [key, value] : notes)
-				{
-					value.noteEnv.setState(4);
+				// Octave control
+			case Key::Z:
+				for (auto& voice : voicePool->getVoices()) {
+					voice->getEnvelope().gate(false);
 				}
 				sSynthOctave -= 12;
-			}
-			break;
-		case Key::X:
-			if (!event.isRepeat()) {
-				for (auto& [key, value] : notes)
-				{
-					value.noteEnv.setState(4);
+				break;
+			case Key::X:
+				for (auto& voice : voicePool->getVoices()) {
+					voice->getEnvelope().gate(false);
 				}
 				sSynthOctave += 12;
+				break;
 			}
-			break;
 		}
-
 
 		return false;
 	}
 
 	bool Synth::onKeyReleased(KeyReleasedEvent& event)
 	{
-		std::lock_guard<std::mutex> lock(synthMutex);
+		std::unique_lock<std::mutex> lock(synthMutex);
 		switch (event.getKeyCode()) {
 		case Key::A:
 			popNote(Notes::C);
@@ -209,19 +204,21 @@ namespace LSAP {
 		return false;
 	}
 
-	void Synth::getNextAudioBlock(SynthBackend& data)
+	void Synth::getNextAudioBlock(const SynthBackend& data)
 	{
 		int bufferSize = data.frameCount;
 
-		for (unsigned int i = 0; i < bufferSize; ++i) {
-			double value = 0.0;
-			for (auto& note : notes) {
-				value += note.second.getSample(mOscStack.getOscillators()) * note.second.processEnv(*mEnvelope);
+		for (int i = 0; i < bufferSize; ++i) {
+			double sample = 0.0;
+
+			for (auto& voice : voicePool->getVoices()) {
+				if (voice->voiceOn) {
+					sample += voice->getSample();
+				}
 			}
 
-			data.outputBuffer[i * data.wfx.nChannels] = static_cast<short>(value * 32767);
-			data.outputBuffer[i * data.wfx.nChannels + 1] = static_cast<short>(value * 32767);
-			data.time += 1.f / data.mAudioData.sampleRate;
+			data.outputBuffer[i * data.wfx.nChannels] = static_cast<short>(sample * 32767);
+			data.outputBuffer[i * data.wfx.nChannels + 1] = static_cast<short>(sample * 32767);
 		}
 	}
 }

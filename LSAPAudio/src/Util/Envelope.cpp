@@ -5,33 +5,33 @@ namespace LSAP {
 	Envelope::Envelope()
 	{
 		reset();
-		setAttackRate(0);
-		setDecayRate(0);
-		setReleaserate(0);
+		setAttackRate(attack);
+		setSustainLevel(sustain);
+		setDecayRate(decay);
+		setReleaserate(release);
 
-		setSustainLevel(1.0);
-		setTargetRatioA(0.3);
-		setTargetRatioDR(0.0001);
+		setTargetRatioA(0.3f);
+		setTargetRatioDR(0.0001f);
 	}
 	Envelope::~Envelope()
 	{
 
 	}
-	double Envelope::processEnv()
+	float Envelope::processEnv()
 	{
 		switch (state) {
 		case envIdle: break;
 		case envAttack:
 			output = attackBase + output * attackCoef;
-			if (output >= 1.0) {
-				output = 1.0;
+			if (output >= 1.0f) {
+				output = 1.0f;
 				state = envDecay;
 			}
 			break;
 		case envDecay:
 			output = decayBase + output * decayCoef;
-			if (output <= sustainLevel) {
-				output = sustainLevel;
+			if (output <= *sustainLevel) {
+				output = *sustainLevel;
 				state = envSustain;
 			}
 		case envSustain:
@@ -45,7 +45,7 @@ namespace LSAP {
 		}
 		return output;
 	}
-	double Envelope::getEnvOutput()
+	float Envelope::getEnvOutput()
 	{
 		return output;
 	}
@@ -58,54 +58,57 @@ namespace LSAP {
 			state = envRelease;
 		}
 	}
-	void Envelope::setAttackRate(double rate)
+	void Envelope::setAttackRate(float& rate)
 	{
-		attackRate = rate;
+		attackRate = &rate;
 		attackCoef = calcCoef(rate, targetRatioA);
-		attackBase = (1.0 + targetRatioA) * (1.0 - attackCoef);
+		attackBase = (1.0f + targetRatioA) * (1.0f - attackCoef);
 	}
-	void Envelope::setDecayRate(double rate)
+	void Envelope::setDecayRate(float& rate)
 	{
-		decayRate = rate;
+		decayRate = &rate;
 		decayCoef = calcCoef(rate, targetRatioDR);
-		decayBase = (sustainLevel - targetRatioDR) * (1.0 - decayCoef);
+		decayBase = (*sustainLevel - targetRatioDR) * (1.0f - decayCoef);
 	}
-	void Envelope::setReleaserate(double rate)
+	void Envelope::setReleaserate(float& rate)
 	{
-		releaseRate = rate;
+		releaseRate = &rate;
 		releaseCoef = calcCoef(rate, targetRatioDR);
-		releaseBase = -targetRatioDR * (1.0 - releaseCoef);
+		releaseBase = -targetRatioDR * (1.0f - releaseCoef);
 	}
-	void Envelope::setSustainLevel(double level)
+	void Envelope::setSustainLevel(float& level)
 	{
-		sustainLevel = level;
-		decayBase = (sustainLevel - targetRatioDR) * (1.0 - decayCoef);
+		if (level > 1.0f) {
+			level = 1.0;
+		}
+		sustainLevel = &level;
+		decayBase = (*sustainLevel - targetRatioDR) * (1.0f - decayCoef);
 	}
-	void Envelope::setTargetRatioA(double target)
+	void Envelope::setTargetRatioA(float target)
 	{
-		if (target < 0.000000001)
-			target = 0.000000001;
+		if (target < 0.000000001f)
+			target = 0.000000001f;
 		targetRatioA = target;
-		attackCoef = calcCoef(attackRate, targetRatioA);
-		attackBase = (1.0 + targetRatioA) * (1.0 - attackCoef);
+		attackCoef = calcCoef(*attackRate, targetRatioA);
+		attackBase = (1.0f + targetRatioA) * (1.0f - attackCoef);
 	}
-	void Envelope::setTargetRatioDR(double target)
+	void Envelope::setTargetRatioDR(float target)
 	{
-		if (target < 0.000000001)
-			target = 0.000000001;  // -180 dB
+		if (target < 0.000000001f)
+			target = 0.000000001f;  // -180 dB
 		targetRatioDR = target;
-		decayCoef = calcCoef(decayRate, targetRatioDR);
-		releaseCoef = calcCoef(releaseRate, targetRatioDR);
-		decayBase = (sustainLevel - targetRatioDR) * (1.0 - decayCoef);
-		releaseBase = -targetRatioDR * (1.0 - releaseCoef);
+		decayCoef = calcCoef(*decayRate, targetRatioDR);
+		releaseCoef = calcCoef(*releaseRate, targetRatioDR);
+		decayBase = (*sustainLevel - targetRatioDR) * (1.0f - decayCoef);
+		releaseBase = -targetRatioDR * (1.0f - releaseCoef);
 	}
 	void Envelope::reset()
 	{
 		state = envIdle;
-		output = 0.0;
+		output = 0.f;
 	}
-	double Envelope::calcCoef(double rate, double targetRatio)
+	float Envelope::calcCoef(float rate, float targetRatio)
 	{
-		return (rate <= 0) ? 0.0 : exp(-log((1.0 + targetRatio) / targetRatio) / rate);
+		return (rate <= 0) ? 0.0f : exp(-log((1.0f + targetRatio) / targetRatio) / rate);
 	}
 }

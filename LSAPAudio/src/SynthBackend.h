@@ -12,26 +12,15 @@ namespace LSAP {
 
 	struct AudioData {
 
-		AudioData(std::wstring outputD = getActiveDevice(), unsigned int sampleRate = 44100, unsigned int nChannels = 2)
-			: outputDevice(outputD), sampleRate(sampleRate), nChannels(nChannels), bitsPerSample(16)
+		AudioData(unsigned int nChannels = 2)
+			: 
+			nChannels(nChannels), 
+			bitsPerSample(16)
 		{}
 
 		std::wstring outputDevice;
-		unsigned int sampleRate;
 		unsigned int nChannels;
 		unsigned int bitsPerSample;
-
-		static std::wstring getActiveDevice() {
-			int deviceCount = waveOutGetNumDevs();
-			std::vector<std::wstring> devices;
-			WAVEOUTCAPS woc;
-			for (int i = 0; i < deviceCount; ++i) {
-				if (waveOutGetDevCaps(i, &woc, sizeof(WAVEOUTCAPS)) == S_OK) {
-					devices.push_back(woc.szPname);
-				}
-			}
-			return devices[0];
-		}
 	};
 
 	class SynthBackend
@@ -45,11 +34,13 @@ namespace LSAP {
 		void stopSound();
 
 		// override it
-		virtual void getNextAudioBlock(SynthBackend& data) {}
+		virtual void getNextAudioBlock(const SynthBackend& data) {}
 	public:
 		std::shared_ptr<short[]> outputBuffer;
 		uint32_t frameCount;
 		uint32_t bufferPadding;
+
+		size_t numVoices;
 
 		bool mIsRunning;
 		double time;

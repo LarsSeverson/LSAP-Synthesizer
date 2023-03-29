@@ -3,51 +3,23 @@
 
 namespace LSAP
 {
-	SineWave::SineWave()
-		: 
-		mWaveName("Sine")
+	Wave::Wave(WaveformType type)
 	{
-		setWaveCallback();
+		setWaveform(type);
 	}
-	SineWave::~SineWave()
+	void Wave::setWaveform(WaveformType type)
 	{
-
-	}
-	void SineWave::setWaveCallback()
-	{
-		mWaveCB = std::bind(&SineWave::SineWaveFunc, this, std::placeholders::_1);
-	}
-
-	SineWave::WaveCallback SineWave::getWaveCallback() const
-	{
-		return mWaveCB;
-	}
-	double SineWave::SineWaveFunc(double phase)
-	{
-		return sin(phase);
-	}
-
-	// ------------- Square Wave -------------
-	SquareWave::SquareWave()
-		:
-		mWaveName("Square")
-	{
-		setWaveCallback();
-	}
-	SquareWave::~SquareWave()
-	{
-	}
-	void SquareWave::setWaveCallback()
-	{
-		mWaveCB = std::bind(&SquareWave::SquareWaveFunc, this, std::placeholders::_1);
-	}
-
-	SquareWave::WaveCallback SquareWave::getWaveCallback() const
-	{
-		return mWaveCB;
-	}
-	double SquareWave::SquareWaveFunc(double phase)
-	{
-		return sin(phase) >= 0 ? 1.0 : -1.0;
+		switch (type) {
+		case sine: 
+			waveAlgorithm = std::bind(&Waveforms::Sinewave::sineAlgorithm, std::placeholders::_1); 
+			waveType = sine;
+			waveName = "Sine";
+			break;
+		case square: 
+			waveAlgorithm = std::bind(&Waveforms::Squarewave::squareAlgorithm, std::placeholders::_1); 
+			waveType = square;
+			waveName = "Square";
+			break;
+		}
 	}
 }

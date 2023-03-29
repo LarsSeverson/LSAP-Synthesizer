@@ -12,7 +12,8 @@ namespace LSAP {
 		outputBuffer(std::make_shared<short[]>(bufferSize)),
 		soundBufferDuration(REFTIMES_PER_SEC * 2),
 		bufferPadding(0),
-		frameCount(0)
+		frameCount(0),
+		numVoices(16)
 	{
 		hr = CoInitializeEx(nullptr, COINIT_SPEED_OVER_MEMORY);
 		EXIT_ON_ERROR(hr);
@@ -29,7 +30,7 @@ namespace LSAP {
 		wfx = {};
 		wfx.wFormatTag = WAVE_FORMAT_PCM;
 		wfx.nChannels = audioData.nChannels;
-		wfx.nSamplesPerSec = audioData.sampleRate;
+		wfx.nSamplesPerSec = (DWORD)Backend::sampleRate;
 		wfx.wBitsPerSample = audioData.bitsPerSample;
 		wfx.nBlockAlign = (wfx.nChannels * wfx.wBitsPerSample) / 8;
 		wfx.nAvgBytesPerSec = wfx.nSamplesPerSec * wfx.nBlockAlign;

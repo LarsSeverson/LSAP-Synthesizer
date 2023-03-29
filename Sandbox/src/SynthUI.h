@@ -14,10 +14,5 @@ namespace LSAP {
 		virtual void onLayerEvent(Event& event) override;
 
 		virtual void onImGuiRenderer() override;
-
-	private:
-
-		// Panels
-		EnvelopePanel mEnvelopePanel;
 	};
 }
