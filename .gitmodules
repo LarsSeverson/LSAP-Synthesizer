@@ -1,6 +1,3 @@
-[submodule "LSAP\\vendor\\spdlog"]
-	path = LSAP\\vendor\\spdlog
-	url = https://github.com/gabime/spdlog
 [submodule "LSAP/vendor/glm"]
 	path = LSAP/vendor/glm
 	url = https://github.com/g-truc/glm
@@ -13,3 +10,6 @@
 [submodule "LSAP/vendor/imgui"]
 	path = LSAP/vendor/imgui
 	url = https://github.com/LarsSeverson/imgui
+[submodule "LSAP/vendor/spdlog"]
+	path = LSAP/vendor/spdlog
+	url = https://github.com/gabime/spdlog
