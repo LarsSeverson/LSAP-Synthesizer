@@ -11,18 +11,18 @@ workspace "LSAP"
     outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
     IncludeDir = {}
-    IncludeDir["GLFW3"] = "LSAP/vendor/GLFW3/include"
+    IncludeDir["GLFW"] = "LSAP/vendor/GLFW/include"
     IncludeDir["glad"] = "LSAP/vendor/glad/include"
-    IncludeDir["imGui"] = "LSAP/vendor/imGui"
+    IncludeDir["imgui"] = "LSAP/vendor/imgui"
     IncludeDir["glm"] = "LSAP/vendor/glm"
     IncludeDir["stb_image"] = "LSAP/vendor/stb_image"
     IncludeDir["LSAPAudio"] = "LSAPAudio"
 
 
     group "Dependencies"
-        include "LSAP/vendor/GLFW3"
+        include "LSAP/vendor/GLFW"
         include "LSAP/vendor/glad"
-        include "LSAP/vendor/imGui"
+        include "LSAP/vendor/imgui"
     group ""
 
     project "LSAP"
@@ -55,9 +55,9 @@ workspace "LSAP"
         includedirs
         {
             "%{prj.name}/src",
-            "%{IncludeDir.GLFW3}",
+            "%{IncludeDir.GLFW}",
             "%{IncludeDir.glad}",
-            "%{IncludeDir.imGui}",
+            "%{IncludeDir.imgui}",
             "%{IncludeDir.glm}",
             "%{prj.name}/vendor/spdlog/include",
             "%{IncludeDir.stb_image}",
@@ -69,7 +69,7 @@ workspace "LSAP"
             "GLFW",
             "opengl32.lib",
             "glad",
-            "imGui"
+            "imgui"
         }
 
         filter "system:windows"
@@ -169,7 +169,7 @@ project "LSAPAudio"
         "LSAP/src",
         "LSAPAudio/src",
         "LSAP/vendor/spdlog/include",
-        "%{IncludeDir.imGui}"
+        "%{IncludeDir.imgui}"
     }
 
     defines
@@ -189,7 +189,7 @@ project "LSAPAudio"
 		links
 		{
 			"winmm.lib",
-            "imGui"
+            "imgui"
 		}
 
 	filter "configurations:Debug"
