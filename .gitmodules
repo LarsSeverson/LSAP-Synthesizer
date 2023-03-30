@@ -1,6 +1,3 @@
-[submodule "LSAP/vendor/GLFW3"]
-	path = LSAP/vendor/GLFW3
-	url = https://github.com/glfw/glfw
 [submodule "LSAP\\vendor\\spdlog"]
 	path = LSAP\\vendor\\spdlog
 	url = https://github.com/gabime/spdlog
@@ -14,3 +11,6 @@
 [submodule "LSAP/vendor/stb_image"]
 	path = LSAP/vendor/stb_image
 	url = https://github.com/nothings/stb
+[submodule "LSAP/vendor/GLFW"]
+	path = LSAP/vendor/GLFW
+	url = https://github.com/LarsSeverson/glfw
