@@ -4,9 +4,14 @@
 
 namespace LSAP {
 	// Eventually I'll have different algorithms for smoothing based on what I want to do
+	enum SmoothType {
+		LowpassSmooth,
+		LinearSmooth
+	};
+
 	class lowpassSmooth {
 	public:
-		lowpassSmooth(float smoothTime = 100.f, int sampleRate = Backend::sampleRate) {
+		lowpassSmooth(float smoothTime = 100.f, float sampleRate = Backend::sampleRate) {
 			a = (float)exp((-2 * M_PI) / (smoothTime * 0.001 * sampleRate));
 			b = 1.f - a;
 			z = 0.f;
@@ -26,19 +31,20 @@ namespace LSAP {
 	struct Smoother
 	{
 		template<typename... Args>
-		Smoother(float current, Args&&... args)
+		Smoother(float* current, float* target, Args&&... args)
 			:
-			targetValue(nullptr),
+			targetValue(target),
 			currentValue(current),
-			smoother(std::make_shared<T>(std::forward<Args>(args)...))
+			smooth(T(std::forward<Args>(args)...))
 		{}
 		Smoother() = default;
+		~Smoother() = default;
 
 
 		float* targetValue;
-		float currentValue;
+		float* currentValue;
 
-		std::shared_ptr<T> smoother;
+		T smooth;
 	};
 }
 

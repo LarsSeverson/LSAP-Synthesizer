@@ -13,12 +13,14 @@ namespace LSAP
 		: 
 		ID(id),
 		oscName(name),
-		scaleFreq(0.0f),
-		scaleAmp(name == "Oscillator 1" ? 5.0f : 0.0f),
-		scaleSub(0.0f),
+		guiFreq(0.0f),
+		guiAmp(name == "Oscillator 1" ? 5.0f : 0.0f),
+		guiSub(0.0f),
 		oscWaveform(std::make_unique<Wave>(wave))
 	{
-
+		sub = guiSub;
+		freq = guiFreq;
+		amp = guiAmp;
 	}
 
 	void OscillatorGui::onOscAttach()
@@ -69,7 +71,7 @@ namespace LSAP
 		ImGui::SetCursorPosY(45);
 		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(200.0f / 255.0f, 200.0f / 255.0f, 200.0f / 255.0f, 1.0f));
 		ImGui::SetWindowFontScale(1.15f);
-		if (ImGuiKnobs::Knob("Amp", &scaleAmp, 0.0f, 10.0f, 0.05f, "##%.01f", ImGuiKnobVariant_Wiper, 60)) {
+		if (ImGuiKnobs::Knob("Amp", &guiAmp, 0.0f, 10.0f, 0.05f, "##%.01f", ImGuiKnobVariant_Wiper, 60)) {
 
 		}
 
@@ -78,14 +80,14 @@ namespace LSAP
 		ImGui::SetCursorPosY(55);
 		ImGui::SetWindowFontScale(1.05f);
 
-		if (ImGuiKnobs::Knob("Pitch", &scaleFreq, -60.0f, 60.0f, 0.5f, "##%.01f", ImGuiKnobVariant_WiperDot, 50)) {
+		if (ImGuiKnobs::Knob("Pitch", &guiFreq, -60.0f, 60.0f, 0.5f, "##%.01f", ImGuiKnobVariant_WiperDot, 50)) {
 
 		}
 
 		ImGui::SameLine();
 		ImGui::SetCursorPosX(260);
 		ImGui::SetCursorPosY(55);
-		if (ImGuiKnobs::Knob("Sub", &scaleSub, 0.0f, 10.0f, 0.05f, "##%.01fdb", ImGuiKnobVariant_Wiper, 50)) {
+		if (ImGuiKnobs::Knob("Sub", &guiSub, 0.0f, 10.0f, 0.05f, "##%.01fdb", ImGuiKnobVariant_Wiper, 50)) {
 
 		}
 	}
@@ -97,7 +99,7 @@ namespace LSAP
 
 	void OscillatorGui::addObserver(const std::shared_ptr<Wave>& observer)
 	{
-		observers.push_back(observer);
+		observers.emplace_back(observer);
 	}
 
 	void OscillatorGui::notifyObservers()

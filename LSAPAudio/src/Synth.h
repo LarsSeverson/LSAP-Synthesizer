@@ -39,10 +39,11 @@ namespace LSAP {
 	private:
 		static Synth* sSynthInstance;
 
-		std::unique_ptr<OscillatorPanels> oscillatorGui;
+		std::unique_ptr<OscillatorPanels> oscillatorPanel;
 		std::unique_ptr<EnvelopePanel> envelopeGui;
 
 		std::unique_ptr<VoicePool> voicePool;
+		ParameterSmoother parameterSmoother;
 
 		std::mutex synthMutex;
 	};

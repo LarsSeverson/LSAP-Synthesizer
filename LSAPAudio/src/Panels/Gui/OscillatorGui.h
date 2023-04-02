@@ -21,9 +21,13 @@ namespace LSAP {
 		void addObserver(const std::shared_ptr<Wave>& observer);
 		void notifyObservers();
 
-		float& getFreqScale() { return scaleFreq; }
-		float& getAmpScale()  { return scaleAmp; }
-		float& getSubScale()  { return scaleSub; }
+		float* getFrequency() { return &freq; }
+		float* getAmplitude()  { return &amp; }
+		float* getSubAmplitude()  { return &sub; }
+
+		float* getGuiAmp() { return &guiAmp; }
+		float* getGuiFreq() { return &guiFreq; }
+		float* getGuiSub() { return &guiSub; }
 
 		const WaveformType getWaveType() const { return oscWaveform->getWaveType(); }
 
@@ -33,9 +37,15 @@ namespace LSAP {
 		std::unique_ptr<Wave> oscWaveform;
 		std::vector<std::shared_ptr<Wave>> observers;
 
-		float scaleAmp;
-		float scaleFreq;
-		float scaleSub;
+		// GUI values
+		float guiAmp;
+		float guiFreq;
+		float guiSub;
+
+		// Processed values
+		float amp;
+		float freq;
+		float sub;
 
 		const std::string oscName;
 	};

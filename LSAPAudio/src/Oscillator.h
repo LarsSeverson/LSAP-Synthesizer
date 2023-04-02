@@ -19,6 +19,7 @@ namespace LSAP {
 
 	private:
 		double phase;
+
 		float* amplitude;
 		float* freqOffset;
 		float* subAmplitude;

@@ -10,6 +10,7 @@ namespace LSAP {
 		phase(0.0),
 		waveType(std::make_shared<Wave>())
 	{
+		
 	}
 	void Oscillator::syncAmplitude(float* amplitude)
 	{
@@ -28,7 +29,7 @@ namespace LSAP {
 		waveType->setWaveform(type);
 	}
 	double Oscillator::onOscFill(double frequency)
-	{
+	{		
 		double phaseInc = ((2 * M_PI) * (frequency + *freqOffset)) / Backend::sampleRate;
 		double sample = waveType->waveAlgorithm(phase) * *amplitude * 0.01;
 		phase += phaseInc;

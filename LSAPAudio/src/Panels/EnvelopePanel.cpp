@@ -9,10 +9,13 @@
 namespace LSAP {
 	EnvelopePanel::EnvelopePanel()
 		: 
-		attack(0.0f), 
-		decay(0.0f),
+		attackKnob(0.0f), 
+		decayKnob(0.0f),
 		sustainLevel(1.0f),
-		release(0.0f)
+		releaseKnob(0.0f),
+		attack(attackKnob * Backend::sampleRate),
+		decay(decayKnob * Backend::sampleRate),
+		release(releaseKnob * Backend::sampleRate)
 	{
 		
 	}
@@ -24,18 +27,18 @@ namespace LSAP {
 		ImGui::SetNextWindowClass(&window_class);
 		ImGui::Begin("Envelope Panel", &mIsOpen, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoNav);
 
-		float xPosition = ImGui::GetCursorPosX();
-		float spacing = 130.0f;
+		float xPosition = ImGui::GetCursorPosX() + 20;
+		float spacing = 125.0f;
 
 		ImGui::SetCursorPosY(250);
-		ImGui::SetCursorPosX(xPosition + 20);
-		if (ImGuiKnobs::Knob("Attack", &attack, 0.0f, 20.0f, 0.1f, "%.01fs", ImGuiKnobVariant_Wiper, 40)) {
-
+		ImGui::SetCursorPosX(xPosition);
+		if (ImGuiKnobs::Knob("Attack", &attackKnob, 0.0f, 20.0f, 0.1f, "%.01fs", ImGuiKnobVariant_Wiper, 40)) {
+			attack = attackKnob * Backend::sampleRate;
 		}
 		ImGui::SameLine();
-		ImGui::SetCursorPosX(xPosition + spacing + 20);
-		if (ImGuiKnobs::Knob("Decay", &decay, 0.0f, 20.0f, 0.1f, "%.01fs", ImGuiKnobVariant_Wiper, 40)) {
-
+		ImGui::SetCursorPosX(xPosition  + spacing);
+		if (ImGuiKnobs::Knob("Decay", &decayKnob, 0.0f, 20.0f, 0.1f, "%.01fs", ImGuiKnobVariant_Wiper, 40)) {
+			decay = decayKnob * Backend::sampleRate;
 		}
 		ImGui::SameLine();
 		ImGui::SetCursorPosX(xPosition + spacing * 2);
@@ -44,8 +47,8 @@ namespace LSAP {
 		}
 		ImGui::SameLine();
 		ImGui::SetCursorPosX(xPosition + spacing * 3);
-		if (ImGuiKnobs::Knob("Release", &release, 0.0f, 30.0f, 0.2f, "%.01fs", ImGuiKnobVariant_Wiper, 40)) {
-
+		if (ImGuiKnobs::Knob("Release", &releaseKnob, 0.0f, 30.0f, 0.2f, "%.01fs", ImGuiKnobVariant_Wiper, 40)) {
+			release = releaseKnob * Backend::sampleRate;
 		}
 
 		ImGui::End();

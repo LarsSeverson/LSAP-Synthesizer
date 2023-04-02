@@ -28,9 +28,9 @@ namespace LSAP {
 	}
 	void Voice::oscillatorSync(OscillatorGui& toSync)
 	{
-		oscillators[toSync.ID]->syncAmplitude(&toSync.getAmpScale());
-		oscillators[toSync.ID]->syncFrequencyOffset(&toSync.getFreqScale());
-		oscillators[toSync.ID]->syncSubAmplitude(&toSync.getSubScale());
+		oscillators[toSync.ID]->syncAmplitude(toSync.getAmplitude());
+		oscillators[toSync.ID]->syncFrequencyOffset(toSync.getFrequency());
+		oscillators[toSync.ID]->syncSubAmplitude(toSync.getSubAmplitude());
 
 		oscillators[toSync.ID]->setWaveType(toSync.getWaveType());
 		toSync.addObserver(oscillators[toSync.ID]->getWave());

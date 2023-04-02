@@ -22,6 +22,7 @@ namespace LSAP {
 		switch (state) {
 		case envIdle: break;
 		case envAttack:
+			setAttackRate(*attackRate);
 			output = attackBase + output * attackCoef;
 			if (output >= 1.0f) {
 				output = 1.0f;
@@ -29,6 +30,7 @@ namespace LSAP {
 			}
 			break;
 		case envDecay:
+			setDecayRate(*decayRate);
 			output = decayBase + output * decayCoef;
 			if (output <= *sustainLevel) {
 				output = *sustainLevel;
@@ -37,6 +39,7 @@ namespace LSAP {
 		case envSustain:
 			break;
 		case envRelease:
+			setReleaserate(*releaseRate);
 			output = releaseBase + output * releaseCoef;
 			if (output <= 0.0) {
 				output = 0.0;
@@ -58,7 +61,7 @@ namespace LSAP {
 			state = envRelease;
 		}
 	}
-	void Envelope::setAttackRate(float& rate)
+	void Envelope::setAttackRate(float& rate )
 	{
 		attackRate = &rate;
 		attackCoef = calcCoef(rate, targetRatioA);

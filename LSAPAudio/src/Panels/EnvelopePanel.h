@@ -16,9 +16,13 @@ namespace LSAP {
 	private:
 		bool mIsOpen = true;
 
+		float attackKnob;
+		float decayKnob;
+		float sustainLevel;
+		float releaseKnob;
+
 		float attack;
 		float decay;
-		float sustainLevel;
 		float release;
 	};
 }
