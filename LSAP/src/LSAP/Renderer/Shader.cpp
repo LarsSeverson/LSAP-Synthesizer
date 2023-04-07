@@ -5,10 +5,10 @@
 #include "Platform/OpenGL/OpenGLShader.h"
 
 namespace LSAP {
-	Shader* Shader::Create(const std::string& vertexSrc, const std::string& fragmentSrc) {
+	std::shared_ptr<Shader> Shader::create(const std::string& vertexSrc, const std::string& fragmentSrc) {
 		switch (Renderer::getApi()) {
-		case RendererAPI::None: LS_CORE_ASSERT(false, "RendererAPI::None is not currently supported."); return nullptr;
-		case RendererAPI::OpenGL: return new OpenGLShader(vertexSrc, fragmentSrc);
+		case RendererAPI::API::None: LS_CORE_ASSERT(false, "RendererAPI::None is not currently supported."); return nullptr;
+		case RendererAPI::API::OpenGL: return std::make_shared<OpenGLShader>(vertexSrc, fragmentSrc);
 		}
 
 		LS_CORE_ASSERT(false, "Unknown RendererAPI.");

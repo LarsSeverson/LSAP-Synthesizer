@@ -7,6 +7,7 @@
 
 #include "LSAPAudio.h"
 #include "LSAP/ImGui/ImGuiLayer.h"
+#include "LSAP/Renderer/Renderer.h"
 
 namespace LSAP {
 	class LSAP_API Application
@@ -20,6 +21,7 @@ namespace LSAP {
 		void pushOverlay(Layer* overlay);
 
 		bool onWindowClose(WindowCloseEvent& event);
+		bool onWindowResize(WindowResizeEvent& event);
 		void closeWindow();
 		
 		Window& getWindow() { return *appWindow; }
@@ -38,6 +40,7 @@ namespace LSAP {
 		static Application* sInstance;
 
 		bool isRunning = true;
+		bool minimized = false;
 	};
 	Application* CreateApplication();
 }

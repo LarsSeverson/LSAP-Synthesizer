@@ -13,8 +13,12 @@ namespace LSAP {
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
 
+		virtual const BufferLayout& getLayout() const override { return layout; }
+		virtual void setLayout(const BufferLayout& layout) override { this->layout = layout; }
+
 	private:
 		uint32_t mRendererID;
+		BufferLayout layout;
 	};
 
 	class OpenGLIndexBuffer : public IndexBuffer

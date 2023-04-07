@@ -2,6 +2,7 @@
 
 #include "LSAP/Renderer/Shader.h"
 #include <glm/glm.hpp>
+#include <glm/ext.hpp>
 
 namespace LSAP {
 	class OpenGLShader : public Shader

@@ -7,6 +7,8 @@
 
 #include "Platform/OpenGL/OpenGLContext.h"
 
+#include "stb_image.h"
+
 namespace LSAP
 {
 	Window* Window::createWindow(const WindowProperties& props) {

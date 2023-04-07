@@ -13,3 +13,8 @@
 #include "LSAP/KeyCodes.h"
 #include "LSAP/MouseCodes.h"
 
+#include "LSAP/Renderer/Texture.h"
+#include "LSAP/Renderer/Shader.h"
+#include "LSAP/Renderer/VertexArray.h"
+#include "LSAP/Renderer/Renderer.h"
+

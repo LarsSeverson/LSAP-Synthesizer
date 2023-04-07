@@ -3,11 +3,73 @@
 #include <imGui/imgui.h>
 #include <imGui/imgui_internal.h>
 
+#include "Platform/OpenGL/OpenGLShader.h"
+
 namespace LSAP {
 #define SYNTH_BIND(x) std::bind(&x, LSAP::Synth::getSynth(), std::placeholders::_1)
     SynthUI::SynthUI()
-        : Layer("SynthUI")
+        : 
+        Layer("SynthUI"),
+        settings(std::make_unique<Settings>())
     {
+        settingsVA = VertexArray::create();
+        logoVA = VertexArray::create();
+        float squareVertices[5 * 4] = {
+            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+             0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+             0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+            -0.5f,  0.5f, 0.0f, 0.0f, 1.0f
+        };
+        std::shared_ptr<VertexBuffer> squareVB;
+        squareVB = VertexBuffer::create(squareVertices, sizeof(squareVertices));
+        squareVB->setLayout({
+             { ShaderDataType::Float3, "a_Position" },
+            { ShaderDataType::Float2, "a_TexCoord" }
+            });
+        settingsVA->addVertexBuffer(squareVB);
+        logoVA->addVertexBuffer(squareVB);
+
+        uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
+        std::shared_ptr<IndexBuffer> squareIB = IndexBuffer::create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
+        settingsVA->setIndexBuffer(squareIB);
+        logoVA->setIndexBuffer(squareIB);
+        std::string textureShaderVertexSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 a_Position;
+			layout(location = 1) in vec2 a_TexCoord;
+			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
+			out vec2 v_TexCoord;
+			void main()
+			{
+				v_TexCoord = a_TexCoord;
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
+			}
+		)";
+
+        std::string textureShaderFragmentSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) out vec4 color;
+			in vec2 v_TexCoord;
+			
+			uniform sampler2D u_Texture;
+			void main()
+			{
+				color = texture(u_Texture, v_TexCoord);
+			}
+		)";
+        settingsShader = Shader::create(textureShaderVertexSrc, textureShaderFragmentSrc);
+        logoShader = Shader::create(textureShaderVertexSrc, textureShaderFragmentSrc);
+
+        settingsTexture = Texture2D::create("src/assets/icons/settings.png", true);
+        logoTexture = Texture2D::create("src/assets/icons/logo.png", false);
+
+        std::dynamic_pointer_cast<OpenGLShader>(settingsShader)->bindShader();
+        std::dynamic_pointer_cast<OpenGLShader>(settingsShader)->uploadUniformInt("u_Texture", 0);
+        std::dynamic_pointer_cast<OpenGLShader>(logoShader)->bindShader();
+        std::dynamic_pointer_cast<OpenGLShader>(logoShader)->uploadUniformInt("u_Texture", 0);
 
     }
 
@@ -18,6 +80,14 @@ namespace LSAP {
     void SynthUI::onLayerUpdate()
     {
         Synth::getSynth()->onSynthUpdate();
+
+        RenderCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+        RenderCommand::clear();
+
+        settingsTexture->bind();
+        Renderer::submit(settingsShader, settingsVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+        logoTexture->bind();
+        Renderer::submit(settingsShader, settingsVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
     }
 
     void SynthUI::onLayerAttach()
@@ -96,17 +166,16 @@ namespace LSAP {
         ImGuiWindowClass window_class;
         window_class.DockNodeFlagsOverrideSet = ImGuiDockNodeFlags_NoTabBar;
         ImGui::SetNextWindowClass(&window_class);
+
         ImGui::Begin("##Topbar");
-        ImGui::SetCursorPosX(ImGui::GetWindowWidth() - 100);
-            if (ImGui::BeginMenu("File"))
-            {
-                ImGui::Separator();
-                if (ImGui::MenuItem("Exit")) {
-                    LSAP::Application::getApplication().closeWindow();
-                    dockspace = false;
-                }
-                ImGui::EndMenu();
-            }
+        ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 55);
+        ImGui::Image((void*)logoTexture->getRendererID(), ImVec2(40.f, 40.f));
+        ImGui::SetCursorPosX(ImGui::GetWindowWidth() - 70);
+        ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 55);
+        if (ImGui::ImageButton((void*)settingsTexture->getRendererID(), ImVec2(40.f, 40.f), ImVec2(0, 0), ImVec2(1, 1), -1, ImVec4())) {
+            settings->open();
+        }
+        settings->onImGuiRender();
 
         LSAP::Synth::getSynth()->onGuiRender();
         ImGui::Begin("ViewPort");

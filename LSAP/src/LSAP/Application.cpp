@@ -19,6 +19,7 @@ namespace LSAP {
 
 		appWindow->setEventCallback(BIND_EVENT_FN(onEvent));
 
+		Renderer::init();
 		mGUILayer = new ImGuiLayer();
 		pushOverlay(mGUILayer);
 
@@ -28,10 +29,13 @@ namespace LSAP {
 			glClearColor(0.1f, 0.1f, 0.1f, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
 
-			for (Layer* i : appLayerStack) {
-				i->onLayerUpdate();
-			}
+			if (!minimized) {
 
+
+				for (Layer* i : appLayerStack) {
+					i->onLayerUpdate();
+				}
+			}
 			mGUILayer->guiBegin();
 			for (Layer* g : appLayerStack) {
 				g->onImGuiRenderer();
@@ -44,6 +48,7 @@ namespace LSAP {
 	void Application::onEvent(Event& event) {
 		EventDispatcher theEvent(event);
 		theEvent.dispatch<WindowCloseEvent>(BIND_EVENT_FN(onWindowClose));
+		theEvent.dispatch<WindowResizeEvent>(BIND_EVENT_FN(onWindowResize));
 		for (auto i = appLayerStack.end(); i != appLayerStack.begin();) {
 			(*--i)->onLayerEvent(event);
 			if (event.mEventHandled) {
@@ -63,6 +68,16 @@ namespace LSAP {
 		appSynth->onSynthStop();
 		isRunning = false;
 		return true;
+	}
+	bool Application::onWindowResize(WindowResizeEvent& event)
+	{
+		if (event.getWindowWidth() == 0 || event.getWindowHeight() == 0) {
+			minimized = true;
+			return false;
+		}
+		minimized = false;
+		Renderer::onWindowResize(event.getWindowWidth(), event.getWindowHeight());
+		return false;
 	}
 	void Application::closeWindow()
 	{
