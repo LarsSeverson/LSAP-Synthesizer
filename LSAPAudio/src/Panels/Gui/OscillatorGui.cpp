@@ -53,8 +53,14 @@ namespace LSAP
 			if (ImGui::MenuItem("Sine")) {
 				setOscillatorWave(WaveformType::sine);
 			}
-			if (ImGui::MenuItem("Square")) {
+			else if (ImGui::MenuItem("Square")) {
 				setOscillatorWave(WaveformType::square);
+			}
+			else if (ImGui::MenuItem("Sawtooth")) {
+				setOscillatorWave(WaveformType::saw);
+			}
+			else if (ImGui::MenuItem("Triangle")) {
+				setOscillatorWave(WaveformType::triangle);
 			}
 			ImGui::EndMenu();
 		}

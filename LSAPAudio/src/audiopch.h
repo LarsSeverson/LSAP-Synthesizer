@@ -21,5 +21,6 @@ namespace Backend {
 #include <map>
 #include <future>
 #include <cmath>
+#include <math.h>
 #include <type_traits>
 #include <queue>

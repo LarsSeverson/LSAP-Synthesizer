@@ -1,4 +1,5 @@
 #pragma once
+#define M_PI 3.14159265358979323846
 namespace LSAP
 {
 	namespace Waveforms {
@@ -12,11 +13,30 @@ namespace LSAP
 				return sin(phase) >= 0 ? 1 : -1;
 			}
 		};
+		struct Sawtoothwave {
+			static double sawAlgorithm(double phase) {
+				return fmod(phase, 2 * M_PI) / (2 * M_PI) * 2 - 1;
+			}
+		};
+		struct Trianglewave {
+			static double triangleAlgorithm(double phase) {
+				double value = fmod(phase, 2 * M_PI) / (2 * M_PI);
+
+				if (value < 0.5) {
+					return value * 4 - 1;
+				}
+				else {
+					return (1 - value) * 4 - 1;
+				}
+			}
+		};
 	}
 
 	enum WaveformType {
 		sine,
-		square
+		square,
+		saw,
+		triangle
 	};
 
 	// Eventually will convert over to wavetables

@@ -31,11 +31,10 @@ namespace LSAP {
 	double Oscillator::onOscFill(double frequency)
 	{		
 		double phaseInc = ((2 * M_PI) * (frequency + *freqOffset)) / Backend::sampleRate;
-		double sample = waveType->waveAlgorithm(phase) * *amplitude * 0.01;
+		double sample = waveType->waveAlgorithm(phase) * (*amplitude * 0.01);
 		phase += phaseInc;
-		if (phase >= 2 * M_PI) {
-			phase -= 2 * M_PI;
-		}
+
+
 		return sample;
 	}
 }

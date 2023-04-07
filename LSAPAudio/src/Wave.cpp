@@ -20,6 +20,17 @@ namespace LSAP
 			waveType = square;
 			waveName = "Square";
 			break;
+		case saw:
+			waveAlgorithm = std::bind(&Waveforms::Sawtoothwave::sawAlgorithm, std::placeholders::_1);
+			waveType = saw;
+			waveName = "Sawtooth";
+			break;
+		case triangle:
+			waveAlgorithm = std::bind(&Waveforms::Trianglewave::triangleAlgorithm, std::placeholders::_1);
+			waveType = triangle;
+			waveName = "Triangle";
+			break;
 		}
+
 	}
 }
