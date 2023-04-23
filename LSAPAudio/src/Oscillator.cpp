@@ -8,6 +8,7 @@ namespace LSAP {
 		freqOffset(nullptr),
 		subAmplitude(nullptr),
 		phase(0.0),
+		subPhase(0.0),
 		waveType(std::make_shared<Wave>())
 	{
 		
@@ -28,13 +29,19 @@ namespace LSAP {
 	{
 		waveType->setWaveform(type);
 	}
-	double Oscillator::onOscFill(double frequency)
+	double Oscillator::onOscFill(double frequency, double subFrequency)
 	{		
 		double phaseInc = ((2 * M_PI) * (frequency + *freqOffset)) / Backend::sampleRate;
-		double sample = waveType->waveAlgorithm(phase) * (*amplitude * 0.01);
+		double subPhaseInc = (2 * M_PI) * (subFrequency + *freqOffset) / Backend::sampleRate;
+
+		// main
+		double sample = waveType->waveAlgorithm(phase) * (*amplitude);
+		// sub
+		sample += waveType->waveAlgorithm(subPhase) * ((*subAmplitude * *amplitude));
+
 		phase += phaseInc;
+		subPhase += subPhaseInc;
 
-
-		return sample;
+		return sample * 0.01;
 	}
 }

@@ -13,17 +13,19 @@ namespace LSAP {
 		Voice(size_t numOsc);
 
 		double getSample();
+
 		void oscillatorSync(OscillatorGui& toSync);
 		void envelopeSync(EnvelopePanel& toSync);
 
 		Note& getNote() { return note; }
 		Envelope& getEnvelope() { return *envelope; }
-		void setNote(const Note& n) { note = n; }
+		void setNote(const Notes n);
 
 		bool voiceOn;
 
 	private:
 		Note note;
+		Note sub;
 		std::unique_ptr<Envelope> envelope;
 		std::vector<std::unique_ptr<Oscillator>> oscillators;
 	};

@@ -50,7 +50,7 @@ namespace LSAP {
 	void Synth::pushNote(Notes note)
 	{
 		Voice& freeVoice = voicePool->getFreeVoice();
-		freeVoice.setNote(Note(note));
+		freeVoice.setNote(note);
 		freeVoice.getEnvelope().gate(true);
 		freeVoice.voiceOn = true;
 	}

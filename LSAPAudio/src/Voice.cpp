@@ -5,6 +5,7 @@ namespace LSAP {
 	Voice::Voice(size_t numOsc)
 		:
 		note(Notes::NONE),
+		sub(Notes::NONE),
 		voiceOn(false),
 		envelope(std::make_unique<Envelope>())
 	{
@@ -16,9 +17,10 @@ namespace LSAP {
 	}
 	double Voice::getSample()
 	{
+		// Note sub 
 		double sample = 0.0;
 		for (auto& osc : oscillators) {
-			sample += osc->onOscFill(note.frequency) * envelope->processEnv();
+			sample += osc->onOscFill(note.frequency, sub.frequency) * envelope->processEnv();
 		}
 		if (envelope->getState() == 0) {
 			voiceOn = false;
@@ -41,5 +43,9 @@ namespace LSAP {
 		envelope->setDecayRate(toSync.getDecay());
 		envelope->setSustainLevel(toSync.getSustain());
 		envelope->setReleaserate(toSync.getRelease());
+	}
+	void Voice::setNote(const Notes note) {
+		this->note = Note((double)note);
+		sub = Note((double)note - 12);
 	}
 }

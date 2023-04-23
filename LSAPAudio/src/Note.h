@@ -28,7 +28,7 @@ namespace LSAP {
 
 	struct Note
 	{
-		Note(Notes note);
+		Note(double note);
 		Note() = default;
 		~Note() = default;
 

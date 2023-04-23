@@ -15,10 +15,11 @@ namespace LSAP {
 
 		const std::shared_ptr<Wave>& getWave() const { return waveType; }
 
-		double onOscFill(double frequency);
+		double onOscFill(double frequency, double subFrequency);
 
 	private:
 		double phase;
+		double subPhase;
 
 		float* amplitude;
 		float* freqOffset;

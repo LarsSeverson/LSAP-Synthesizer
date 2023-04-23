@@ -5,7 +5,7 @@
 
 namespace LSAP
 {
-	Note::Note(Notes note)
+	Note::Note(double note)
 		: 
 		location(note + Synth::sSynthOctave), 
 		noteDone(false)
