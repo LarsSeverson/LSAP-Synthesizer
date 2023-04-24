@@ -1,5 +1,5 @@
 #include "SynthUI.h"
-#include "Synth.h"
+#include "Core/Synth.h"
 #include <imGui/imgui.h>
 #include <imGui/imgui_internal.h>
 
@@ -156,7 +156,7 @@ namespace LSAP {
 
         // Submit the DockSpace
         ImGuiIO& io = ImGui::GetIO();
-        dockspace_flags |= ImGuiDockNodeFlags_NoResize;
+        dockspace_flags |= ImGuiDockNodeFlags_NoResize | ImGuiDockNodeFlags_NoTabBar;
         
         if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
         {
@@ -184,13 +184,9 @@ namespace LSAP {
         // To mostly be implemented in the corresponding classes
         ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
         ImGui::Begin("Effects Panel");
-        ImGui::Begin("Filter A");
-        ImGui::Begin("Filter B");
         ImGui::PopStyleColor();
         ImGui::End();
 
-        ImGui::End();
-        ImGui::End();
         ImGui::End();
         ImGui::End();
     }

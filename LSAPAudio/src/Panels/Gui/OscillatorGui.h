@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Wave.h"
+#include "Core/Wave.h"
 #include "Util/Smoothing.h"
-#include "Oscillator.h"
+#include "Core/Oscillator.h"
 
 namespace LSAP {
 	class OscillatorGui
@@ -15,7 +15,7 @@ namespace LSAP {
 		void onOscAttach();
 		void onOscDetach();
 		void onGuiRender();
-		void drawOscKnobs();
+		void renderKnobs();
 		void setOscillatorWave(WaveformType type);
 
 		void addObserver(const std::shared_ptr<Wave>& observer);

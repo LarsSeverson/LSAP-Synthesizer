@@ -39,7 +39,7 @@ namespace LSAP
 		auto regularFont = io.Fonts->Fonts[0];
 
 		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
-		ImGui::Begin(oscName.c_str(), nullptr, ImGuiWindowFlags_NoScrollbar);
+		ImGui::Begin(oscName.c_str(), nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
 		ImGui::Text(oscName.c_str());
 		ImGui::SameLine();
@@ -65,13 +65,12 @@ namespace LSAP
 			ImGui::EndMenu();
 		}
 
-		drawOscKnobs();
+		renderKnobs();
 
-		ImGui::SetWindowFontScale(1.0f);
 		ImGui::PopStyleColor(2);
 		ImGui::End();
 	}
-	void OscillatorGui::drawOscKnobs()
+	void OscillatorGui::renderKnobs()
 	{
 		ImGui::SetCursorPosX(50);
 		ImGui::SetCursorPosY(45);

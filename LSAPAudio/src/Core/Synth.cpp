@@ -8,19 +8,23 @@ namespace LSAP {
 	Synth::Synth()
 		:
 		voicePool(std::make_unique<VoicePool>(16, 3)),
-		envelopeGui(std::make_unique<EnvelopePanel>()),
-		oscillatorPanel(std::make_unique<OscillatorPanels>())
+		envelopePanel(std::make_unique<EnvelopePanel>()),
+		oscillatorPanel(std::make_unique<OscillatorPanels>()),
+		filterPanel(std::make_unique<FilterPanels>())
 	{
 		sSynthInstance = this;
 
 		oscillatorPanel->addOscillator(0, std::make_unique<OscillatorGui>(WaveformType::sine,		0,	"Oscillator 1"));
-		oscillatorPanel->addOscillator(1, std::make_unique<OscillatorGui>(WaveformType::square,	1,  "Oscillator 2"));
-		oscillatorPanel->addOscillator(2, std::make_unique<OscillatorGui>(WaveformType::sine,		2,	"Oscillator 3"));
+		oscillatorPanel->addOscillator(1, std::make_unique<OscillatorGui>(WaveformType::square,		1,	"Oscillator 2"));
+		oscillatorPanel->addOscillator(2, std::make_unique<OscillatorGui>(WaveformType::triangle,	2,	"Oscillator 3"));
+
+		filterPanel->addFilter(std::make_unique<FilterGui>("Filter A"));
+		filterPanel->addFilter(std::make_unique<FilterGui>("Filter B"));
 
 		voicePool->syncOscillators(oscillatorPanel->getGui(0));
 		voicePool->syncOscillators(oscillatorPanel->getGui(1));
 		voicePool->syncOscillators(oscillatorPanel->getGui(2));
-		voicePool->syncEnvelope(*envelopeGui);
+		voicePool->syncEnvelope(*envelopePanel);
 		
 		LS_CORE_INFO("Synth Created");
 		startSoundThread();
@@ -44,7 +48,8 @@ namespace LSAP {
 	void Synth::onGuiRender()
 	{
 		oscillatorPanel->onGuiRender();
-		envelopeGui->onGuiRender();
+		filterPanel->onGuiRender();
+		envelopePanel->onGuiRender();
 	}
 
 	void Synth::pushNote(Notes note)

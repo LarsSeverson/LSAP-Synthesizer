@@ -7,6 +7,7 @@
 
 #include "Panels/EnvelopePanel.h"
 #include "Panels/OscillatorPanels.h"
+#include "Panels/FilterPanels.h"
 
 #include "Wave.h"
 #include "Note.h"
@@ -40,7 +41,8 @@ namespace LSAP {
 		static Synth* sSynthInstance;
 
 		std::unique_ptr<OscillatorPanels> oscillatorPanel;
-		std::unique_ptr<EnvelopePanel> envelopeGui;
+		std::unique_ptr<EnvelopePanel> envelopePanel;
+		std::unique_ptr<FilterPanels> filterPanel;
 
 		std::unique_ptr<VoicePool> voicePool;
 		ParameterSmoother parameterSmoother;
